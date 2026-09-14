@@ -4,14 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>誤會機器｜偷偷看 × 聲波傳遞</title>
+<title>誤會機器｜LED × 攝像頭 × 聲波</title>
 
 <style>
 *{
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   width:100%;
   height:100%;
 }
@@ -19,8 +20,8 @@ html,body{
 body{
   margin:0;
   overflow:hidden;
-  background:#f1eee7;
-  color:#303633;
+  background:#ece9e2;
+  color:#303532;
   font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
 }
 
@@ -34,12 +35,13 @@ body{
 #stageWrap{
   position:relative;
   overflow:hidden;
+
   background:
     radial-gradient(
-      circle at 50% 45%,
-      #faf9f6 0%,
-      #eeeae2 63%,
-      #e5e0d7 100%
+      circle at 50% 40%,
+      #faf9f5 0%,
+      #eeebe4 58%,
+      #ded9cf 100%
     );
 }
 
@@ -47,13 +49,12 @@ body{
   display:block;
   width:100%;
   height:100%;
-  cursor:pointer;
 }
 
 #title{
   position:absolute;
-  top:24px;
   left:28px;
+  top:24px;
   pointer-events:none;
 }
 
@@ -65,7 +66,7 @@ body{
 #title p{
   margin:7px 0 0;
   font-size:13px;
-  color:#69736e;
+  color:#6d746f;
 }
 
 #hint{
@@ -73,6 +74,7 @@ body{
   left:28px;
   bottom:24px;
   max-width:680px;
+
   padding:10px 14px;
 
   background:rgba(255,255,255,.88);
@@ -81,15 +83,13 @@ body{
 
   font-size:13px;
   line-height:1.65;
-
   pointer-events:none;
 }
 
 #panel{
   padding:20px;
   overflow-y:auto;
-
-  background:#fbfaf7;
+  background:#faf9f6;
   border-left:1px solid #ddd8ce;
 }
 
@@ -101,7 +101,6 @@ body{
   margin-bottom:10px;
   font-size:13px;
   font-weight:700;
-  color:#414743;
 }
 
 video{
@@ -122,7 +121,7 @@ button{
   margin:0 0 8px;
   padding:11px;
 
-  border:none;
+  border:0;
   border-radius:9px;
 
   font-weight:700;
@@ -131,45 +130,26 @@ button{
 
 button.dark{
   background:#222;
-  color:#fff;
+  color:white;
 }
 
 button.light{
-  background:#e6e2da;
+  background:#e5e1d9;
   color:#333;
 }
 
 button.gray{
-  background:#d3d0c9;
-  color:#333;
+  background:#d2cec5;
 }
 
 .status{
   padding:11px;
-
   background:#fff;
-  border:1px solid #dfdbd2;
+  border:1px solid #dedad1;
   border-radius:8px;
 
   font-size:12px;
   line-height:1.8;
-}
-
-.meter{
-  height:8px;
-  margin-top:8px;
-  overflow:hidden;
-
-  background:#e1ddd5;
-  border-radius:999px;
-}
-
-#cameraMeter,
-#voiceMeter{
-  width:0%;
-  height:100%;
-  background:#343936;
-  transition:width .06s linear;
 }
 
 label{
@@ -182,11 +162,29 @@ input[type="range"]{
   width:100%;
 }
 
+.meter{
+  height:8px;
+  margin-top:7px;
+
+  overflow:hidden;
+
+  background:#e1ddd5;
+  border-radius:999px;
+}
+
+#cameraMeter,
+#voiceMeter{
+  width:0%;
+  height:100%;
+  background:#383d3a;
+  transition:width .06s linear;
+}
+
 .small{
   margin-top:8px;
+  color:#777;
   font-size:11px;
   line-height:1.55;
-  color:#777;
 }
 </style>
 </head>
@@ -201,13 +199,13 @@ input[type="range"]{
 
     <div id="title">
       <h1>《誤會機器》</h1>
-      <p>偷偷觀察 × 聲音傳遞 × 訊號失真</p>
+      <p>LED 感知 × 攝像頭觀看 × 聲音傳遞</p>
     </div>
 
     <div id="hint">
-      開啟攝像頭後，裝置不會立刻跟著你。
-      它們會等待、偷偷轉向、換一支觀察；
-      當你的動作突然變大時，正在看的裝置會先轉回去，像是裝作什麼都沒發生。
+      靠近裝置時，頂部 LED 會先出現反應，裝置再慢慢轉向你。
+      當你說話後，聲音會從靠近你的個體進入，並透過螢幕與 LED
+      逐漸傳向其他個體。
     </div>
 
   </div>
@@ -218,7 +216,7 @@ input[type="range"]{
     <div class="section">
 
       <div class="sectionTitle">
-        攝像頭｜偷偷看
+        攝像頭
       </div>
 
       <video
@@ -243,6 +241,16 @@ input[type="range"]{
 
         <br>
 
+        觀者位置：
+        <b id="viewerPosition">—</b>
+
+        <br>
+
+        最近個體：
+        <b id="nearestDevice">—</b>
+
+        <br>
+
         動作量：
         <b>
           <span id="cameraPercent">0</span>%
@@ -252,13 +260,6 @@ input[type="range"]{
           <div id="cameraMeter"></div>
         </div>
 
-        <br>
-
-        偷看狀態：
-        <b id="peekState">
-          待機
-        </b>
-
       </div>
 
     </div>
@@ -267,17 +268,8 @@ input[type="range"]{
     <div class="section">
 
       <div class="sectionTitle">
-        聲音互動
+        麥克風
       </div>
-
-      <div
-        id="selectedStatus"
-        class="status">
-        目前說話對象：
-        <b>第 3 支</b>
-      </div>
-
-      <br>
 
       <button
         id="micBtn"
@@ -294,9 +286,12 @@ input[type="range"]{
       <div class="status">
 
         麥克風：
-        <b id="micState">
-          未啟動
-        </b>
+        <b id="micState">未啟動</b>
+
+        <br>
+
+        聲音入口：
+        <b id="audioSourceText">第 3 支</b>
 
         <br>
 
@@ -317,7 +312,7 @@ input[type="range"]{
     <div class="section">
 
       <div class="sectionTitle">
-        偷看設定
+        觀看設定
       </div>
 
       <label>
@@ -335,40 +330,85 @@ input[type="range"]{
 
 
       <label>
-        偷看角度：
-        <span id="peekAngleValue">32</span>°
+        轉向延遲：
+        <span id="gazeDelayValue">400</span> ms
       </label>
 
       <input
-        id="peekAngleSlider"
+        id="gazeDelaySlider"
         type="range"
-        min="12"
-        max="50"
-        value="32"
+        min="0"
+        max="1200"
+        step="50"
+        value="400"
       >
 
 
       <label>
-        偷看速度：
-        <span id="peekSpeedValue">35</span>%
+        最大轉向：
+        <span id="gazeAngleValue">42</span>°
       </label>
 
       <input
-        id="peekSpeedSlider"
+        id="gazeAngleSlider"
+        type="range"
+        min="15"
+        max="60"
+        value="42"
+      >
+
+    </div>
+
+
+    <div class="section">
+
+      <div class="sectionTitle">
+        LED 設定
+      </div>
+
+      <label>
+        LED 感知亮度：
+        <span id="ledStrengthValue">85</span>%
+      </label>
+
+      <input
+        id="ledStrengthSlider"
+        type="range"
+        min="20"
+        max="100"
+        value="85"
+      >
+
+
+      <label>
+        LED 呼吸速度：
+        <span id="breathValue">50</span>%
+      </label>
+
+      <input
+        id="breathSlider"
         type="range"
         min="10"
-        max="80"
-        value="35"
+        max="100"
+        value="50"
       >
 
+    </div>
+
+
+    <div class="section">
+
+      <div class="sectionTitle">
+        聲波設定
+      </div>
 
       <label>
-        每支聲波延遲：
-        <span id="delayValue">500</span> ms
+        每支傳遞延遲：
+        <span id="soundDelayValue">500</span> ms
       </label>
 
       <input
-        id="delaySlider"
+        id="soundDelaySlider"
         type="range"
         min="150"
         max="1200"
@@ -378,7 +418,7 @@ input[type="range"]{
 
 
       <label>
-        聲波失真：
+        訊號失真：
         <span id="distortionValue">55</span>%
       </label>
 
@@ -442,18 +482,18 @@ const ctx =
 const video =
   document.getElementById("video");
 
-const cameraAnalysis =
+const analysisCanvas =
   document.getElementById("cameraAnalysis");
 
-const cameraCtx =
-  cameraAnalysis.getContext(
+const analysisCtx =
+  analysisCanvas.getContext(
     "2d",
     {willReadFrequently:true}
   );
 
 
 /* =========================================================
-   基本
+   BASIC
 ========================================================= */
 
 const DEVICE_COUNT = 5;
@@ -463,55 +503,11 @@ let H = 0;
 
 const devices = [];
 
-let selectedIndex = 2;
+let manuallySelectedIndex = 2;
 
+let nearestViewerIndex = 2;
 
-/* =========================================================
-   偷看設定
-========================================================= */
-
-let maxPeekAngle = 32;
-
-/*
-  越大，轉得越快。
-*/
-let peekSpeed = .035;
-
-
-/*
-  現在正在偷看的棒子。
-  一開始沒有。
-*/
-let watcherIndices = [];
-
-
-/*
-  下一次換人的時間。
-*/
-let nextWatcherChange = 0;
-
-
-/*
-  剛偵測到觀者時，
-  先不要馬上看。
-*/
-let firstPeekTime = 0;
-
-
-/*
-  被「抓到」後，
-  在這之前都先裝沒事。
-*/
-let caughtUntil = 0;
-
-
-/*
-  防止連續被觸發。
-*/
-let lastCaughtTime = 0;
-
-
-let previousViewerPresent = false;
+let currentAudioSource = 2;
 
 
 /* =========================================================
@@ -519,9 +515,11 @@ let previousViewerPresent = false;
 ========================================================= */
 
 let cameraStream = null;
+
 let cameraReady = false;
 
 let previousCameraFrame = null;
+
 
 const viewer = {
 
@@ -529,17 +527,32 @@ const viewer = {
 
   movement:0,
 
-  rawMovement:0,
-
-  movementX:.5,
+  x:.5,
 
   absentTime:0,
 
-  sensitivity:40,
-
-  sudden:false
+  sensitivity:40
 
 };
+
+
+const viewerHistory = [];
+
+
+let gazeDelay = 400;
+
+let maxGazeAngle = 42;
+
+let gazeSpeed = .055;
+
+
+/* =========================================================
+   LED
+========================================================= */
+
+let ledStrength = .85;
+
+let breathSpeed = .50;
 
 
 /* =========================================================
@@ -547,9 +560,13 @@ const viewer = {
 ========================================================= */
 
 let micStream = null;
+
 let audioContext = null;
+
 let analyser = null;
+
 let microphoneSource = null;
+
 let waveformBuffer = null;
 
 let micReady = false;
@@ -560,18 +577,13 @@ const audioHistory = [];
 
 let lastAudioCapture = 0;
 
-
-/* =========================================================
-   聲波
-========================================================= */
-
-let propagationDelay = 500;
+let soundPropagationDelay = 500;
 
 let distortionStrength = .55;
 
 
 /* =========================================================
-   Device
+   DEVICE
 ========================================================= */
 
 class Device{
@@ -580,406 +592,263 @@ class Device{
 
     this.index = index;
 
-    this.yaw =
-      random(-3,3);
+    this.yaw = 0;
 
-    this.targetYaw =
-      this.yaw;
+    this.targetYaw = 0;
 
-    this.phase =
-      random(
-        0,
-        Math.PI * 2
-      );
+    this.attention = 0;
 
-    /*
-      每支偷看的偏差不同，
-      不會像機器人一樣完全精準。
-    */
-    this.peekBias =
-      random(-6,6);
-
-    /*
-      每支回到待機方向也不完全一樣。
-    */
-    this.homeYaw =
-      random(-4,4);
-
-    this.activity =
-      .03;
+    this.personality =
+      random(.94,1.06);
 
   }
 
 
-  update(now){
-
-    const watching =
-      watcherIndices.includes(
-        this.index
-      );
-
+  update(
+    now,
+    delayedViewerX,
+    delayedViewerPresent
+  ){
 
     /*
-      麥克風只增加很輕微的身體反應，
-      不再主導偷看。
-    */
-    const audioDistance =
-      Math.abs(
-        this.index -
-        selectedIndex
-      );
-
-
-    const snapshot =
-      getDelayedAudio(
-
-        now
-
-        -
-
-        audioDistance *
-        propagationDelay
-
-      );
-
-
-    const localVoice =
-      snapshot
-      ?
-      levelFromRms(
-        snapshot.rms
-      )
-      :
-      0;
-
-
-    /*
-      =============================
-      1. 被抓到
-      =============================
+      沒有觀者。
     */
 
     if(
-      now <
-      caughtUntil
+      !delayedViewerPresent
     ){
 
-      /*
-        原本正在偷看的棒子
-        會比較快轉回正面。
-
-        其他棒子繼續裝沒事。
-      */
-
-      if(watching){
-
-        this.targetYaw =
-          this.homeYaw;
-
-        this.yaw =
-          lerp(
-            this.yaw,
-            this.targetYaw,
-            .12
-          );
-
-      }
-      else{
-
-        this.idleUpdate(now);
-
-      }
-
-      return;
-
-    }
-
-
-    /*
-      =============================
-      2. 偷看
-      =============================
-    */
-
-    if(
-      viewer.present
-      &&
-      watching
-    ){
-
-      const rodPosition =
-
-        this.index
-
-        /
-
-        (
-          DEVICE_COUNT - 1
-        );
-
-
-      /*
-        觀者在這支棒子的左邊還右邊。
-      */
-      const difference =
-
-        viewer.movementX
-
-        -
-
-        rodPosition;
-
-
-      let direction =
-
-        difference >= 0
-        ?
-        1
-        :
-        -1;
-
-
-      /*
-        如果剛好站在這支正前方，
-        還是讓它稍微偏一邊偷看，
-        不會死死正對。
-      */
-      if(
-        Math.abs(difference) <
-        .07
-      ){
-
-        direction =
-
-          this.peekBias >= 0
-          ?
-          1
-          :
-          -1;
-
-      }
-
-
-      /*
-        人離這支越遠，
-        它需要轉得多一點。
-
-        但不會超過 maxPeekAngle。
-      */
-      const distanceAmount =
-
-        constrain(
-
-          Math.abs(difference)
-          *
-          1.7,
-
-          0,
-          1
-
-        );
-
-
-      let angle =
-
-        12
-
-        +
-
-        distanceAmount
-
-        *
-
-        (
-          maxPeekAngle -
-          12
-        );
-
-
-      /*
-        留一點「餘光」偏差，
-        不完全精準看著人。
-      */
-      angle +=
-        this.peekBias;
-
-
-      angle =
-
-        constrain(
-
-          Math.abs(angle),
-
-          10,
-          maxPeekAngle
-
-        );
-
-
-      this.targetYaw =
-
-        direction
-        *
-        angle;
-
-
-      /*
-        偷看不是瞬間追蹤，
-        而是慢慢轉過去。
-      */
-      const followSpeed =
-
-        peekSpeed
-
-        *
-
-        (
-          .75
-          +
-          viewer.movement * 1.8
-        );
-
+      this.targetYaw = 0;
 
       this.yaw =
-
         lerp(
-
           this.yaw,
-
-          this.targetYaw,
-
-          constrain(
-            followSpeed,
-            .015,
-            .09
-          )
-
+          0,
+          .025
         );
 
-
-      this.activity =
-
+      this.attention =
         lerp(
-          this.activity,
-          .7,
+          this.attention,
+          0,
           .04
         );
 
-
       return;
 
     }
 
 
-    /*
-      =============================
-      3. 不是偷看者
-      =============================
-    */
+    const rodX =
+
+      this.index
+
+      /
+
+      (
+        DEVICE_COUNT - 1
+      );
+
+
+    const primaryIndex =
+
+      constrain(
+
+        Math.round(
+
+          delayedViewerX
+
+          *
+
+          (
+            DEVICE_COUNT - 1
+          )
+
+        ),
+
+        0,
+        DEVICE_COUNT - 1
+
+      );
+
+
+    const indexDistance =
+
+      Math.abs(
+
+        this.index
+
+        -
+
+        primaryIndex
+
+      );
+
 
     /*
-      說話的棒子可以有很輕微的反應，
-      但不會搶掉偷看的角色。
+      最近最強，
+      鄰居次強。
     */
+
+    let attention = 0;
+
+
     if(
-      localVoice >
-      .04
+      indexDistance === 0
     ){
 
-      const voiceMotion =
+      attention = 1;
 
-        Math.sin(
+    }
 
-          now / 480
+    else if(
+      indexDistance === 1
+    ){
 
-          +
+      attention = .35;
 
-          this.phase
+    }
 
+    else if(
+      indexDistance === 2
+    ){
+
+      attention = .06;
+
+    }
+
+
+    this.attention =
+
+      lerp(
+
+        this.attention,
+
+        attention,
+
+        .09
+
+      );
+
+
+    const difference =
+
+      delayedViewerX
+
+      -
+
+      rodX;
+
+
+    let direction;
+
+
+    if(
+      difference >
+      .025
+    ){
+
+      direction = 1;
+
+    }
+
+    else if(
+      difference <
+      -.025
+    ){
+
+      direction = -1;
+
+    }
+
+    else{
+
+      /*
+        站在正前方時仍保留一點側向，
+        才看得出轉向。
+      */
+
+      direction =
+
+        delayedViewerX <
+        .5
+
+        ?
+
+        -1
+
+        :
+
+        1;
+
+    }
+
+
+    const lateralDistance =
+
+      constrain(
+
+        Math.abs(
+          difference
         )
 
         *
+        2.3,
 
-        7
+        0,
+        1
 
-        *
+      );
 
-        localVoice;
-
-
-      this.targetYaw =
-
-        this.homeYaw
-
-        +
-
-        voiceMotion;
-
-
-      this.yaw =
-
-        lerp(
-          this.yaw,
-          this.targetYaw,
-          .035
-        );
-
-      return;
-
-    }
-
-
-    this.idleUpdate(now);
-
-  }
-
-
-  idleUpdate(now){
 
     /*
-      沒有偷看時只做很微弱的呼吸式動作。
+      主體的轉向範圍比較明顯，
+      因為現在裝置只有30cm左右。
     */
 
-    const idle =
+    const angle =
 
-      Math.sin(
+      25
 
-        now / 3100
+      +
 
-        +
-
-        this.phase
-
-      )
+      lateralDistance
 
       *
-      1.8;
+
+      (
+        maxGazeAngle -
+        25
+      );
 
 
     this.targetYaw =
 
-      this.homeYaw
+      direction
 
-      +
+      *
 
-      idle;
+      angle
+
+      *
+
+      attention
+
+      *
+
+      this.personality;
 
 
     this.yaw =
 
       lerp(
+
         this.yaw,
+
         this.targetYaw,
-        .015
-      );
 
+        gazeSpeed
 
-    this.activity =
-
-      lerp(
-        this.activity,
-        .03,
-        .02
       );
 
   }
@@ -1007,15 +876,14 @@ function resetDevices(){
 
   }
 
-  watcherIndices = [];
+  viewerHistory.length = 0;
 
-  nextWatcherChange = 0;
+  audioHistory.length = 0;
 
-  firstPeekTime = 0;
+  nearestViewerIndex = 2;
 
-  caughtUntil = 0;
-
-  lastCaughtTime = 0;
+  currentAudioSource =
+    manuallySelectedIndex;
 
 }
 
@@ -1024,7 +892,7 @@ resetDevices();
 
 
 /* =========================================================
-   SIZE
+   CANVAS SIZE
 ========================================================= */
 
 function resizeCanvas(){
@@ -1035,21 +903,31 @@ function resizeCanvas(){
     .getBoundingClientRect();
 
 
-  W = rect.width;
-  H = rect.height;
+  W =
+    rect.width;
+
+
+  H =
+    rect.height;
 
 
   canvas.width =
+
     Math.round(
+
       W *
       devicePixelRatio
+
     );
 
 
   canvas.height =
+
     Math.round(
+
       H *
       devicePixelRatio
+
     );
 
 
@@ -1062,12 +940,14 @@ function resizeCanvas(){
 
 
   ctx.setTransform(
+
     devicePixelRatio,
     0,
     0,
     devicePixelRatio,
     0,
     0
+
   );
 
 }
@@ -1083,7 +963,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   POSITION
+   POSITIONS
 ========================================================= */
 
 function getDevicePosition(index){
@@ -1091,16 +971,22 @@ function getDevicePosition(index){
   return{
 
     x:
+
       mapValue(
+
         index,
+
         0,
         DEVICE_COUNT - 1,
-        W * .17,
-        W * .83
+
+        W * .16,
+        W * .84
+
       ),
 
     y:
-      H * .51
+
+      H * .56
 
   };
 
@@ -1108,249 +994,7 @@ function getDevicePosition(index){
 
 
 /* =========================================================
-   偷看控制
-========================================================= */
-
-function updateStealthBehavior(now){
-
-  /*
-    剛有人進來。
-  */
-
-  if(
-    viewer.present
-    &&
-    !previousViewerPresent
-  ){
-
-    watcherIndices = [];
-
-    /*
-      不立刻看。
-      先等 0.7～1.6 秒。
-    */
-    firstPeekTime =
-
-      now
-
-      +
-
-      random(
-        700,
-        1600
-      );
-
-
-    nextWatcherChange =
-
-      firstPeekTime;
-
-  }
-
-
-  /*
-    人離開。
-  */
-
-  if(
-    !viewer.present
-    &&
-    previousViewerPresent
-  ){
-
-    watcherIndices = [];
-
-    firstPeekTime = 0;
-
-    nextWatcherChange = 0;
-
-  }
-
-
-  /*
-    大動作 = 像被發現。
-  */
-
-  if(
-    viewer.present
-    &&
-    viewer.sudden
-    &&
-    watcherIndices.length > 0
-    &&
-    now - lastCaughtTime > 1800
-  ){
-
-    caughtUntil =
-
-      now
-
-      +
-
-      random(
-        900,
-        1500
-      );
-
-
-    lastCaughtTime = now;
-
-
-    /*
-      被抓到後，
-      不會馬上換下一支。
-    */
-    nextWatcherChange =
-
-      caughtUntil
-
-      +
-
-      random(
-        800,
-        1800
-      );
-
-  }
-
-
-  /*
-    該換偷看的棒子了。
-  */
-
-  if(
-    viewer.present
-    &&
-    now >= nextWatcherChange
-    &&
-    now >= caughtUntil
-  ){
-
-    chooseNewWatcher(now);
-
-  }
-
-
-  previousViewerPresent =
-    viewer.present;
-
-}
-
-
-/* =========================================================
-   換一支偷看
-========================================================= */
-
-function chooseNewWatcher(now){
-
-  const oldWatcher =
-    watcherIndices.length
-    ?
-    watcherIndices[0]
-    :
-    -1;
-
-
-  let next = oldWatcher;
-
-
-  /*
-    不要連續同一支。
-  */
-  let safety = 0;
-
-
-  while(
-    next === oldWatcher
-    &&
-    safety < 20
-  ){
-
-    next =
-      Math.floor(
-        random(
-          0,
-          DEVICE_COUNT
-        )
-      );
-
-    safety++;
-
-  }
-
-
-  watcherIndices = [next];
-
-
-  /*
-    偶爾有第二支也偷看，
-    但機率不高。
-  */
-  if(
-    Math.random() <
-    .23
-  ){
-
-    const possible = [];
-
-    if(next > 0){
-      possible.push(
-        next - 1
-      );
-    }
-
-    if(
-      next <
-      DEVICE_COUNT - 1
-    ){
-      possible.push(
-        next + 1
-      );
-    }
-
-
-    if(possible.length){
-
-      const second =
-
-        possible[
-          Math.floor(
-            random(
-              0,
-              possible.length
-            )
-          )
-        ];
-
-
-      watcherIndices.push(
-        second
-      );
-
-    }
-
-  }
-
-
-  /*
-    4～7 秒後再換。
-  */
-  nextWatcherChange =
-
-    now
-
-    +
-
-    random(
-      4000,
-      7000
-    );
-
-}
-
-
-/* =========================================================
-   CLICK = 選擇說話對象
+   MANUAL CLICK
 ========================================================= */
 
 canvas.addEventListener(
@@ -1361,19 +1005,19 @@ canvas.addEventListener(
       canvas.getBoundingClientRect();
 
 
-    const mx =
+    const mouseX =
       event.clientX -
       rect.left;
 
 
-    const my =
+    const mouseY =
       event.clientY -
       rect.top;
 
 
-    let nearest = -1;
+    let closestIndex = -1;
 
-    let nearestDistance =
+    let closestDistance =
       Infinity;
 
 
@@ -1388,32 +1032,34 @@ canvas.addEventListener(
 
 
       const dx =
-        mx - p.x;
+        mouseX - p.x;
 
 
       const dy =
-        my - p.y;
+        mouseY - p.y;
 
 
-      const distance =
+      const d =
+
         Math.sqrt(
+
           dx * dx
           +
           dy * dy
+
         );
 
 
       if(
-        distance < 140
+        d < 130
         &&
-        distance <
-        nearestDistance
+        d <
+        closestDistance
       ){
 
-        nearest = i;
+        closestIndex = i;
 
-        nearestDistance =
-          distance;
+        closestDistance = d;
 
       }
 
@@ -1421,11 +1067,21 @@ canvas.addEventListener(
 
 
     if(
-      nearest >= 0
+      closestIndex >= 0
     ){
 
-      selectedIndex =
-        nearest;
+      manuallySelectedIndex =
+        closestIndex;
+
+
+      if(
+        !viewer.present
+      ){
+
+        currentAudioSource =
+          manuallySelectedIndex;
+
+      }
 
     }
 
@@ -1441,19 +1097,6 @@ async function startCamera(){
 
   try{
 
-    if(
-      !navigator.mediaDevices
-      ||
-      !navigator.mediaDevices.getUserMedia
-    ){
-
-      throw new Error(
-        "目前瀏覽器無法使用攝像頭"
-      );
-
-    }
-
-
     cameraStream =
 
       await navigator
@@ -1461,13 +1104,17 @@ async function startCamera(){
       .getUserMedia({
 
         video:{
+
           width:{
             ideal:640
           },
+
           height:{
             ideal:480
           },
+
           facingMode:"user"
+
         },
 
         audio:false
@@ -1515,6 +1162,7 @@ async function startCamera(){
       "cameraState"
     )
     .textContent =
+
       "啟動失敗：" +
       error.name;
 
@@ -1524,9 +1172,7 @@ async function startCamera(){
 
 
 document
-.getElementById(
-  "cameraBtn"
-)
+.getElementById("cameraBtn")
 .addEventListener(
   "click",
   startCamera
@@ -1537,7 +1183,7 @@ document
    CAMERA ANALYSIS
 ========================================================= */
 
-function analyzeCamera(){
+function analyzeCamera(now){
 
   if(
     !cameraReady
@@ -1550,29 +1196,29 @@ function analyzeCamera(){
   }
 
 
-  cameraCtx.drawImage(
+  analysisCtx.drawImage(
 
     video,
 
     0,
     0,
 
-    cameraAnalysis.width,
-    cameraAnalysis.height
+    analysisCanvas.width,
+    analysisCanvas.height
 
   );
 
 
   const frame =
 
-    cameraCtx
+    analysisCtx
     .getImageData(
 
       0,
       0,
 
-      cameraAnalysis.width,
-      cameraAnalysis.height
+      analysisCanvas.width,
+      analysisCanvas.height
 
     )
     .data;
@@ -1583,6 +1229,7 @@ function analyzeCamera(){
   ){
 
     previousCameraFrame =
+
       new Uint8ClampedArray(
         frame
       );
@@ -1600,11 +1247,11 @@ function analyzeCamera(){
 
 
   const width =
-    cameraAnalysis.width;
+    analysisCanvas.width;
 
 
   const height =
-    cameraAnalysis.height;
+    analysisCanvas.height;
 
 
   const threshold =
@@ -1634,13 +1281,14 @@ function analyzeCamera(){
       x += 4
     ){
 
-      const index =
+      const i =
 
         (
           y * width
           +
           x
         )
+
         *
         4;
 
@@ -1648,25 +1296,22 @@ function analyzeCamera(){
       const difference =
 
         Math.abs(
-          frame[index]
-          -
-          previousCameraFrame[index]
+          frame[i] -
+          previousCameraFrame[i]
         )
 
         +
 
         Math.abs(
-          frame[index + 1]
-          -
-          previousCameraFrame[index + 1]
+          frame[i+1] -
+          previousCameraFrame[i+1]
         )
 
         +
 
         Math.abs(
-          frame[index + 2]
-          -
-          previousCameraFrame[index + 2]
+          frame[i+2] -
+          previousCameraFrame[i+2]
         );
 
 
@@ -1690,6 +1335,7 @@ function analyzeCamera(){
 
 
   previousCameraFrame =
+
     new Uint8ClampedArray(
       frame
     );
@@ -1707,13 +1353,6 @@ function analyzeCamera(){
     );
 
 
-  viewer.rawMovement =
-    ratio;
-
-
-  /*
-    平滑過的動作量。
-  */
   viewer.movement =
 
     lerp(
@@ -1721,19 +1360,15 @@ function analyzeCamera(){
       viewer.movement,
 
       constrain(
-        ratio * 2.5,
+        ratio * 3,
         0,
         1
       ),
 
-      .28
+      .30
 
     );
 
-
-  /*
-    動作中心位置。
-  */
 
   if(
     changed > 0
@@ -1746,37 +1381,47 @@ function analyzeCamera(){
 
 
     /*
-      video 是鏡像，
-      這裡反轉一次。
+      video 顯示為鏡像，
+      因此反轉一次。
     */
+
     averageX =
 
       width -
       averageX;
 
 
-    viewer.movementX =
+    const targetX =
 
-      lerp(
-
-        viewer.movementX,
+      constrain(
 
         averageX /
         width,
 
-        .25
+        0,
+        1
+
+      );
+
+
+    viewer.x =
+
+      lerp(
+
+        viewer.x,
+
+        targetX,
+
+        .35
 
       );
 
   }
 
 
-  /*
-    判定觀者存在。
-  */
   if(
     ratio >
-    .0055
+    .005
   ){
 
     viewer.present = true;
@@ -1784,18 +1429,20 @@ function analyzeCamera(){
     viewer.absentTime = 0;
 
   }
+
   else{
 
-    viewer.absentTime += 100;
+    viewer.absentTime +=
+      100;
 
 
     /*
-      你暫時不動，
-      不會馬上被判定消失。
+      停下來時保留最後位置一段時間。
     */
+
     if(
       viewer.absentTime >
-      5500
+      6000
     ){
 
       viewer.present = false;
@@ -1805,38 +1452,92 @@ function analyzeCamera(){
   }
 
 
-  /*
-    動作突然很大時，
-    視為「它覺得好像被發現」。
-  */
-  viewer.sudden =
+  viewerHistory.push({
 
-    ratio >
-    .032;
+    time:now,
+
+    x:viewer.x,
+
+    present:viewer.present
+
+  });
+
+
+  const cutoff =
+    now - 5000;
+
+
+  while(
+    viewerHistory.length > 0
+    &&
+    viewerHistory[0].time <
+    cutoff
+  ){
+
+    viewerHistory.shift();
+
+  }
 
 }
 
 
 /* =========================================================
-   MICROPHONE
+   DELAYED VIEWER
+========================================================= */
+
+function getDelayedViewer(
+  targetTime
+){
+
+  if(
+    viewerHistory.length === 0
+  ){
+
+    return{
+
+      x:viewer.x,
+
+      present:viewer.present
+
+    };
+
+  }
+
+
+  for(
+    let i =
+      viewerHistory.length - 1;
+
+    i >= 0;
+
+    i--
+  ){
+
+    if(
+      viewerHistory[i].time
+      <=
+      targetTime
+    ){
+
+      return viewerHistory[i];
+
+    }
+
+  }
+
+
+  return viewerHistory[0];
+
+}
+
+
+/* =========================================================
+   MICROPHONE START
 ========================================================= */
 
 async function startMicrophone(){
 
   try{
-
-    if(
-      !navigator.mediaDevices
-      ||
-      !navigator.mediaDevices.getUserMedia
-    ){
-
-      throw new Error(
-        "目前瀏覽器無法使用麥克風"
-      );
-
-    }
-
 
     if(micReady){
       return;
@@ -1850,9 +1551,13 @@ async function startMicrophone(){
       .getUserMedia({
 
         audio:{
+
           echoCancellation:true,
+
           noiseSuppression:false,
+
           autoGainControl:false
+
         },
 
         video:false
@@ -1863,7 +1568,9 @@ async function startMicrophone(){
     const AudioCtx =
 
       window.AudioContext
+
       ||
+
       window.webkitAudioContext;
 
 
@@ -1945,6 +1652,7 @@ async function startMicrophone(){
       "micState"
     )
     .textContent =
+
       "啟動失敗：" +
       error.name;
 
@@ -1952,6 +1660,10 @@ async function startMicrophone(){
 
 }
 
+
+/* =========================================================
+   STOP MIC
+========================================================= */
 
 async function stopMicrophone(){
 
@@ -1975,7 +1687,7 @@ async function stopMicrophone(){
     try{
       microphoneSource.disconnect();
     }
-    catch(error){}
+    catch(e){}
 
   }
 
@@ -1988,7 +1700,7 @@ async function stopMicrophone(){
     try{
       await audioContext.close();
     }
-    catch(error){}
+    catch(e){}
 
   }
 
@@ -2025,9 +1737,7 @@ async function stopMicrophone(){
 
 
 document
-.getElementById(
-  "micBtn"
-)
+.getElementById("micBtn")
 .addEventListener(
   "click",
   startMicrophone
@@ -2035,9 +1745,7 @@ document
 
 
 document
-.getElementById(
-  "micStopBtn"
-)
+.getElementById("micStopBtn")
 .addEventListener(
   "click",
   stopMicrophone
@@ -2092,22 +1800,22 @@ function captureAudio(now){
   );
 
 
-  const sampleCount = 128;
+  const count = 128;
 
 
   const samples =
 
     new Float32Array(
-      sampleCount
+      count
     );
 
 
-  let sumSquares = 0;
+  let sum = 0;
 
 
   for(
     let i = 0;
-    i < sampleCount;
+    i < count;
     i++
   ){
 
@@ -2127,7 +1835,7 @@ function captureAudio(now){
         /
 
         (
-          sampleCount -
+          count -
           1
         )
 
@@ -2146,11 +1854,10 @@ function captureAudio(now){
       128;
 
 
-    samples[i] =
-      value;
+    samples[i] = value;
 
 
-    sumSquares +=
+    sum +=
 
       value *
       value;
@@ -2162,17 +1869,9 @@ function captureAudio(now){
 
     Math.sqrt(
 
-      sumSquares
-      /
-      sampleCount
+      sum /
+      count
 
-    );
-
-
-  const currentLevel =
-
-    levelFromRms(
-      rms
     );
 
 
@@ -2182,7 +1881,9 @@ function captureAudio(now){
 
       voiceLevel,
 
-      currentLevel,
+      levelFromRms(
+        rms
+      ),
 
       .36
 
@@ -2195,7 +1896,10 @@ function captureAudio(now){
 
     rms:rms,
 
-    samples:samples
+    samples:samples,
+
+    sourceIndex:
+      currentAudioSource
 
   });
 
@@ -2218,6 +1922,10 @@ function captureAudio(now){
 }
 
 
+/* =========================================================
+   AUDIO LEVEL
+========================================================= */
+
 function levelFromRms(rms){
 
   return constrain(
@@ -2239,10 +1947,12 @@ function levelFromRms(rms){
 
 
 /* =========================================================
-   AUDIO DELAY
+   DELAYED AUDIO
 ========================================================= */
 
-function getDelayedAudio(targetTime){
+function getDelayedAudio(
+  targetTime
+){
 
   if(
     audioHistory.length === 0
@@ -2291,40 +2001,57 @@ function getDelayedAudio(targetTime){
 
 
 /* =========================================================
-   DRAW FLOOR
+   DISPLAY TABLE
 ========================================================= */
 
-function drawGround(){
+function drawDisplayTable(){
 
-  const floorY =
-    H * .755;
+  /*
+    展櫃上方平台。
+  */
 
-
-  ctx.strokeStyle =
-    "rgba(45,49,48,.08)";
-
-  ctx.lineWidth = 1;
+  const tableY =
+    H * .72;
 
 
-  ctx.beginPath();
+  ctx.fillStyle =
+    "#e6e1d8";
 
-  ctx.moveTo(
-    45,
-    floorY
+
+  ctx.fillRect(
+
+    W * .06,
+
+    tableY,
+
+    W * .88,
+
+    H * .16
+
   );
 
-  ctx.lineTo(
-    W - 45,
-    floorY
-  );
 
-  ctx.stroke();
+  ctx.fillStyle =
+    "rgba(0,0,0,.07)";
+
+
+  ctx.fillRect(
+
+    W * .06,
+
+    tableY,
+
+    W * .88,
+
+    4
+
+  );
 
 }
 
 
 /* =========================================================
-   DRAW DEVICE
+   DEVICE DRAW
 ========================================================= */
 
 function drawDevice(
@@ -2333,18 +2060,25 @@ function drawDevice(
 ){
 
   const p =
-
     getDevicePosition(
       device.index
     );
 
 
+  /*
+    模擬實體約30cm高，
+    比之前矮很多。
+  */
+
   const bodyHeight =
 
     Math.min(
-      390,
-      H * .48
+      260,
+      H * .35
     );
+
+
+  const frontWidth = 62;
 
 
   const yawRad =
@@ -2359,16 +2093,32 @@ function drawDevice(
 
 
   /*
-    圓柱正面寬約20，
-    側面稍微縮窄。
+    旋轉時略微變窄。
   */
+
   const visibleWidth =
 
-    11
+    34
 
     +
 
-    9
+    28
+
+    *
+    Math.abs(
+      Math.cos(
+        yawRad
+      )
+    );
+
+
+  const facing =
+
+    .35
+
+    +
+
+    .65
 
     *
     Math.abs(
@@ -2379,9 +2129,9 @@ function drawDevice(
 
 
   /*
-    攝像頭與螢幕固定在正面，
-    所以會跟著棒子轉。
+    正面元件跟著柱體移動。
   */
+
   const surfaceX =
 
     Math.sin(
@@ -2392,23 +2142,7 @@ function drawDevice(
     visibleWidth
 
     *
-    .57;
-
-
-  const facing =
-
-    .24
-
-    +
-
-    .76
-
-    *
-    Math.abs(
-      Math.cos(
-        yawRad
-      )
-    );
+    .48;
 
 
   ctx.save();
@@ -2420,129 +2154,25 @@ function drawDevice(
   );
 
 
-  /* -----------------------------
-     BLACK CYLINDER
-  ----------------------------- */
-
-  ctx.shadowBlur =
-
-    7
-
-    +
-
-    device.activity *
-    14;
-
-
-  ctx.shadowColor =
-    "rgba(0,0,0,.24)";
-
-
-  const gradient =
-
-    ctx.createLinearGradient(
-
-      -visibleWidth / 2,
-      0,
-
-      visibleWidth / 2,
-      0
-
-    );
-
-
-  const lightShift =
-
-    Math.sin(
-      yawRad
-    )
-    *
-    .12;
-
-
-  gradient.addColorStop(
-    0,
-    "#020202"
-  );
-
-  gradient.addColorStop(
-    constrain(
-      .30 + lightShift,
-      .15,
-      .43
-    ),
-    "#0b0b0b"
-  );
-
-  gradient.addColorStop(
-    constrain(
-      .52 + lightShift,
-      .36,
-      .67
-    ),
-    "#292929"
-  );
-
-  gradient.addColorStop(
-    constrain(
-      .72 + lightShift,
-      .57,
-      .87
-    ),
-    "#101010"
-  );
-
-  gradient.addColorStop(
-    1,
-    "#020202"
-  );
-
+  /*
+    地面陰影。
+  */
 
   ctx.fillStyle =
-    gradient;
-
-
-  ctx.beginPath();
-
-  ctx.roundRect(
-
-    -visibleWidth / 2,
-
-    -bodyHeight / 2,
-
-    visibleWidth,
-
-    bodyHeight,
-
-    visibleWidth / 2
-
-  );
-
-  ctx.fill();
-
-
-  ctx.shadowBlur = 0;
-
-
-  /* -----------------------------
-     TOP
-  ----------------------------- */
-
-  ctx.fillStyle =
-    "#151515";
+    "rgba(0,0,0,.10)";
 
 
   ctx.beginPath();
 
   ctx.ellipse(
 
-    0,
+    6,
 
-    -bodyHeight / 2,
+    bodyHeight / 2 + 17,
 
-    visibleWidth / 2,
+    38,
 
-    3,
+    10,
 
     0,
 
@@ -2555,71 +2185,155 @@ function drawDevice(
   ctx.fill();
 
 
-  /* -----------------------------
-     CAMERA
-  ----------------------------- */
+  /*
+    本體。
+  */
 
-  const cameraY =
+  const bodyGradient =
 
-    -bodyHeight *
-    .31;
+    ctx.createLinearGradient(
 
+      -visibleWidth/2,
+      0,
 
-  const cameraW =
+      visibleWidth/2,
+      0
 
-    Math.max(
-      7,
-      20 * facing
     );
 
 
-  const cameraH = 16;
+  bodyGradient.addColorStop(
+    0,
+    "#050505"
+  );
+
+  bodyGradient.addColorStop(
+    .32,
+    "#111"
+  );
+
+  bodyGradient.addColorStop(
+    .54,
+    "#303030"
+  );
+
+  bodyGradient.addColorStop(
+    .74,
+    "#121212"
+  );
+
+  bodyGradient.addColorStop(
+    1,
+    "#030303"
+  );
 
 
   ctx.fillStyle =
-    "#171d19";
-
-
-  ctx.strokeStyle =
-    "#464d47";
-
-
-  ctx.lineWidth = 1;
+    bodyGradient;
 
 
   ctx.beginPath();
 
   ctx.roundRect(
 
-    surfaceX -
-    cameraW / 2,
+    -visibleWidth/2,
 
-    cameraY -
-    cameraH / 2,
+    -bodyHeight/2,
 
-    cameraW,
+    visibleWidth,
 
-    cameraH,
+    bodyHeight,
 
-    2
+    16
 
   );
 
   ctx.fill();
 
-  ctx.stroke();
+
+  /*
+    頂面。
+  */
+
+  ctx.fillStyle =
+    "#101010";
 
 
-  const lensR =
+  ctx.beginPath();
+
+  ctx.ellipse(
+
+    0,
+
+    -bodyHeight/2 + 4,
+
+    visibleWidth/2 - 2,
+
+    7,
+
+    0,
+
+    0,
+
+    Math.PI * 2
+
+  );
+
+  ctx.fill();
+
+
+  /* =====================================================
+     LED RING
+  ===================================================== */
+
+  drawLedRing(
+
+    device,
+
+    now,
+
+    0,
+
+    -bodyHeight/2 + 9,
+
+    visibleWidth,
+
+    yawRad
+
+  );
+
+
+  /* =====================================================
+     CAMERA
+  ===================================================== */
+
+  const cameraY =
+
+    -bodyHeight *
+    .25;
+
+
+  const cameraRadius =
 
     Math.max(
-      2,
-      4.5 * facing
+      4,
+      8 * facing
     );
 
 
+  /*
+    camera housing
+  */
+
   ctx.fillStyle =
-    "#020303";
+    "#050606";
+
+
+  ctx.strokeStyle =
+    "#353b39";
+
+
+  ctx.lineWidth = 1;
 
 
   ctx.beginPath();
@@ -2630,7 +2344,36 @@ function drawDevice(
 
     cameraY,
 
-    lensR,
+    cameraRadius + 4,
+
+    0,
+
+    Math.PI * 2
+
+  );
+
+  ctx.fill();
+
+  ctx.stroke();
+
+
+  /*
+    lens
+  */
+
+  ctx.fillStyle =
+    "#020406";
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+
+    surfaceX,
+
+    cameraY,
+
+    cameraRadius,
 
     0,
 
@@ -2641,8 +2384,12 @@ function drawDevice(
   ctx.fill();
 
 
+  /*
+    lens reflection
+  */
+
   ctx.fillStyle =
-    "rgba(125,160,170,.42)";
+    "rgba(90,135,160,.48)";
 
 
   ctx.beginPath();
@@ -2650,14 +2397,14 @@ function drawDevice(
   ctx.arc(
 
     surfaceX -
-    lensR * .27,
+    cameraRadius*.25,
 
     cameraY -
-    lensR * .27,
+    cameraRadius*.28,
 
     Math.max(
-      .7,
-      lensR * .22
+      1,
+      cameraRadius*.23
     ),
 
     0,
@@ -2669,57 +2416,37 @@ function drawDevice(
   ctx.fill();
 
 
-  /* -----------------------------
+  /* =====================================================
      SCREEN
-  ----------------------------- */
+  ===================================================== */
 
   const screenY =
 
-    -bodyHeight *
-    .01;
+    bodyHeight *
+    .02;
 
 
-  const screenW =
+  const screenWidth =
 
     Math.max(
-      10,
-      54 * facing
+      16,
+      42 * facing
     );
 
 
-  const screenH = 82;
+  const screenHeight =
+    64;
 
 
   ctx.fillStyle =
-    "#060808";
+    "#030505";
 
 
   ctx.strokeStyle =
-
-    device.index ===
-    selectedIndex
-
-    ?
-
-    "rgba(210,220,215,.82)"
-
-    :
-
-    "#303432";
+    "#262b29";
 
 
-  ctx.lineWidth =
-
-    device.index ===
-    selectedIndex
-
-    ?
-
-    1.5
-
-    :
-
-    1;
+  ctx.lineWidth = 1;
 
 
   ctx.beginPath();
@@ -2727,14 +2454,14 @@ function drawDevice(
   ctx.roundRect(
 
     surfaceX -
-    screenW / 2,
+    screenWidth/2,
 
     screenY -
-    screenH / 2,
+    screenHeight/2,
 
-    screenW,
+    screenWidth,
 
-    screenH,
+    screenHeight,
 
     3
 
@@ -2748,28 +2475,28 @@ function drawDevice(
   const innerX =
 
     surfaceX -
-    screenW / 2 +
+    screenWidth/2 +
     3;
 
 
   const innerY =
 
     screenY -
-    screenH / 2 +
+    screenHeight/2 +
     3;
 
 
   const innerW =
 
     Math.max(
-      3,
-      screenW - 6
+      4,
+      screenWidth - 6
     );
 
 
   const innerH =
 
-    screenH - 6;
+    screenHeight - 6;
 
 
   ctx.save();
@@ -2780,13 +2507,9 @@ function drawDevice(
   ctx.roundRect(
 
     innerX,
-
     innerY,
-
     innerW,
-
     innerH,
-
     2
 
   );
@@ -2799,11 +2522,8 @@ function drawDevice(
     device.index,
 
     innerX,
-
     innerY,
-
     innerW,
-
     innerH,
 
     now
@@ -2814,25 +2534,311 @@ function drawDevice(
   ctx.restore();
 
 
-  /* -----------------------------
-     BASE
-  ----------------------------- */
+  ctx.restore();
 
-  ctx.fillStyle =
-    "#151515";
+}
+
+
+/* =========================================================
+   LED RING
+========================================================= */
+
+function drawLedRing(
+  device,
+  now,
+  x,
+  y,
+  width,
+  yawRad
+){
+
+  /*
+    待機呼吸。
+  */
+
+  const breath =
+
+    (
+      Math.sin(
+
+        now
+
+        *
+        (
+          .001
+
+          +
+
+          breathSpeed *
+          .0025
+        )
+
+      )
+
+      +
+      1
+
+    )
+
+    /
+    2;
+
+
+  let brightness =
+
+    .08
+
+    +
+
+    breath *
+    .08;
+
+
+  /*
+    攝像頭感知。
+  */
+
+  brightness +=
+
+    device.attention
+
+    *
+    .60
+
+    *
+    ledStrength;
+
+
+  /*
+    聲音傳遞。
+  */
+
+  const audioDistance =
+
+    Math.abs(
+
+      device.index
+
+      -
+
+      currentAudioSource
+
+    );
+
+
+  const delayedAudio =
+
+    getDelayedAudio(
+
+      now
+
+      -
+
+      audioDistance *
+      soundPropagationDelay
+
+    );
+
+
+  if(
+    delayedAudio
+    &&
+    micReady
+  ){
+
+    const level =
+
+      levelFromRms(
+        delayedAudio.rms
+      );
+
+
+    /*
+      越遠亮度越弱，
+      但還是能看見訊號傳出去。
+    */
+
+    const transmission =
+
+      Math.max(
+
+        .25,
+
+        1
+
+        -
+
+        audioDistance *
+        .18
+
+      );
+
+
+    brightness +=
+
+      level
+
+      *
+      .75
+
+      *
+      transmission;
+
+  }
+
+
+  brightness =
+
+    constrain(
+      brightness,
+      .05,
+      1
+    );
+
+
+  /*
+    LED暗底。
+  */
+
+  ctx.strokeStyle =
+    "rgba(70,80,82,.25)";
+
+
+  ctx.lineWidth =
+    5;
 
 
   ctx.beginPath();
 
   ctx.ellipse(
 
+    x,
+    y,
+
+    width/2 - 2,
+
+    5,
+
     0,
 
-    bodyHeight / 2 + 8,
+    0,
 
-    16,
+    Math.PI * 2
 
-    4,
+  );
+
+  ctx.stroke();
+
+
+  /*
+    主LED環。
+  */
+
+  ctx.shadowBlur =
+
+    7
+
+    +
+
+    brightness *
+    13;
+
+
+  ctx.shadowColor =
+
+    `rgba(
+      190,
+      225,
+      235,
+      ${brightness}
+    )`;
+
+
+  ctx.strokeStyle =
+
+    `rgba(
+      210,
+      238,
+      245,
+      ${brightness}
+    )`;
+
+
+  ctx.lineWidth =
+    3;
+
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+
+    x,
+    y,
+
+    width/2 - 2,
+
+    5,
+
+    0,
+
+    0,
+
+    Math.PI * 2
+
+  );
+
+  ctx.stroke();
+
+
+  ctx.shadowBlur = 0;
+
+
+  /*
+    正面方向再稍微亮一點，
+    讓圓柱旋轉更容易看出來。
+
+    不是眼睛，
+    只是LED環的一小段亮區。
+  */
+
+  const frontShift =
+
+    Math.sin(
+      yawRad
+    )
+
+    *
+    width
+
+    *
+    .27;
+
+
+  ctx.fillStyle =
+
+    `rgba(
+      235,
+      250,
+      255,
+      ${brightness*.75}
+    )`;
+
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+
+    x +
+    frontShift,
+
+    y,
+
+    Math.max(
+      3,
+      width*.12
+    ),
+
+    2.5,
 
     0,
 
@@ -2843,51 +2849,6 @@ function drawDevice(
   );
 
   ctx.fill();
-
-
-  ctx.restore();
-
-
-  /*
-    說話對象選取圈。
-    實體作品可以拿掉。
-  */
-  if(
-    device.index ===
-    selectedIndex
-  ){
-
-    ctx.strokeStyle =
-      "rgba(60,65,62,.20)";
-
-    ctx.lineWidth = 1;
-
-
-    ctx.beginPath();
-
-    ctx.ellipse(
-
-      p.x,
-
-      p.y +
-      bodyHeight / 2 +
-      17,
-
-      29,
-
-      7,
-
-      0,
-
-      0,
-
-      Math.PI * 2
-
-    );
-
-    ctx.stroke();
-
-  }
 
 }
 
@@ -2906,7 +2867,7 @@ function drawWaveScreen(
 ){
 
   ctx.fillStyle =
-    "#040708";
+    "#020405";
 
 
   ctx.fillRect(
@@ -2925,7 +2886,7 @@ function drawWaveScreen(
 
       -
 
-      selectedIndex
+      currentAudioSource
 
     );
 
@@ -2939,15 +2900,11 @@ function drawWaveScreen(
       -
 
       distance *
-      propagationDelay
+      soundPropagationDelay
 
     );
 
 
-  /*
-    沒麥克風：
-    顯示待機波。
-  */
   if(
     !micReady
     ||
@@ -2955,17 +2912,51 @@ function drawWaveScreen(
   ){
 
     drawIdleSignal(
+
       x,
       y,
       w,
       h,
+
       now,
       deviceIndex
+
     );
 
     return;
 
   }
+
+
+  const actualDistance =
+
+    Math.abs(
+
+      deviceIndex
+
+      -
+
+      snapshot.sourceIndex
+
+    );
+
+
+  const distortion =
+
+    constrain(
+
+      actualDistance
+
+      *
+      .24
+
+      *
+      distortionStrength,
+
+      0,
+      .92
+
+    );
 
 
   const samples =
@@ -2979,75 +2970,20 @@ function drawWaveScreen(
     );
 
 
-  const distortion =
-
-    constrain(
-
-      distance
-
-      *
-      .24
-
-      *
-      distortionStrength,
-
-      0,
-      .88
-
-    );
-
-
-  /* -----------------------------
-     SCAN LINE
-  ----------------------------- */
-
-  const scanY =
-
-    y
-
-    +
-
-    (
-      now / 18
-      +
-      deviceIndex * 17
-    )
-
-    %
-    h;
-
-
-  ctx.fillStyle =
-
-    `rgba(
-      180,
-      215,
-      220,
-      ${.025 + distortion * .06}
-    )`;
-
-
-  ctx.fillRect(
-    x,
-    scanY,
-    w,
-    1
-  );
-
-
-  /* -----------------------------
-     SIGNAL
-  ----------------------------- */
+  /*
+    signal
+  */
 
   ctx.beginPath();
 
 
-  const pointCount = 80;
+  const points =
+    72;
 
 
   for(
     let i = 0;
-    i < pointCount;
+    i < points;
     i++
   ){
 
@@ -3058,11 +2994,11 @@ function drawWaveScreen(
       /
 
       (
-        pointCount - 1
+        points - 1
       );
 
 
-    const sourceIndex =
+    const index =
 
       Math.floor(
 
@@ -3080,30 +3016,24 @@ function drawWaveScreen(
 
     let sample =
 
-      samples[
-        sourceIndex
-      ]
+      samples[index]
 
       *
-      2.7;
+      2.8;
 
 
-    /*
-      每多傳一支，
-      多一點失真。
-    */
     if(
-      distance > 0
+      actualDistance > 0
     ){
 
       const noise =
 
         (
-          noise2D(
+          pseudoNoise(
 
             i * .13
             +
-            deviceIndex * 13,
+            deviceIndex * 12,
 
             now * .003
 
@@ -3126,13 +3056,13 @@ function drawWaveScreen(
         distortion
 
         *
-        .65;
+        .6;
 
     }
 
 
     if(
-      distance >= 2
+      actualDistance >= 2
     ){
 
       sample +=
@@ -3146,9 +3076,9 @@ function drawWaveScreen(
 
           *
           (
-            8
+            9
             +
-            distance * 5
+            actualDistance * 4
           )
 
           +
@@ -3161,7 +3091,7 @@ function drawWaveScreen(
         distortion
 
         *
-        .17;
+        .20;
 
     }
 
@@ -3171,21 +3101,17 @@ function drawWaveScreen(
       x
 
       +
-
-      t *
-      w;
+      t * w;
 
 
-    let py =
+    const py =
 
       y
 
       +
-
-      h / 2
+      h/2
 
       +
-
       sample
 
       *
@@ -3195,64 +3121,21 @@ function drawWaveScreen(
       .27;
 
 
-    py +=
-
-      Math.sin(
-
-        t * 10
-
-        +
-
-        now * .006
-
-        +
-
-        deviceIndex
-
-      )
-
-      *
-      distortion
-
-      *
-      h
-
-      *
-      .05;
-
-
-    const breakChance =
-
-      distance > 0
-
-      ?
-
-      distortion *
-      .16
-
-      :
-
-      0;
-
-
     const broken =
 
       pseudoRandom(
 
-        i
-
-        +
-
-        deviceIndex * 71,
+        i +
+        deviceIndex * 81,
 
         Math.floor(
-          now / 120
+          now / 110
         )
 
       )
 
       <
-      breakChance;
+      distortion * .13;
 
 
     if(
@@ -3279,25 +3162,8 @@ function drawWaveScreen(
   }
 
 
-  const alpha =
-
-    constrain(
-
-      .35
-
-      +
-
-      localLevel *
-      .8,
-
-      .28,
-      1
-
-    );
-
-
   ctx.lineWidth =
-    1.35;
+    1.3;
 
 
   ctx.strokeStyle =
@@ -3305,17 +3171,17 @@ function drawWaveScreen(
     `rgba(
       205,
       232,
-      238,
-      ${alpha}
+      240,
+      ${.35 + localLevel*.65}
     )`;
 
 
   ctx.shadowBlur =
-    5;
+    6;
 
 
   ctx.shadowColor =
-    "rgba(170,215,225,.45)";
+    "rgba(165,215,230,.45)";
 
 
   ctx.stroke();
@@ -3324,15 +3190,15 @@ function drawWaveScreen(
   ctx.shadowBlur = 0;
 
 
-  /* -----------------------------
-     GLITCH
-  ----------------------------- */
+  /*
+    glitch
+  */
 
-  const glitchCount =
+  const glitches =
 
     Math.floor(
 
-      distance
+      actualDistance
 
       *
       distortionStrength
@@ -3345,7 +3211,7 @@ function drawWaveScreen(
 
   for(
     let i = 0;
-    i < glitchCount;
+    i < glitches;
     i++
   ){
 
@@ -3357,12 +3223,12 @@ function drawWaveScreen(
 
       pseudoRandom(
 
-        deviceIndex * 50
+        deviceIndex * 40
         +
-        i * 9,
+        i * 7,
 
         Math.floor(
-          now / 100
+          now / 90
         )
 
       )
@@ -3374,37 +3240,39 @@ function drawWaveScreen(
     ctx.fillStyle =
 
       `rgba(
-        210,
-        230,
-        235,
-        ${.03 + distortion * .09}
+        220,
+        240,
+        245,
+        ${.04 + distortion*.10}
       )`;
 
 
     ctx.fillRect(
+
       x,
       gy,
       w,
-      1.5
+      1
+
     );
 
   }
 
 
-  /* -----------------------------
-     NOISE
-  ----------------------------- */
+  /*
+    dots
+  */
 
-  const dots =
+  const dotCount =
 
     Math.floor(
-      distortion * 65
+      distortion * 55
     );
 
 
   for(
     let i = 0;
-    i < dots;
+    i < dotCount;
     i++
   ){
 
@@ -3416,12 +3284,12 @@ function drawWaveScreen(
 
       pseudoRandom(
 
-        deviceIndex * 100
+        deviceIndex * 90
         +
-        i * 11,
+        i * 10,
 
         Math.floor(
-          now / 70
+          now / 65
         )
 
       )
@@ -3438,12 +3306,12 @@ function drawWaveScreen(
 
       pseudoRandom(
 
-        deviceIndex * 70
+        deviceIndex * 60
         +
-        i * 17,
+        i * 13,
 
         Math.floor(
-          now / 70
+          now / 65
         )
         +
         4
@@ -3457,10 +3325,10 @@ function drawWaveScreen(
     ctx.fillStyle =
 
       `rgba(
-        220,
-        240,
+        225,
         242,
-        ${.03 + distortion * .16}
+        247,
+        ${.04 + distortion*.15}
       )`;
 
 
@@ -3494,12 +3362,12 @@ function drawIdleSignal(
 
   for(
     let i = 0;
-    i < 50;
+    i < 48;
     i++
   ){
 
     const t =
-      i / 49;
+      i / 47;
 
 
     const px =
@@ -3507,9 +3375,7 @@ function drawIdleSignal(
       x
 
       +
-
-      t *
-      w;
+      t * w;
 
 
     const py =
@@ -3517,22 +3383,24 @@ function drawIdleSignal(
       y
 
       +
-
-      h / 2
+      h/2
 
       +
 
       Math.sin(
 
         t
+
         *
         Math.PI
+
         *
         4
 
         +
 
-        now / 1000
+        now /
+        1100
 
         +
 
@@ -3541,10 +3409,12 @@ function drawIdleSignal(
       )
 
       *
-      1.1;
+      1.2;
 
 
-    if(i === 0){
+    if(
+      i === 0
+    ){
 
       ctx.moveTo(
         px,
@@ -3568,7 +3438,7 @@ function drawIdleSignal(
 
 
   ctx.strokeStyle =
-    "rgba(145,170,165,.20)";
+    "rgba(150,180,180,.18)";
 
 
   ctx.stroke();
@@ -3580,16 +3450,22 @@ function drawIdleSignal(
    UI
 ========================================================= */
 
-function updateUI(now){
+function updateUI(){
 
-  document
-  .getElementById(
-    "selectedStatus"
-  )
-  .innerHTML =
+  if(
+    viewer.present
+  ){
 
-    `目前說話對象：
-    <b>第 ${selectedIndex + 1} 支</b>`;
+    currentAudioSource =
+      nearestViewerIndex;
+
+  }
+  else{
+
+    currentAudioSource =
+      manuallySelectedIndex;
+
+  }
 
 
   const cameraPercent =
@@ -3597,12 +3473,9 @@ function updateUI(now){
     Math.round(
 
       constrain(
-
-        viewer.movement * 5,
-
+        viewer.movement * 4,
         0,
         1
-
       )
 
       *
@@ -3627,6 +3500,74 @@ function updateUI(now){
     cameraPercent + "%";
 
 
+  let viewerText = "—";
+
+
+  if(
+    viewer.present
+  ){
+
+    if(
+      viewer.x <
+      .32
+    ){
+
+      viewerText = "左側";
+
+    }
+
+    else if(
+      viewer.x >
+      .68
+    ){
+
+      viewerText = "右側";
+
+    }
+
+    else{
+
+      viewerText = "中央";
+
+    }
+
+  }
+
+
+  document
+  .getElementById(
+    "viewerPosition"
+  )
+  .textContent =
+    viewerText;
+
+
+  document
+  .getElementById(
+    "nearestDevice"
+  )
+  .textContent =
+
+    viewer.present
+
+    ?
+
+    `第 ${nearestViewerIndex + 1} 支`
+
+    :
+
+    "—";
+
+
+  document
+  .getElementById(
+    "audioSourceText"
+  )
+  .textContent =
+
+    `第 ${currentAudioSource + 1} 支`;
+
+
   const voicePercent =
 
     Math.round(
@@ -3648,49 +3589,6 @@ function updateUI(now){
   )
   .style.width =
     voicePercent + "%";
-
-
-  let peekText =
-    "待機";
-
-
-  if(
-    viewer.present
-  ){
-
-    if(
-      now <
-      caughtUntil
-    ){
-
-      peekText =
-        "裝作沒在看";
-
-    }
-    else if(
-      watcherIndices.length
-    ){
-
-      peekText =
-        "偷偷觀察中";
-
-    }
-    else{
-
-      peekText =
-        "等待時機";
-
-    }
-
-  }
-
-
-  document
-  .getElementById(
-    "peekState"
-  )
-  .textContent =
-    peekText;
 
 
   document
@@ -3725,26 +3623,28 @@ function updateUI(now){
 
     <br>
 
-    觀者位置：
+    感知個體：
     <b>
     ${
-      viewer.movementX < .38
+      viewer.present
       ?
-      "左側"
+      `第 ${nearestViewerIndex + 1} 支`
       :
-      viewer.movementX > .62
-      ?
-      "右側"
-      :
-      "中央"
+      "—"
     }
     </b>
 
     <br>
 
-    偷看：
+    LED：
     <b>
-    ${peekText}
+    ${
+      viewer.present
+      ?
+      "感知模式"
+      :
+      "呼吸待機"
+    }
     </b>
 
     <br>
@@ -3762,9 +3662,9 @@ function updateUI(now){
 
     <br>
 
-    聲音：
+    聲音入口：
     <b>
-    ${voicePercent}%
+    第 ${currentAudioSource + 1} 支
     </b>
 
   `;
@@ -3785,6 +3685,7 @@ document
   event => {
 
     viewer.sensitivity =
+
       Number(
         event.target.value
       );
@@ -3795,7 +3696,7 @@ document
       "sensitivityValue"
     )
     .textContent =
-      viewer.sensitivity;
+      event.target.value;
 
   }
 );
@@ -3803,13 +3704,14 @@ document
 
 document
 .getElementById(
-  "peekAngleSlider"
+  "gazeDelaySlider"
 )
 .addEventListener(
   "input",
   event => {
 
-    maxPeekAngle =
+    gazeDelay =
+
       Number(
         event.target.value
       );
@@ -3817,10 +3719,10 @@ document
 
     document
     .getElementById(
-      "peekAngleValue"
+      "gazeDelayValue"
     )
     .textContent =
-      maxPeekAngle;
+      event.target.value;
 
   }
 );
@@ -3828,30 +3730,25 @@ document
 
 document
 .getElementById(
-  "peekSpeedSlider"
+  "gazeAngleSlider"
 )
 .addEventListener(
   "input",
   event => {
 
-    const value =
+    maxGazeAngle =
+
       Number(
         event.target.value
       );
 
 
-    peekSpeed =
-      .01
-      +
-      value / 1000;
-
-
     document
     .getElementById(
-      "peekSpeedValue"
+      "gazeAngleValue"
     )
     .textContent =
-      value;
+      event.target.value;
 
   }
 );
@@ -3859,13 +3756,72 @@ document
 
 document
 .getElementById(
-  "delaySlider"
+  "ledStrengthSlider"
 )
 .addEventListener(
   "input",
   event => {
 
-    propagationDelay =
+    ledStrength =
+
+      Number(
+        event.target.value
+      )
+
+      /
+      100;
+
+
+    document
+    .getElementById(
+      "ledStrengthValue"
+    )
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+document
+.getElementById(
+  "breathSlider"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    breathSpeed =
+
+      Number(
+        event.target.value
+      )
+
+      /
+      100;
+
+
+    document
+    .getElementById(
+      "breathValue"
+    )
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+document
+.getElementById(
+  "soundDelaySlider"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    soundPropagationDelay =
+
       Number(
         event.target.value
       );
@@ -3873,10 +3829,10 @@ document
 
     document
     .getElementById(
-      "delayValue"
+      "soundDelayValue"
     )
     .textContent =
-      propagationDelay;
+      event.target.value;
 
   }
 );
@@ -3891,9 +3847,11 @@ document
   event => {
 
     distortionStrength =
+
       Number(
         event.target.value
       )
+
       /
       100;
 
@@ -3917,11 +3875,9 @@ document
   "click",
   () => {
 
+    manuallySelectedIndex = 2;
+
     resetDevices();
-
-    selectedIndex = 2;
-
-    audioHistory.length = 0;
 
   }
 );
@@ -3931,38 +3887,58 @@ document
    UTILITY
 ========================================================= */
 
-function random(min,max){
+function random(
+  min,
+  max
+){
 
-  if(max === undefined){
+  if(
+    max === undefined
+  ){
 
     max = min;
     min = 0;
 
   }
 
+
   return(
+
     Math.random()
+
     *
     (
-      max - min
+      max -
+      min
     )
+
     +
     min
+
   );
 
 }
 
 
-function lerp(a,b,t){
+function lerp(
+  a,
+  b,
+  t
+){
 
   return(
+
     a
+
     +
     (
-      b - a
+      b -
+      a
     )
+
     *
     t
+
   );
 
 }
@@ -3970,16 +3946,19 @@ function lerp(a,b,t){
 
 function constrain(
   value,
-  min,
-  max
+  minimum,
+  maximum
 ){
 
   return Math.max(
-    min,
+
+    minimum,
+
     Math.min(
-      max,
+      maximum,
       value
     )
+
   );
 
 }
@@ -3996,42 +3975,27 @@ function mapValue(
   return(
 
     (
-      value - inMin
+      value -
+      inMin
     )
 
     /
 
     (
-      inMax - inMin
+      inMax -
+      inMin
     )
 
     *
 
     (
-      outMax - outMin
+      outMax -
+      outMin
     )
 
     +
-
     outMin
 
-  );
-
-}
-
-
-function noise2D(
-  x,
-  y
-){
-
-  return pseudoRandom(
-    Math.floor(
-      x * 100
-    ),
-    Math.floor(
-      y * 100
-    )
   );
 
 }
@@ -4059,11 +4023,34 @@ function pseudoRandom(
 
 
   return(
+
     value
+
     -
     Math.floor(
       value
     )
+
+  );
+
+}
+
+
+function pseudoNoise(
+  x,
+  y
+){
+
+  return pseudoRandom(
+
+    Math.floor(
+      x * 100
+    ),
+
+    Math.floor(
+      y * 100
+    )
+
   );
 
 }
@@ -4073,37 +4060,22 @@ function pseudoRandom(
    ANIMATION
 ========================================================= */
 
-let previousTime =
-  performance.now();
-
-
 let previousCameraAnalysis = 0;
 
 
 function animate(now){
 
-  const dt =
-
-    Math.min(
-      50,
-      now - previousTime
-    );
-
-
-  previousTime =
-    now;
-
-
   /*
-    Camera analysis
+    CAMERA
   */
+
   if(
     now -
     previousCameraAnalysis >
     100
   ){
 
-    analyzeCamera();
+    analyzeCamera(now);
 
     previousCameraAnalysis =
       now;
@@ -4112,29 +4084,82 @@ function animate(now){
 
 
   /*
-    聲音
+    AUDIO
   */
+
   captureAudio(now);
 
 
   /*
-    偷看邏輯
+    delayed viewer
   */
-  updateStealthBehavior(now);
+
+  const delayedViewer =
+
+    getDelayedViewer(
+
+      now -
+      gazeDelay
+
+    );
 
 
   /*
-    更新棒子
+    最近棒子
   */
+
+  if(
+    delayedViewer.present
+  ){
+
+    nearestViewerIndex =
+
+      constrain(
+
+        Math.round(
+
+          delayedViewer.x
+
+          *
+          (
+            DEVICE_COUNT - 1
+          )
+
+        ),
+
+        0,
+        DEVICE_COUNT - 1
+
+      );
+
+  }
+
+
+  /*
+    device update
+  */
+
   devices.forEach(
-    device =>
-      device.update(now)
+    device => {
+
+      device.update(
+
+        now,
+
+        delayedViewer.x,
+
+        delayedViewer.present
+
+      );
+
+    }
   );
 
 
   /*
-    Draw
+    draw
   */
+
   ctx.clearRect(
     0,
     0,
@@ -4143,26 +4168,22 @@ function animate(now){
   );
 
 
-  drawGround();
+  drawDisplayTable();
 
 
   devices.forEach(
-    device =>
+    device => {
+
       drawDevice(
         device,
         now
-      )
+      );
+
+    }
   );
 
 
-  updateUI(now);
-
-
-  /*
-    sudden 只維持很短，
-    避免每一 frame 都觸發。
-  */
-  viewer.sudden = false;
+  updateUI();
 
 
   requestAnimationFrame(
