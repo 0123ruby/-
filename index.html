@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>誤會機器｜攝像頭擾動模擬</title>
+<title>誤會機器｜五支棒子群體模擬</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -14,81 +16,139 @@
 body{
   margin:0;
   overflow:hidden;
+
   background:#f3efe6;
   color:#303633;
-  font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
+
+  font-family:
+  "Microsoft JhengHei",
+  "Noto Sans TC",
+  sans-serif;
 }
+
 
 #app{
+
   display:grid;
-  grid-template-columns:1fr 340px;
+
+  grid-template-columns:
+  1fr
+  340px;
+
   height:100vh;
+
 }
+
+
+/* =========================
+   左側畫面
+========================= */
 
 #stageWrap{
+
   position:relative;
+
   overflow:hidden;
+
   background:
-    radial-gradient(
-      circle at center,
-      #faf9f5 0%,
-      #ece8df 100%
-    );
+
+  radial-gradient(
+    circle at center,
+    #faf9f5 0%,
+    #ece8df 100%
+  );
+
 }
+
 
 #stage{
+
   width:100%;
   height:100%;
+
   display:block;
+
 }
+
 
 #title{
+
   position:absolute;
+
   left:28px;
   top:22px;
+
   pointer-events:none;
+
 }
+
 
 #title h1{
+
   margin:0;
+
   font-size:26px;
+
 }
+
 
 #title p{
+
   margin:6px 0 0;
+
   color:#687772;
+
   font-size:13px;
+
 }
 
+
 #hint{
+
   position:absolute;
+
   left:28px;
   bottom:24px;
 
   padding:10px 14px;
 
-  background:rgba(255,255,255,.86);
+  background:
+  rgba(255,255,255,.88);
 
   border-radius:10px;
 
   font-size:13px;
+
 }
 
+
+/* =========================
+   右側控制區
+========================= */
+
 #panel{
+
   padding:22px;
 
   background:#fbfaf7;
 
-  border-left:1px solid #ddd8ce;
+  border-left:
+  1px solid #ddd8ce;
 
   overflow-y:auto;
+
 }
+
 
 .section{
+
   margin-bottom:22px;
+
 }
 
+
 .sectionTitle{
+
   color:#a84d3d;
 
   font-size:13px;
@@ -96,9 +156,12 @@ body{
   font-weight:bold;
 
   margin-bottom:10px;
+
 }
 
+
 video{
+
   width:100%;
 
   border-radius:8px;
@@ -106,9 +169,12 @@ video{
   background:#111;
 
   transform:scaleX(-1);
+
 }
 
+
 button{
+
   width:100%;
 
   padding:11px;
@@ -122,191 +188,256 @@ button{
   font-weight:bold;
 
   cursor:pointer;
+
 }
+
 
 #cameraBtn{
+
   background:#ad4c3d;
+
   color:white;
+
 }
+
 
 #leaveBtn{
+
   background:#e5e0d6;
+
 }
+
 
 #resetBtn{
+
   background:#d4d4cf;
+
 }
 
+
 label{
+
   display:block;
 
   margin:10px 0 5px;
 
   font-size:13px;
+
 }
+
 
 input[type="range"]{
+
   width:100%;
+
 }
 
+
 .status{
+
   padding:10px;
 
   background:#fff;
 
-  border:1px solid #dfdbd2;
+  border:
+  1px solid #dfdbd2;
 
   border-radius:8px;
 
   font-size:12px;
 
   line-height:1.7;
+
 }
 
+
 .device{
+
   margin-bottom:7px;
 
   padding:8px 10px;
 
   background:#fff;
 
-  border:1px solid #e3dfd6;
+  border:
+  1px solid #e3dfd6;
 
   border-radius:7px;
 
   font-size:11px;
 
   line-height:1.5;
+
 }
 
+
 .leader{
-  border:2px solid #a84d3d;
+
+  border:
+  2px solid #a84d3d;
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div id="app">
 
-  <div id="stageWrap">
 
-    <canvas id="stage"></canvas>
+<!-- =========================
+     左側模擬
+========================= -->
 
-    <div id="title">
-
-      <h1>
-        《誤會機器》
-      </h1>
-
-      <p>
-        固定主導者 × 攝像頭擾動 × 群體失序
-      </p>
-
-    </div>
+<div id="stageWrap">
 
 
-    <div id="hint">
-
-      觀者不是控制者，而是讓原本穩定的群體開始失衡。
-
-    </div>
-
-  </div>
+<canvas id="stage"></canvas>
 
 
-  <aside id="panel">
+<div id="title">
 
-    <div class="section">
+  <h1>
+    《誤會機器》
+  </h1>
 
-      <div class="sectionTitle">
-        電腦攝像頭
-      </div>
-
-      <video
-        id="video"
-        autoplay
-        playsinline
-        muted>
-      </video>
-
-      <br><br>
-
-      <button id="cameraBtn">
-        開啟攝像頭
-      </button>
-
-      <button id="leaveBtn">
-        模擬觀者離開
-      </button>
-
-    </div>
-
-
-    <div class="section">
-
-      <div class="sectionTitle">
-        感知設定
-      </div>
-
-      <label>
-        攝像頭敏感度：
-        <span id="sensitivityValue">
-          35
-        </span>
-      </label>
-
-      <input
-        type="range"
-        id="sensitivity"
-        min="5"
-        max="80"
-        value="35">
-
-    </div>
-
-
-    <div class="section">
-
-      <div class="sectionTitle">
-        系統狀態
-      </div>
-
-      <div
-        id="globalStatus"
-        class="status">
-
-        尚未開啟攝像頭
-
-      </div>
-
-    </div>
-
-
-    <div class="section">
-
-      <div class="sectionTitle">
-        個體狀態
-      </div>
-
-      <div id="deviceStatus"></div>
-
-    </div>
-
-
-    <button id="resetBtn">
-      重設系統
-    </button>
-
-  </aside>
+  <p>
+    五支圓柱 × 固定主導者 × 攝像頭擾動
+  </p>
 
 </div>
 
 
-<!--
-  隱藏 Canvas
-  專門分析攝像頭畫面
--->
+<div id="hint">
+
+  第 3 支永遠是主導者。觀者只造成擾動，不直接控制棒子的朝向。
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     右側控制
+========================= -->
+
+<aside id="panel">
+
+
+<div class="section">
+
+  <div class="sectionTitle">
+    電腦攝像頭
+  </div>
+
+
+  <video
+    id="video"
+    autoplay
+    playsinline
+    muted>
+  </video>
+
+
+  <br><br>
+
+
+  <button id="cameraBtn">
+    開啟攝像頭
+  </button>
+
+
+  <button id="leaveBtn">
+    模擬觀者離開
+  </button>
+
+</div>
+
+
+
+<div class="section">
+
+  <div class="sectionTitle">
+    感知設定
+  </div>
+
+
+  <label>
+
+    攝像頭敏感度：
+
+    <span id="sensitivityValue">
+      35
+    </span>
+
+  </label>
+
+
+  <input
+    type="range"
+    id="sensitivity"
+    min="5"
+    max="80"
+    value="35">
+
+</div>
+
+
+
+<div class="section">
+
+  <div class="sectionTitle">
+    系統狀態
+  </div>
+
+
+  <div
+    id="globalStatus"
+    class="status">
+
+    尚未開啟攝像頭
+
+  </div>
+
+</div>
+
+
+
+<div class="section">
+
+  <div class="sectionTitle">
+    個體狀態
+  </div>
+
+
+  <div id="deviceStatus">
+  </div>
+
+</div>
+
+
+
+<button id="resetBtn">
+  重設系統
+</button>
+
+
+</aside>
+
+
+</div>
+
+
+
+<!-- =========================
+     隱藏攝像頭分析畫布
+========================= -->
 
 <canvas
   id="analysisCanvas"
@@ -316,6 +447,7 @@ input[type="range"]{
 </canvas>
 
 
+
 <script>
 
 /* ======================================
@@ -323,48 +455,70 @@ input[type="range"]{
 ====================================== */
 
 const canvas =
-document.getElementById("stage");
 
-const ctx =
-canvas.getContext("2d");
-
-
-const video =
-document.getElementById("video");
-
-
-const analysisCanvas =
-document.getElementById("analysisCanvas");
-
-
-const analysisCtx =
-analysisCanvas.getContext(
-  "2d",
-  {
-    willReadFrequently:true
-  }
+document.getElementById(
+  "stage"
 );
 
 
+const ctx =
+
+canvas.getContext(
+  "2d"
+);
+
+
+const video =
+
+document.getElementById(
+  "video"
+);
+
+
+const analysisCanvas =
+
+document.getElementById(
+  "analysisCanvas"
+);
+
+
+const analysisCtx =
+
+analysisCanvas.getContext(
+
+  "2d",
+
+  {
+    willReadFrequently:true
+  }
+
+);
+
+
+
 /* ======================================
-   基本設定
+   畫布
 ====================================== */
 
 let W = 0;
+
 let H = 0;
 
 
-/*
-  9 支棒狀裝置
 
-  第 5 支永遠是主導者
-*/
+/* ======================================
+   裝置設定
 
-const DEVICE_COUNT = 9;
+   只有 5 支
+   第 3 支固定主導
+====================================== */
 
-const LEADER_INDEX = 4;
+const DEVICE_COUNT = 5;
+
+const LEADER_INDEX = 2;
 
 const devices = [];
+
 
 
 /* ======================================
@@ -376,78 +530,46 @@ let cameraStream = null;
 let cameraReady = false;
 
 
+
 /* ======================================
-   觀者資料
+   觀者狀態
 ====================================== */
 
 const viewer = {
 
-  /*
-    系統目前是否認為
-    有觀者／擾動存在
-  */
-
   present:false,
-
-
-  /*
-    畫面變化量
-  */
 
   movement:0,
 
-
-  /*
-    畫面變化大約發生在哪裡
-
-    0 = 左
-    1 = 右
-
-    注意：
-    不直接控制棒子方向
-  */
-
   movementX:.5,
-
-
-  /*
-    停留時間
-  */
 
   stayTime:0,
 
-
-  /*
-    沒有移動多久
-  */
-
   absentTime:0,
-
-
-  /*
-    攝像頭敏感程度
-  */
 
   sensitivity:35
 
 };
 
 
+
 /* ======================================
-   前一幀
+   攝像頭前一幀
 ====================================== */
 
 let previousFrame = null;
 
 
+
 /* ======================================
    群體混亂度
 
-   0 = 穩定
-   1 = 高度混亂
+   0 = 平靜
+   1 = 非常混亂
 ====================================== */
 
 let globalChaos = 0;
+
 
 
 /* ======================================
@@ -456,329 +578,132 @@ let globalChaos = 0;
 
 class Device {
 
-  constructor(index) {
 
-    this.index =
-    index;
+constructor(index){
 
 
-    this.isLeader =
+  this.index =
+  index;
 
-    index ===
-    LEADER_INDEX;
+
+  this.isLeader =
+
+  index ===
+  LEADER_INDEX;
+
+
+
+  /*
+    yaw：
+
+    -90 = 左轉
+      0 = 正面
+     90 = 右轉
+
+    棒子不移動位置
+    只繞垂直軸旋轉
+  */
+
+  this.yaw =
+
+  random(-5,5);
+
+
+  this.targetYaw =
+
+  this.yaw;
+
+
+
+  /*
+    自己過去的記憶
+  */
+
+  this.memoryYaw =
+
+  random(-8,8);
+
+
+
+  /*
+    個體差異
+  */
+
+  this.neighborWeight =
+
+  random(.30,.55);
+
+
+  this.memoryWeight =
+
+  random(.15,.35);
+
+
+  this.randomWeight =
+
+  random(.08,.22);
+
+
+
+  /*
+    每支自己的節奏
+  */
+
+  this.phase =
+
+  random(
+    0,
+    Math.PI * 2
+  );
+
+
+
+  /*
+    活性
+  */
+
+  this.activity =
+
+  random(.04,.10);
+
+}
+
+
+
+/* ======================================
+   更新
+====================================== */
+
+update(){
+
+
+  const neighbor =
+
+  this.getNeighbor();
+
+
+
+  /* ==================================
+     無人狀態
+  ================================== */
+
+  if(
+    !viewer.present
+  ){
 
 
     /*
-      圓柱原地轉動
-
-      -90 = 左
-        0 = 正面
-       90 = 右
+      五支棒子維持一個
+      很慢、微弱的自主秩序
     */
 
-    this.yaw =
-    random(-4,4);
-
-
-    this.targetYaw =
-    this.yaw;
-
-
-    /*
-      過去的記憶
-    */
-
-    this.memoryYaw =
-    random(-8,8);
-
-
-    /*
-      每支棒子的性格不同
-    */
-
-    this.neighborWeight =
-    random(.30,.55);
-
-
-    this.memoryWeight =
-    random(.15,.35);
-
-
-    this.randomWeight =
-    random(.08,.22);
-
-
-    /*
-      活性
-    */
-
-    this.activity =
-    random(.04,.10);
-
-
-    /*
-      每支棒子有不同波動週期
-    */
-
-    this.phase =
-    random(
-      0,
-      Math.PI * 2
-    );
-
-  }
-
-
-  update() {
-
-    const neighbor =
-    this.getNeighbor();
-
-
-    /* ==================================
-       無人／低擾動狀態
-    ================================== */
-
-    if (
-      !viewer.present
-    ) {
-
-      /*
-        很慢的群體呼吸
-      */
-
-      const calmWave =
-
-      Math.sin(
-
-        performance.now()
-        /
-        1800
-
-        +
-
-        this.phase
-
-      )
-
-      *
-      5;
-
-
-      /*
-        鄰居＋記憶＋微弱波動
-      */
-
-      this.targetYaw =
-
-      neighbor *
-      .45
-
-      +
-
-      this.memoryYaw *
-      .30
-
-      +
-
-      calmWave *
-      .25;
-
-
-      this.yaw =
-
-      lerp(
-
-        this.yaw,
-
-        this.targetYaw,
-
-        .025
-
-      );
-
-
-      this.activity =
-
-      lerp(
-
-        this.activity,
-
-        .05,
-
-        .025
-
-      );
-
-
-      return;
-
-    }
-
-
-
-    /* ==================================
-       有觀者進入
-    ================================== */
-
-
-    /*
-      距離主導者越遠
-      受到的影響越慢
-    */
-
-    const distanceFromLeader =
-
-    Math.abs(
-
-      this.index -
-      LEADER_INDEX
-
-    );
-
-
-    const propagation =
-
-    constrain(
-
-      1 -
-      distanceFromLeader * .16,
-
-      0,
-      1
-
-    );
-
-
-
-    /* ==================================
-       主導者刺激
-    ================================== */
-
-    let leaderStimulus = 0;
-
-
-    if (
-      this.isLeader
-    ) {
-
-      /*
-        有人存在
-        +
-        移動
-        +
-        停留
-
-        都會讓主導者更不穩定
-      */
-
-      leaderStimulus =
-
-      .25
-
-      +
-
-      viewer.movement * 5
-
-      +
-
-      Math.min(
-
-        viewer.stayTime
-        /
-        12000,
-
-        .45
-
-      );
-
-    }
-
-
-
-    /*
-      主導者不是跟著人轉
-
-      而是受到刺激後
-      產生不可預測方向
-    */
-
-    const leaderDisturbance =
-
-    random(
-      -85,
-      85
-    )
-
-    *
-
-    leaderStimulus;
-
-
-
-    /* ==================================
-       鄰居影響
-    ================================== */
-
-    const neighborInfluence =
-
-    neighbor
-
-    *
-
-    this.neighborWeight;
-
-
-
-    /* ==================================
-       過去記憶
-    ================================== */
-
-    const memoryInfluence =
-
-    this.memoryYaw
-
-    *
-
-    this.memoryWeight;
-
-
-
-    /* ==================================
-       隨機偏差
-    ================================== */
-
-    const randomInfluence =
-
-    random(
-      -55,
-      55
-    )
-
-    *
-
-    this.randomWeight
-
-    *
-
-    (
-      .25 +
-      globalChaos
-    );
-
-
-
-    /* ==================================
-       群體波動
-    ================================== */
-
-    const wave =
+    const calmWave =
 
     Math.sin(
 
       performance.now()
       /
-      480
+      1800
 
       +
 
@@ -787,98 +712,24 @@ class Device {
     )
 
     *
-
-    18
-
-    *
-
-    globalChaos
-
-    *
-
-    propagation;
-
-
-
-    /* ==================================
-       最終朝向
-    ================================== */
-
-    this.targetYaw =
-
-    neighborInfluence
-
-    +
-
-    memoryInfluence
-
-    +
-
-    randomInfluence
-
-    +
-
-    wave;
-
-
-
-    /*
-      第一手刺激
-      只有固定主導者有
-    */
-
-    if (
-      this.isLeader
-    ) {
-
-      this.targetYaw +=
-      leaderDisturbance;
-
-    }
+    5;
 
 
 
     this.targetYaw =
 
-    constrain(
-
-      this.targetYaw,
-
-      -90,
-      90
-
-    );
-
-
-
-    /* ==================================
-       旋轉速度
-    ================================== */
-
-    let turnSpeed =
-
-    .014
+    neighbor *
+    .45
 
     +
 
-    globalChaos *
-    .05
+    this.memoryYaw *
+    .30
 
     +
 
-    this.activity *
-    .02;
-
-
-
-    if (
-      this.isLeader
-    ) {
-
-      turnSpeed +=
-      .03;
-
-    }
+    calmWave *
+    .25;
 
 
 
@@ -890,15 +741,11 @@ class Device {
 
       this.targetYaw,
 
-      turnSpeed
+      .025
 
     );
 
 
-
-    /* ==================================
-       活性
-    ================================== */
 
     this.activity =
 
@@ -906,123 +753,493 @@ class Device {
 
       this.activity,
 
-      constrain(
+      .05,
 
-        propagation
-        *
-        globalChaos
-
-        +
-
-        leaderStimulus *
-        .55,
-
-        0,
-        1
-
-      ),
-
-      .03
+      .02
 
     );
 
 
-
-    /* ==================================
-       留下經驗
-    ================================== */
-
-    this.memoryYaw =
-
-    lerp(
-
-      this.memoryYaw,
-
-      this.yaw,
-
-      .0025
-
-    );
+    return;
 
   }
 
 
 
   /* ==================================
-     鄰居平均角度
+     有人進入
   ================================== */
 
-  getNeighbor() {
 
-    let total = 0;
+  /*
+    距離主導者：
 
-    let count = 0;
+    3號 = 0
+    2、4號 = 1
+    1、5號 = 2
+  */
 
+  const distanceFromLeader =
 
-    if (
-      this.index >
-      0
-    ) {
+  Math.abs(
 
-      total +=
+    this.index -
+    LEADER_INDEX
 
-      devices[
-        this.index - 1
-      ].yaw;
-
-
-      count++;
-
-    }
+  );
 
 
-    if (
-      this.index <
-      DEVICE_COUNT - 1
-    ) {
 
-      total +=
+  /*
+    影響層級：
 
-      devices[
-        this.index + 1
-      ].yaw;
+    主導者最強
+
+    第二層
+    2、4
+
+    第三層
+    1、5
+  */
+
+  const propagation =
+
+  distanceFromLeader === 0
+  ?
+  1
+
+  :
+
+  distanceFromLeader === 1
+  ?
+  .72
+
+  :
+
+  .42;
 
 
-      count++;
 
-    }
+  /* ==================================
+     主導者第一手刺激
+  ================================== */
 
-
-    if (
-      count === 0
-    ) {
-
-      return this.yaw;
-
-    }
+  let leaderStimulus = 0;
 
 
-    return total / count;
+  if(
+    this.isLeader
+  ){
+
+
+    /*
+      人存在
+      +
+      移動
+      +
+      停留
+
+      都只會增加刺激強度
+
+      不決定方向
+    */
+
+    leaderStimulus =
+
+    .25
+
+    +
+
+    viewer.movement *
+    5
+
+    +
+
+    Math.min(
+
+      viewer.stayTime
+      /
+      12000,
+
+      .45
+
+    );
 
   }
 
+
+
+  /*
+    主導者產生
+    不可預測的旋轉方向
+  */
+
+  const leaderDisturbance =
+
+  random(
+    -85,
+    85
+  )
+
+  *
+
+  leaderStimulus;
+
+
+
+  /* ==================================
+     鄰居影響
+  ================================== */
+
+  const neighborInfluence =
+
+  neighbor
+
+  *
+
+  this.neighborWeight;
+
+
+
+  /* ==================================
+     過去記憶
+  ================================== */
+
+  const memoryInfluence =
+
+  this.memoryYaw
+
+  *
+
+  this.memoryWeight;
+
+
+
+  /* ==================================
+     隨機偏差
+  ================================== */
+
+  const randomInfluence =
+
+  random(
+    -55,
+    55
+  )
+
+  *
+
+  this.randomWeight
+
+  *
+
+  (
+    .25
+    +
+    globalChaos
+  );
+
+
+
+  /* ==================================
+     群體振盪
+  ================================== */
+
+  const wave =
+
+  Math.sin(
+
+    performance.now()
+    /
+    500
+
+    +
+
+    this.phase
+
+  )
+
+  *
+
+  22
+
+  *
+
+  globalChaos
+
+  *
+
+  propagation;
+
+
+
+  /* ==================================
+     最終目標方向
+  ================================== */
+
+  this.targetYaw =
+
+  neighborInfluence
+
+  +
+
+  memoryInfluence
+
+  +
+
+  randomInfluence
+
+  +
+
+  wave;
+
+
+
+  /*
+    只有 3 號
+    直接接收第一手刺激
+  */
+
+  if(
+    this.isLeader
+  ){
+
+    this.targetYaw +=
+
+    leaderDisturbance;
+
+  }
+
+
+
+  this.targetYaw =
+
+  constrain(
+
+    this.targetYaw,
+
+    -90,
+    90
+
+  );
+
+
+
+  /* ==================================
+     轉動速度
+
+     距離主導者越遠
+     反應越慢
+  ================================== */
+
+  let speed =
+
+  .012
+
+  +
+
+  globalChaos *
+  .045
+
+  +
+
+  this.activity *
+  .018;
+
+
+
+  /*
+    主導者最快
+  */
+
+  if(
+    distanceFromLeader === 0
+  ){
+
+    speed +=
+    .035;
+
+  }
+
+
+  /*
+    2、4號
+  */
+
+  if(
+    distanceFromLeader === 1
+  ){
+
+    speed *=
+    .72;
+
+  }
+
+
+  /*
+    1、5號最慢
+  */
+
+  if(
+    distanceFromLeader === 2
+  ){
+
+    speed *=
+    .45;
+
+  }
+
+
+
+  this.yaw =
+
+  lerp(
+
+    this.yaw,
+
+    this.targetYaw,
+
+    speed
+
+  );
+
+
+
+  /* ==================================
+     活性
+  ================================== */
+
+  this.activity =
+
+  lerp(
+
+    this.activity,
+
+    constrain(
+
+      globalChaos *
+      propagation
+
+      +
+
+      leaderStimulus *
+      .5,
+
+      0,
+      1
+
+    ),
+
+    .03
+
+  );
+
+
+
+  /* ==================================
+     記憶
+  ================================== */
+
+  this.memoryYaw =
+
+  lerp(
+
+    this.memoryYaw,
+
+    this.yaw,
+
+    .0025
+
+  );
+
 }
+
+
+
+/* ======================================
+   取得鄰居
+====================================== */
+
+getNeighbor(){
+
+
+  let total = 0;
+
+  let count = 0;
+
+
+
+  if(
+    this.index >
+    0
+  ){
+
+    total +=
+
+    devices[
+      this.index - 1
+    ].yaw;
+
+
+    count++;
+
+  }
+
+
+
+  if(
+    this.index <
+    DEVICE_COUNT - 1
+  ){
+
+    total +=
+
+    devices[
+      this.index + 1
+    ].yaw;
+
+
+    count++;
+
+  }
+
+
+
+  if(
+    count === 0
+  ){
+
+    return this.yaw;
+
+  }
+
+
+
+  return total / count;
+
+}
+
+
+}
+
 
 
 /* ======================================
    初始化
 ====================================== */
 
-function init() {
-
-  devices.length = 0;
+function init(){
 
 
-  for (
+  devices.length =
+  0;
+
+
+
+  for(
     let i = 0;
     i < DEVICE_COUNT;
     i++
-  ) {
+  ){
 
     devices.push(
 
@@ -1031,6 +1248,7 @@ function init() {
     );
 
   }
+
 
 
   globalChaos =
@@ -1055,11 +1273,13 @@ function init() {
 }
 
 
+
 /* ======================================
-   Canvas尺寸
+   畫布尺寸
 ====================================== */
 
-function resize() {
+function resize(){
+
 
   const rect =
 
@@ -1068,10 +1288,12 @@ function resize() {
   .getBoundingClientRect();
 
 
+
   canvas.width =
 
   rect.width *
   devicePixelRatio;
+
 
 
   canvas.height =
@@ -1080,16 +1302,19 @@ function resize() {
   devicePixelRatio;
 
 
+
   canvas.style.width =
 
   rect.width +
   "px";
 
 
+
   canvas.style.height =
 
   rect.height +
   "px";
+
 
 
   ctx.setTransform(
@@ -1104,6 +1329,7 @@ function resize() {
   );
 
 
+
   W =
   rect.width;
 
@@ -1115,13 +1341,17 @@ function resize() {
 
 
 window.addEventListener(
+
   "resize",
+
   resize
+
 );
 
 
+
 /* ======================================
-   開攝像頭
+   開啟攝像頭
 ====================================== */
 
 document
@@ -1130,24 +1360,26 @@ document
 )
 .onclick = async () => {
 
-  try {
+
+  try{
 
 
-    /*
-      先確認瀏覽器支援
-    */
+    if(
 
-    if (
       !navigator.mediaDevices
+
       ||
+
       !navigator.mediaDevices.getUserMedia
-    ) {
+
+    ){
 
       throw new Error(
         "目前瀏覽器無法使用攝像頭"
       );
 
     }
+
 
 
     cameraStream =
@@ -1175,19 +1407,25 @@ document
     });
 
 
+
     video.srcObject =
+
     cameraStream;
 
 
+
     await video.play();
+
 
 
     cameraReady =
     true;
 
 
+
     previousFrame =
     null;
+
 
 
     document
@@ -1200,16 +1438,16 @@ document
 
 
   }
-  catch(error) {
+  catch(error){
+
+
+    cameraReady =
+    false;
 
 
     console.error(
       error
     );
-
-
-    cameraReady =
-    false;
 
 
     document
@@ -1226,16 +1464,6 @@ document
 
       ${error.message}
 
-      <br><br>
-
-      請確認：
-      <br>
-      1. 使用 GitHub Pages 網址
-      <br>
-      2. 瀏覽器已允許攝影機
-      <br>
-      3. 不是直接開本機 HTML
-
     `;
 
   }
@@ -1243,8 +1471,9 @@ document
 };
 
 
+
 /* ======================================
-   手動模擬觀者離開
+   模擬觀者離開
 ====================================== */
 
 document
@@ -1252,6 +1481,7 @@ document
   "leaveBtn"
 )
 .onclick = () => {
+
 
   viewer.present =
   false;
@@ -1271,8 +1501,9 @@ document
 };
 
 
+
 /* ======================================
-   敏感度
+   攝像頭敏感度
 ====================================== */
 
 document
@@ -1285,11 +1516,13 @@ document
 
   e => {
 
+
     viewer.sensitivity =
 
     Number(
       e.target.value
     );
+
 
 
     document
@@ -1305,6 +1538,7 @@ document
 );
 
 
+
 /* ======================================
    Reset
 ====================================== */
@@ -1313,38 +1547,43 @@ document
 .getElementById(
   "resetBtn"
 )
-.onclick = () => {
+.onclick =
+
+() => {
 
   init();
 
 };
 
 
+
 /* ======================================
-   攝像頭畫面分析
+   攝像頭分析
 ====================================== */
 
-function analyzeCamera() {
+function analyzeCamera(){
 
-  if (
+
+  if(
     !cameraReady
-  ) {
+  ){
+
     return;
+
   }
 
 
-  if (
+
+  if(
     video.readyState <
     2
-  ) {
+  ){
+
     return;
+
   }
 
 
-
-  /*
-    畫進小 canvas
-  */
 
   analysisCtx.drawImage(
 
@@ -1374,18 +1613,21 @@ function analyzeCamera() {
   );
 
 
+
   const data =
+
   image.data;
 
 
 
   /*
-    第一張畫面
+    第一幀
   */
 
-  if (
+  if(
     !previousFrame
-  ) {
+  ){
+
 
     previousFrame =
 
@@ -1405,11 +1647,14 @@ function analyzeCamera() {
   let changedXTotal = 0;
 
 
+
   const width =
+
   analysisCanvas.width;
 
 
   const height =
+
   analysisCanvas.height;
 
 
@@ -1436,20 +1681,21 @@ function analyzeCamera() {
 
 
   /*
-    每 4 pixel 取一次
+    每4像素取一次
   */
 
-  for (
-    let y = 0;
-    y < height;
-    y += 4
-  ) {
+  for(
+    let y=0;
+    y<height;
+    y+=4
+  ){
 
-    for (
-      let x = 0;
-      x < width;
-      x += 4
-    ) {
+
+    for(
+      let x=0;
+      x<width;
+      x+=4
+    ){
 
 
       const index =
@@ -1471,33 +1717,46 @@ function analyzeCamera() {
       const difference =
 
       Math.abs(
+
         data[index]
+
         -
+
         previousFrame[index]
+
       )
 
       +
 
       Math.abs(
-        data[index + 1]
+
+        data[index+1]
+
         -
-        previousFrame[index + 1]
+
+        previousFrame[index+1]
+
       )
 
       +
 
       Math.abs(
-        data[index + 2]
+
+        data[index+2]
+
         -
-        previousFrame[index + 2]
+
+        previousFrame[index+2]
+
       );
 
 
 
-      if (
+      if(
         difference >
         threshold
-      ) {
+      ){
+
 
         changedPixels++;
 
@@ -1519,10 +1778,6 @@ function analyzeCamera() {
   );
 
 
-
-  /*
-    取樣總數
-  */
 
   const sampleCount =
 
@@ -1563,13 +1818,17 @@ function analyzeCamera() {
 
 
   /*
-    畫面變化中心
+    擾動位置
+
+    只拿來顯示
+    不拿來控制棒子朝向
   */
 
-  if (
+  if(
     changedPixels >
     0
-  ) {
+  ){
+
 
     let avgX =
 
@@ -1580,10 +1839,6 @@ function analyzeCamera() {
     changedPixels;
 
 
-
-    /*
-      video 顯示為鏡像
-    */
 
     avgX =
 
@@ -1598,8 +1853,7 @@ function analyzeCamera() {
 
       viewer.movementX,
 
-      avgX /
-      width,
+      avgX / width,
 
       .25
 
@@ -1610,16 +1864,15 @@ function analyzeCamera() {
 
 
   /*
-    判斷有人
-
-    目前是透過畫面變化
-    不是人體辨識
+    有明顯畫面變化
+    視為觀者存在
   */
 
-  if (
+  if(
     movementRatio >
     .009
-  ) {
+  ){
+
 
     viewer.present =
     true;
@@ -1629,21 +1882,23 @@ function analyzeCamera() {
     0;
 
   }
-  else {
+  else{
+
 
     viewer.absentTime +=
     100;
 
 
+
     /*
-      約 4 秒幾乎沒有動作
-      才認為觀者離開
+      4秒沒明顯變化
+      視為離開
     */
 
-    if (
+    if(
       viewer.absentTime >
       4000
-    ) {
+    ){
 
       viewer.present =
       false;
@@ -1655,15 +1910,18 @@ function analyzeCamera() {
 }
 
 
+
 /* ======================================
-   更新群體
+   群體系統
 ====================================== */
 
-function updateSystem(dt) {
+function updateSystem(dt){
 
-  if (
+
+  if(
     viewer.present
-  ) {
+  ){
+
 
     viewer.stayTime +=
     dt;
@@ -1700,25 +1958,22 @@ function updateSystem(dt) {
 
 
     /*
-      觀者存在
-      ＋
-      移動
-      ＋
-      停留
+      人越動
+      人停越久
 
-      共同增加混亂度
+      混亂度越高
     */
 
     const targetChaos =
 
     constrain(
 
-      .18
+      .16
 
       +
 
       movementFactor *
-      .42
+      .44
 
       +
 
@@ -1745,13 +2000,12 @@ function updateSystem(dt) {
     );
 
   }
-
-  else {
+  else{
 
 
     /*
-      人走之後
-      不瞬間恢復
+      人離開後
+      慢慢恢復
     */
 
     globalChaos =
@@ -1767,8 +2021,10 @@ function updateSystem(dt) {
     );
 
 
+
     viewer.stayTime =
     0;
+
 
 
     viewer.movement =
@@ -1788,22 +2044,29 @@ function updateSystem(dt) {
 }
 
 
+
 /* ======================================
-   Animation
+   動畫
 ====================================== */
 
 let lastTime =
+
 performance.now();
 
 
 let lastAnalyze =
+
 0;
 
 
-function draw() {
+
+function draw(){
+
 
   const now =
+
   performance.now();
+
 
 
   const dt =
@@ -1824,16 +2087,18 @@ function draw() {
 
 
   /*
-    每 100ms 分析一次鏡頭
+    每100ms分析一次鏡頭
   */
 
-  if (
+  if(
     now -
     lastAnalyze >
     100
-  ) {
+  ){
+
 
     analyzeCamera();
+
 
     lastAnalyze =
     now;
@@ -1849,22 +2114,23 @@ function draw() {
 
 
   ctx.clearRect(
+
     0,
     0,
     W,
     H
+
   );
 
 
 
-  drawFloor();
+  drawGround();
 
 
 
   devices.forEach(
 
     device =>
-
     device.update()
 
   );
@@ -1876,7 +2142,9 @@ function draw() {
 
 
   devices.forEach(
+
     drawDevice
+
   );
 
 
@@ -1896,13 +2164,16 @@ function draw() {
 }
 
 
+
 /* ======================================
    地面
 ====================================== */
 
-function drawFloor() {
+function drawGround(){
+
 
   ctx.strokeStyle =
+
   "rgba(45,49,48,.10)";
 
 
@@ -1914,14 +2185,20 @@ function drawFloor() {
 
 
   ctx.moveTo(
+
     45,
+
     H * .73
+
   );
 
 
   ctx.lineTo(
+
     W - 45,
+
     H * .73
+
   );
 
 
@@ -1930,13 +2207,15 @@ function drawFloor() {
 }
 
 
+
 /* ======================================
-   裝置位置
+   五支棒子的位置
 ====================================== */
 
-function getPosition(index) {
+function getPosition(index){
 
-  return {
+
+  return{
 
     x:
 
@@ -1947,8 +2226,8 @@ function getPosition(index) {
       0,
       DEVICE_COUNT - 1,
 
-      W * .14,
-      W * .86
+      W * .20,
+      W * .80
 
     ),
 
@@ -1962,11 +2241,17 @@ function getPosition(index) {
 }
 
 
+
 /* ======================================
-   畫圓形棒狀體
+   畫整支圓柱
+
+   重點：
+   不是畫一條線在動
+   而是整支圓柱的明暗面一起旋轉
 ====================================== */
 
-function drawDevice(device) {
+function drawDevice(device){
+
 
   const pos =
 
@@ -1975,16 +2260,13 @@ function drawDevice(device) {
   );
 
 
+
   const bodyHeight =
-  130;
+  160;
 
 
 
-  /*
-    yaw
-  */
-
-  const rad =
+  const yawRad =
 
   device.yaw
 
@@ -1999,37 +2281,53 @@ function drawDevice(device) {
 
 
   /*
-    圓柱正面看較寬
-    轉到側面變窄
-
-    用這個方式模擬原地旋轉
+    圓柱轉側面時會變窄
   */
 
-  const bodyWidth =
+  const visibleWidth =
 
-  8
+  13
 
   +
 
-  20
+  34
 
   *
 
   Math.abs(
 
-    Math.cos(rad)
+    Math.cos(
+      yawRad
+    )
 
   );
+
+
+
+  /*
+    正面亮面的位置
+  */
+
+  const surfaceShift =
+
+  Math.sin(
+    yawRad
+  )
+
+  *
+
+  visibleWidth *
+  .38;
 
 
 
   ctx.save();
 
 
+
   ctx.translate(
 
     pos.x,
-
     pos.y
 
   );
@@ -2043,12 +2341,12 @@ function drawDevice(device) {
 
   ctx.shadowBlur =
 
-  4
+  5
 
   +
 
   device.activity *
-  20;
+  24;
 
 
 
@@ -2058,66 +2356,168 @@ function drawDevice(device) {
 
   ?
 
-  "rgba(168,77,61,.65)"
+  "rgba(180,74,56,.55)"
 
   :
 
-  "rgba(90,90,90,.25)";
+  "rgba(90,90,90,.24)";
 
 
+
+  /*
+    整支圓柱明暗
+
+    gradient的位置
+    會隨yaw移動
+
+    所以看起來是整支轉
+  */
 
   const gradient =
 
-  ctx
-  .createLinearGradient(
+  ctx.createLinearGradient(
 
-    -bodyWidth / 2,
-
+    -visibleWidth/2,
     0,
 
-    bodyWidth / 2,
-
+    visibleWidth/2,
     0
 
   );
 
 
-  gradient.addColorStop(
+
+  /*
+    根據旋轉方向
+    改變明暗面
+  */
+
+  const lightPos =
+
+  constrain(
+
+    .5
+
+    +
+
+    Math.sin(
+      yawRad
+    )
+    *
+    .32,
+
+    .12,
+    .88
+
+  );
+
+
+
+  const darkPos =
+
+  constrain(
+
+    lightPos -
+    .34,
+
     0,
-    "#555a56"
+    1
+
+  );
+
+
+
+  const brightPos =
+
+  constrain(
+
+    lightPos +
+    .25,
+
+    0,
+    1
+
+  );
+
+
+
+  gradient.addColorStop(
+
+    0,
+
+    "#3d413f"
+
   );
 
 
   gradient.addColorStop(
-    .5,
-    "#bcb6aa"
+
+    darkPos,
+
+    "#696b65"
+
   );
 
 
   gradient.addColorStop(
+
+    lightPos,
+
+    device.isLeader
+
+    ?
+
+    "#c66d57"
+
+    :
+
+    "#d6d1c6"
+
+  );
+
+
+  gradient.addColorStop(
+
+    brightPos,
+
+    "#f4f0e7"
+
+  );
+
+
+  gradient.addColorStop(
+
     1,
-    "#f0ede6"
+
+    "#575a56"
+
   );
+
 
 
   ctx.fillStyle =
   gradient;
 
 
+
+  /*
+    圓柱身體
+  */
+
   ctx.beginPath();
 
 
   ctx.roundRect(
 
-    -bodyWidth / 2,
+    -visibleWidth/2,
 
-    -bodyHeight / 2,
+    -bodyHeight/2,
 
-    bodyWidth,
+    visibleWidth,
 
     bodyHeight,
 
-    bodyWidth / 2
+    visibleWidth/2
 
   );
 
@@ -2127,84 +2527,150 @@ function drawDevice(device) {
 
 
   /*
-    正面標記線
-
-    用它看出棒子轉向
+    上圓面
   */
-
-  const faceX =
-
-  Math.sin(rad)
-
-  *
-
-  bodyWidth *
-  .35;
-
 
   ctx.shadowBlur =
   0;
 
 
-  ctx.strokeStyle =
+  ctx.fillStyle =
 
   device.isLeader
 
   ?
 
-  "#a84d3d"
+  "#c47a66"
 
   :
 
-  "#ffffff";
-
-
-  ctx.lineWidth =
-
-  device.isLeader
-
-  ?
-
-  3
-
-  :
-
-  2;
+  "#c9c4b8";
 
 
   ctx.beginPath();
 
 
-  ctx.moveTo(
+  ctx.ellipse(
 
-    faceX,
+    0,
 
-    -bodyHeight / 2 +
-    10
+    -bodyHeight/2,
+
+    visibleWidth/2,
+
+    Math.max(
+      4,
+      visibleWidth * .18
+    ),
+
+    0,
+
+    0,
+
+    Math.PI * 2
 
   );
 
 
-  ctx.lineTo(
+  ctx.fill();
 
-    faceX,
 
-    bodyHeight / 2 -
-    10
+
+  /*
+    下圓面
+  */
+
+  ctx.fillStyle =
+
+  device.isLeader
+
+  ?
+
+  "#9f4d3d"
+
+  :
+
+  "#8f8a80";
+
+
+  ctx.beginPath();
+
+
+  ctx.ellipse(
+
+    0,
+
+    bodyHeight/2,
+
+    visibleWidth/2,
+
+    Math.max(
+      4,
+      visibleWidth * .18
+    ),
+
+    0,
+
+    0,
+
+    Math.PI * 2
 
   );
 
 
-  ctx.stroke();
+  ctx.fill();
+
+
+
+  /*
+    表面高光
+
+    不是獨立線條
+    而是圓柱表面的一部分
+  */
+
+  ctx.globalAlpha =
+  .28;
+
+
+  ctx.fillStyle =
+  "#ffffff";
+
+
+  ctx.beginPath();
+
+
+  ctx.roundRect(
+
+    surfaceShift -
+    visibleWidth * .08,
+
+    -bodyHeight/2 + 10,
+
+    visibleWidth * .16,
+
+    bodyHeight - 20,
+
+    visibleWidth * .08
+
+  );
+
+
+  ctx.fill();
+
+
+  ctx.globalAlpha =
+  1;
+
 
 
   ctx.restore();
 
 
 
-  /*
-    編號
-  */
+  /* ==================================
+     編號
+  ================================== */
 
   ctx.textAlign =
   "center";
@@ -2229,7 +2695,7 @@ function drawDevice(device) {
 
   ?
 
-  "bold 11px sans-serif"
+  "bold 12px sans-serif"
 
   :
 
@@ -2237,19 +2703,20 @@ function drawDevice(device) {
 
 
 
-  if (
+  if(
     device.isLeader
-  ) {
+  ){
+
 
     ctx.fillText(
 
-      "5",
+      "3",
 
       pos.x,
 
       pos.y +
-      bodyHeight / 2 +
-      24
+      bodyHeight/2 +
+      28
 
     );
 
@@ -2261,14 +2728,14 @@ function drawDevice(device) {
       pos.x,
 
       pos.y +
-      bodyHeight / 2 +
-      40
+      bodyHeight/2 +
+      45
 
     );
 
   }
+  else{
 
-  else {
 
     ctx.fillText(
 
@@ -2277,8 +2744,8 @@ function drawDevice(device) {
       pos.x,
 
       pos.y +
-      bodyHeight / 2 +
-      28
+      bodyHeight/2 +
+      32
 
     );
 
@@ -2287,26 +2754,36 @@ function drawDevice(device) {
 }
 
 
+
 /* ======================================
-   棒子之間的關係
+   群體傳播線
+
+   只是系統Debug提示
+
+   如果未來覺得太干擾
+   可以拿掉
 ====================================== */
 
-function drawConnections() {
+function drawConnections(){
 
-  if (
+
+  if(
     globalChaos <
     .08
-  ) {
+  ){
+
     return;
+
   }
 
 
-  for (
+
+  for(
     let i = 0;
-    i <
-    DEVICE_COUNT - 1;
+    i < DEVICE_COUNT - 1;
     i++
-  ) {
+  ){
+
 
     const a =
 
@@ -2328,7 +2805,7 @@ function drawConnections() {
 
       +
 
-      devices[i + 1].activity
+      devices[i+1].activity
     )
 
     /
@@ -2352,7 +2829,7 @@ function drawConnections() {
 
     *
 
-    25
+    18
 
     *
 
@@ -2366,7 +2843,7 @@ function drawConnections() {
       168,
       77,
       61,
-      ${.03 + activity * .18}
+      ${.03 + activity * .14}
     )`;
 
 
@@ -2376,20 +2853,22 @@ function drawConnections() {
 
     +
 
-    activity *
-    1.5;
+    activity;
+
 
 
     ctx.beginPath();
+
 
 
     ctx.moveTo(
 
       a.x,
 
-      a.y - 75
+      a.y - 95
 
     );
+
 
 
     ctx.quadraticCurveTo(
@@ -2402,15 +2881,16 @@ function drawConnections() {
       2,
 
       a.y -
-      100 +
+      125 +
       wobble,
 
       b.x,
 
       b.y -
-      75
+      95
 
     );
+
 
 
     ctx.stroke();
@@ -2420,22 +2900,25 @@ function drawConnections() {
 }
 
 
+
 /* ======================================
-   顯示攝像頭擾動位置
+   攝像頭擾動位置
 
-   注意：
-   只是視覺提示
-
-   不直接控制棒子方向
+   只是提示
+   不控制棒子的朝向
 ====================================== */
 
-function drawViewerInfluence() {
+function drawViewerInfluence(){
 
-  if (
+
+  if(
     !viewer.present
-  ) {
+  ){
+
     return;
+
   }
+
 
 
   const x =
@@ -2447,8 +2930,8 @@ function drawViewerInfluence() {
     0,
     1,
 
-    W * .10,
-    W * .90
+    W * .12,
+    W * .88
 
   );
 
@@ -2461,14 +2944,13 @@ function drawViewerInfluence() {
   +
 
   globalChaos *
-  120;
+  110;
 
 
 
   const gradient =
 
-  ctx
-  .createRadialGradient(
+  ctx.createRadialGradient(
 
     x,
     H * .84,
@@ -2481,6 +2963,7 @@ function drawViewerInfluence() {
   );
 
 
+
   gradient.addColorStop(
 
     0,
@@ -2489,10 +2972,11 @@ function drawViewerInfluence() {
       168,
       77,
       61,
-      ${.12 + globalChaos * .10}
+      ${.10 + globalChaos * .08}
     )`
 
   );
+
 
 
   gradient.addColorStop(
@@ -2504,11 +2988,14 @@ function drawViewerInfluence() {
   );
 
 
+
   ctx.fillStyle =
   gradient;
 
 
+
   ctx.beginPath();
+
 
 
   ctx.arc(
@@ -2524,6 +3011,7 @@ function drawViewerInfluence() {
     Math.PI * 2
 
   );
+
 
 
   ctx.fill();
@@ -2582,11 +3070,13 @@ function drawViewerInfluence() {
 }
 
 
+
 /* ======================================
-   狀態顯示
+   Debug
 ====================================== */
 
-function updateDebug() {
+function updateDebug(){
+
 
   document
   .getElementById(
@@ -2658,7 +3148,7 @@ function updateDebug() {
 
     固定主導者：
     <b>
-    5號
+    3號
     </b>
 
   `;
@@ -2689,32 +3179,32 @@ function updateDebug() {
         "
       >
 
-        <b>
+      <b>
 
-        ${
-          device.isLeader
-          ?
-          "5號｜固定主導者"
-          :
-          `${device.index + 1}號`
-        }
+      ${
+        device.isLeader
+        ?
+        "3號｜固定主導者"
+        :
+        `${device.index + 1}號`
+      }
 
-        </b>
+      </b>
 
-        <br>
+      <br>
 
-        朝向：
-        ${device.yaw.toFixed(1)}°
+      朝向：
+      ${device.yaw.toFixed(1)}°
 
-        <br>
+      <br>
 
-        活性：
-        ${
-          Math.round(
-            device.activity *
-            100
-          )
-        }%
+      活性：
+      ${
+        Math.round(
+          device.activity *
+          100
+        )
+      }%
 
       </div>
 
@@ -2726,19 +3216,21 @@ function updateDebug() {
 }
 
 
+
 /* ======================================
-   工具
+   Utility
 ====================================== */
 
 function random(
   min,
   max
-) {
+){
 
-  if (
+
+  if(
     max ===
     undefined
-  ) {
+  ){
 
     max =
     min;
@@ -2749,7 +3241,8 @@ function random(
   }
 
 
-  return (
+
+  return(
 
     Math.random()
 
@@ -2769,15 +3262,17 @@ function random(
 }
 
 
+
 function map(
   value,
   inMin,
   inMax,
   outMin,
   outMax
-) {
+){
 
-  return (
+
+  return(
 
     (
       value -
@@ -2807,13 +3302,15 @@ function map(
 }
 
 
+
 function lerp(
   a,
   b,
   t
-) {
+){
 
-  return (
+
+  return(
 
     a
 
@@ -2832,11 +3329,13 @@ function lerp(
 }
 
 
+
 function constrain(
   value,
   min,
   max
-) {
+){
+
 
   return Math.max(
 
@@ -2855,6 +3354,7 @@ function constrain(
 }
 
 
+
 /* ======================================
    START
 ====================================== */
@@ -2865,7 +3365,9 @@ init();
 
 draw();
 
+
 </script>
 
 </body>
+
 </html>
