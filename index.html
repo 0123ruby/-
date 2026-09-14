@@ -4,12 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>誤會機器｜聲波／雜訊傳遞模擬</title>
+<title>誤會機器｜聲波訊號傳遞模擬</title>
 
 <style>
-
 *{
   box-sizing:border-box;
+}
+
+html,body{
+  width:100%;
+  height:100%;
 }
 
 body{
@@ -17,16 +21,14 @@ body{
   overflow:hidden;
   background:#f1eee7;
   color:#303633;
-  font-family:
-  "Microsoft JhengHei",
-  "Noto Sans TC",
-  sans-serif;
+  font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
 }
 
 #app{
-  display:grid;
-  grid-template-columns:1fr 360px;
+  width:100%;
   height:100vh;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 350px;
 }
 
 #stageWrap{
@@ -34,36 +36,37 @@ body{
   overflow:hidden;
 
   background:
-  radial-gradient(
-    circle at center,
-    #faf9f6 0%,
-    #ece8df 100%
-  );
+    radial-gradient(
+      circle at 50% 45%,
+      #faf9f6 0%,
+      #eeeae2 63%,
+      #e5e0d7 100%
+    );
 }
 
 #stage{
+  display:block;
   width:100%;
   height:100%;
-  display:block;
   cursor:pointer;
 }
 
 #title{
   position:absolute;
   left:28px;
-  top:22px;
+  top:24px;
   pointer-events:none;
 }
 
 #title h1{
   margin:0;
-  font-size:26px;
+  font-size:27px;
 }
 
-.sub{
-  margin-top:6px;
-  color:#687772;
+#title p{
+  margin:7px 0 0;
   font-size:13px;
+  color:#6b746f;
 }
 
 #hint{
@@ -71,143 +74,141 @@ body{
   left:28px;
   bottom:24px;
 
-  max-width:640px;
+  max-width:650px;
 
   padding:10px 14px;
 
-  background:
-  rgba(255,255,255,.88);
-
-  border:
-  1px solid rgba(0,0,0,.05);
-
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.05);
   border-radius:10px;
 
   font-size:13px;
-  line-height:1.6;
+  line-height:1.65;
+
+  pointer-events:none;
 }
 
 #panel{
   padding:20px;
+  overflow-y:auto;
 
   background:#fbfaf7;
-
-  border-left:
-  1px solid #ddd8ce;
-
-  overflow-y:auto;
+  border-left:1px solid #ddd8ce;
 }
 
 .section{
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 .sectionTitle{
-  font-size:13px;
-  font-weight:bold;
   margin-bottom:10px;
-  color:#444;
+
+  font-size:13px;
+  font-weight:700;
+  color:#414743;
 }
 
 video{
+  display:block;
   width:100%;
 
-  border-radius:8px;
+  min-height:145px;
+
+  object-fit:cover;
 
   background:#111;
+  border-radius:8px;
 
-  transform:
-  scaleX(-1);
+  transform:scaleX(-1);
 }
 
 button{
   width:100%;
 
+  margin:0 0 8px;
   padding:11px;
 
-  margin-bottom:8px;
-
-  border:0;
-
+  border:none;
   border-radius:9px;
 
-  font-weight:bold;
+  font-weight:700;
 
   cursor:pointer;
 }
 
-.dark{
+button.dark{
   background:#222;
-  color:#fff;
+  color:white;
 }
 
-.light{
-  background:#e4e1db;
+button.light{
+  background:#e6e2da;
   color:#333;
 }
 
-.gray{
-  background:#d2d0ca;
+button.gray{
+  background:#d3d0c9;
   color:#333;
 }
 
 .status{
-  padding:10px;
+  padding:11px;
 
-  background:#fff;
+  background:white;
 
-  border:
-  1px solid #dfdbd2;
-
+  border:1px solid #dfdbd2;
   border-radius:8px;
 
   font-size:12px;
-
-  line-height:1.75;
-}
-
-.meter{
-  height:8px;
-
-  background:#e5e1d8;
-
-  border-radius:999px;
-
-  overflow:hidden;
-
-  margin-top:7px;
-}
-
-.meterFill{
-  height:100%;
-  width:0;
-
-  background:#333;
-
-  transition:
-  width .08s linear;
+  line-height:1.8;
 }
 
 label{
   display:block;
 
-  margin:10px 0 5px;
+  margin:12px 0 5px;
 
-  font-size:13px;
+  font-size:12px;
 }
 
 input[type="range"]{
   width:100%;
 }
 
+.meter{
+  height:8px;
+
+  margin-top:8px;
+
+  overflow:hidden;
+
+  background:#e1ddd5;
+  border-radius:999px;
+}
+
+#voiceMeter{
+  width:0%;
+  height:100%;
+
+  background:#303532;
+
+  transition:width .06s linear;
+}
+
 .small{
+  margin-top:8px;
+
   font-size:11px;
-  color:#666;
-  line-height:1.6;
+  line-height:1.55;
+
+  color:#777;
+}
+
+#selectedStatus{
+  margin-bottom:10px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -219,21 +220,14 @@ input[type="range"]{
     <canvas id="stage"></canvas>
 
     <div id="title">
-
-      <h1>
-        《誤會機器》
-      </h1>
-
-      <div class="sub">
-        聲音進入 → 聲波傳遞 → 訊號失真 → 雜訊
-      </div>
-
+      <h1>《誤會機器》</h1>
+      <p>聲音 → 訊號 → 傳遞 → 失真 → 雜訊</p>
     </div>
 
     <div id="hint">
-      點一支棒子作為說話對象，再開啟麥克風。
-      你說話時，第一支顯示較清楚的聲波；
-      訊號傳到其他棒子後會產生延遲、斷裂、偏移與雜訊。
+      點選一支棒子，再開啟麥克風對它說話。
+      聲音會先以較清楚的聲波出現在該裝置的螢幕，
+      再延遲傳往其他裝置，並逐漸產生偏移、斷裂與雜訊。
     </div>
 
   </div>
@@ -241,21 +235,21 @@ input[type="range"]{
 
   <aside id="panel">
 
-
+    <!-- CAMERA -->
     <div class="section">
 
       <div class="sectionTitle">
-        電腦攝像頭
+        攝像頭
       </div>
 
       <video
         id="video"
         autoplay
-        playsinline
-        muted>
+        muted
+        playsinline>
       </video>
 
-      <br><br>
+      <br>
 
       <button
         id="cameraBtn"
@@ -263,19 +257,23 @@ input[type="range"]{
         開啟攝像頭
       </button>
 
-      <button
-        id="leaveBtn"
-        class="light">
-        模擬觀者離開
-      </button>
-
     </div>
 
 
+    <!-- MICROPHONE -->
     <div class="section">
 
       <div class="sectionTitle">
-        麥克風／聲波
+        聲音互動
+      </div>
+
+      <div
+        id="selectedStatus"
+        class="status">
+
+        目前說話對象：
+        <b>第 3 支</b>
+
       </div>
 
       <button
@@ -291,9 +289,7 @@ input[type="range"]{
       </button>
 
 
-      <div
-        id="micStatus"
-        class="status">
+      <div class="status">
 
         麥克風：
         <b id="micState">
@@ -302,101 +298,77 @@ input[type="range"]{
 
         <br>
 
-        目前說話對象：
-        <b id="talkTarget">
-          第 3 支
+        聲音強度：
+        <b>
+          <span id="voicePercent">
+            0
+          </span>%
         </b>
 
-        <br>
-
-        聲音強度：
-        <span id="voicePercent">
-          0
-        </span>%
-
         <div class="meter">
-
-          <div
-            id="voiceMeter"
-            class="meterFill">
-          </div>
-
+          <div id="voiceMeter"></div>
         </div>
 
       </div>
 
-
-      <div
-        class="small"
-        style="margin-top:8px">
-
-        這版不辨識文字，
-        只讀取麥克風的即時波形與音量。
-
+      <div class="small">
+        這個版本不辨識你說了什麼，只讀取聲音本身的波形與強度。
       </div>
 
     </div>
 
 
+    <!-- SETTINGS -->
     <div class="section">
 
       <div class="sectionTitle">
-        感知設定
+        傳遞設定
       </div>
-
-
-      <label>
-        攝像頭敏感度：
-        <span id="sensitivityValue">
-          35
-        </span>
-      </label>
-
-      <input
-        type="range"
-        id="sensitivity"
-        min="5"
-        max="80"
-        value="35"
-      >
-
-
-      <label>
-        訊號失真強度：
-        <span id="distortionValue">
-          55
-        </span>
-      </label>
-
-      <input
-        type="range"
-        id="distortion"
-        min="0"
-        max="100"
-        value="55"
-      >
 
 
       <label>
         每支傳遞延遲：
-        <span id="delayValue">
-          450
-        </span>
-        ms
+        <span id="delayValue">500</span> ms
       </label>
 
       <input
+        id="delaySlider"
         type="range"
-        id="delay"
-        min="100"
-        max="1000"
+        min="150"
+        max="1200"
         step="50"
-        value="450"
-      >
+        value="500">
+
+
+      <label>
+        訊號失真：
+        <span id="distortionValue">55</span>%
+      </label>
+
+      <input
+        id="distortionSlider"
+        type="range"
+        min="0"
+        max="100"
+        value="55">
+
+
+      <label>
+        攝像頭敏感度：
+        <span id="sensitivityValue">35</span>
+      </label>
+
+      <input
+        id="sensitivitySlider"
+        type="range"
+        min="5"
+        max="80"
+        value="35">
 
     </div>
 
 
+    <!-- SYSTEM -->
     <div class="section">
 
       <div class="sectionTitle">
@@ -404,10 +376,10 @@ input[type="range"]{
       </div>
 
       <div
-        id="globalStatus"
+        id="systemStatus"
         class="status">
 
-        尚未啟動感知
+        系統待機中
 
       </div>
 
@@ -417,7 +389,7 @@ input[type="range"]{
     <button
       id="resetBtn"
       class="gray">
-      重設系統
+      重設裝置狀態
     </button>
 
   </aside>
@@ -425,8 +397,9 @@ input[type="range"]{
 </div>
 
 
+<!-- 攝影機分析用，不顯示 -->
 <canvas
-  id="analysisCanvas"
+  id="cameraAnalysis"
   width="160"
   height="120"
   style="display:none">
@@ -435,135 +408,54 @@ input[type="range"]{
 
 <script>
 
-/* =====================================
-   Canvas
-===================================== */
+/* ==========================================================
+   DOM
+========================================================== */
 
 const canvas =
-document.getElementById(
-  "stage"
-);
+  document.getElementById("stage");
 
 const ctx =
-canvas.getContext(
-  "2d"
-);
-
+  canvas.getContext("2d");
 
 const video =
-document.getElementById(
-  "video"
-);
+  document.getElementById("video");
+
+const cameraAnalysis =
+  document.getElementById("cameraAnalysis");
+
+const cameraCtx =
+  cameraAnalysis.getContext(
+    "2d",
+    {willReadFrequently:true}
+  );
 
 
-const analysisCanvas =
-document.getElementById(
-  "analysisCanvas"
-);
+/* ==========================================================
+   基本設定
+========================================================== */
 
-
-const analysisCtx =
-analysisCanvas.getContext(
-
-  "2d",
-
-  {
-    willReadFrequently:true
-  }
-
-);
-
-
+const DEVICE_COUNT = 5;
 
 let W = 0;
 let H = 0;
 
+let selectedIndex = 2;
 
-/* =====================================
-   五支棒子
-===================================== */
+let propagationDelay = 500;
 
-const DEVICE_COUNT = 5;
-
-const devices = [];
+let distortionStrength = .55;
 
 
-
-/* =====================================
-   目前說話對象
-===================================== */
-
-let selectedTalkIndex = 2;
-
-
-
-/* =====================================
+/* ==========================================================
    攝像頭
-===================================== */
+========================================================== */
 
 let cameraStream = null;
 
 let cameraReady = false;
 
-let previousFrame = null;
-
-
-
-/* =====================================
-   麥克風
-===================================== */
-
-let micStream = null;
-
-let audioContext = null;
-
-let analyser = null;
-
-let audioBytes = null;
-
-let micReady = false;
-
-
-
-let voiceLevel = 0;
-
-let voiceActive = false;
-
-let lastAudioCapture = 0;
-
-
-
-/* =====================================
-   聲波歷史
-
-   用來做傳遞延遲
-===================================== */
-
-let audioHistory = [];
-
-
-
-/* =====================================
-   群體狀態
-===================================== */
-
-let globalChaos = 0;
-
-
-
-/* =====================================
-   可調整參數
-===================================== */
-
-let distortionStrength = .55;
-
-let propagationDelay = 450;
-
-
-
-/* =====================================
-   攝像頭觀者資料
-===================================== */
+let previousCameraFrame = null;
 
 const viewer = {
 
@@ -573,8 +465,6 @@ const viewer = {
 
   movementX:.5,
 
-  stayTime:0,
-
   absentTime:0,
 
   sensitivity:35
@@ -582,537 +472,384 @@ const viewer = {
 };
 
 
+/* ==========================================================
+   麥克風 / Web Audio
+========================================================== */
 
-/* =====================================
+let micStream = null;
+
+let audioContext = null;
+
+let analyser = null;
+
+let microphoneSource = null;
+
+let waveformBuffer = null;
+
+let micReady = false;
+
+
+/*
+  即時聲音強度
+  0～1
+*/
+let voiceLevel = 0;
+
+
+/*
+  儲存前幾秒的聲音，
+  讓訊號真的可以延遲傳給其他棒子。
+*/
+const audioHistory = [];
+
+let lastAudioCapture = 0;
+
+
+/* ==========================================================
+   群體狀態
+========================================================== */
+
+let globalChaos = 0;
+
+const devices = [];
+
+
+/* ==========================================================
    Device
-===================================== */
+========================================================== */
 
-class Device{
+class Device {
 
+  constructor(index){
 
-constructor(index){
+    this.index = index;
 
+    /*
+      圓柱旋轉角度
 
-  this.index =
-  index;
+      負值 = 左轉
+      0 = 正面
+      正值 = 右轉
+    */
+    this.yaw =
+      random(-8,8);
 
+    this.targetYaw =
+      this.yaw;
 
-  this.yaw =
+    this.memoryYaw =
+      random(-5,5);
 
-  random(
-    -4,
-    4
-  );
+    this.phase =
+      random(0,Math.PI * 2);
 
+    this.activity =
+      .03;
 
-  this.targetYaw =
+    /*
+      每一支都有一點不同的個性
+    */
+    this.responseWeight =
+      random(.86,1.14);
 
-  this.yaw;
+    this.neighborWeight =
+      random(.20,.34);
 
-
-  this.memoryYaw =
-
-  random(
-    -7,
-    7
-  );
-
-
-  this.neighborWeight =
-
-  random(
-    .30,
-    .55
-  );
-
-
-  this.memoryWeight =
-
-  random(
-    .12,
-    .28
-  );
-
-
-  this.randomWeight =
-
-  random(
-    .08,
-    .20
-  );
-
-
-  this.phase =
-
-  random(
-    0,
-    Math.PI * 2
-  );
-
-
-  this.activity =
-
-  random(
-    .03,
-    .08
-  );
-
-}
-
-
-
-/* =====================================
-   更新棒子
-===================================== */
-
-update(){
-
-
-  const neighbor =
-
-  this.getNeighbor();
-
-
-
-  const distance =
-
-  Math.abs(
-
-    this.index -
-    selectedTalkIndex
-
-  );
-
-
-
-  /*
-    只有目前被說話的棒子
-    直接受到聲音刺激
-  */
-
-  const sourcePulse =
-
-  (
-    this.index ===
-    selectedTalkIndex
-
-    ?
-
-    voiceLevel *
-    2.4
-
-    :
-
-    0
-  );
-
-
-
-  const presencePulse =
-
-  viewer.present
-
-  ?
-
-  (
-    .10
-
-    +
-
-    viewer.movement *
-    4.0
-  )
-
-  :
-
-  0;
-
-
-
-  /*
-    距離越遠
-    傳播影響越弱
-  */
-
-  const propagation =
-
-  Math.max(
-
-    .25,
-
-    1 -
-    distance *
-    .18
-
-  );
-
-
-
-  /*
-    群體振盪
-  */
-
-  const wave =
-
-  Math.sin(
-
-    performance.now()
-    /
-    650
-
-    +
-
-    this.phase
-
-  )
-
-  *
-
-  15
-
-  *
-
-  globalChaos
-
-  *
-
-  propagation;
-
-
-
-  /*
-    隨機偏差
-  */
-
-  const randomPart =
-
-  random(
-    -35,
-    35
-  )
-
-  *
-
-  this.randomWeight
-
-  *
-
-  (
-    .15
-
-    +
-
-    globalChaos
-
-    +
-
-    voiceLevel
-  );
-
-
-
-  /*
-    聲音擾動
-
-    音量決定擾動強度
-    但不直接決定旋轉方向
-  */
-
-  const voiceJolt =
-
-  random(
-    -55,
-    55
-  )
-
-  *
-
-  sourcePulse;
-
-
-
-  this.targetYaw =
-
-  neighbor *
-  this.neighborWeight
-
-  +
-
-  this.memoryYaw *
-  this.memoryWeight
-
-  +
-
-  wave
-
-  +
-
-  randomPart
-
-  +
-
-  voiceJolt;
-
-
-
-  this.targetYaw =
-
-  constrain(
-
-    this.targetYaw,
-
-    -75,
-    75
-
-  );
-
-
-
-  let speed =
-
-  .012
-
-  +
-
-  globalChaos *
-  .032
-
-  +
-
-  voiceLevel *
-  .025;
-
-
-
-  if(
-    this.index ===
-    selectedTalkIndex
-  ){
-
-    speed *=
-    1.25;
-
-  }
-
-  else{
-
-    speed *=
-
-    Math.max(
-
-      .48,
-
-      1 -
-      distance *
-      .14
-
-    );
+    this.memoryWeight =
+      random(.10,.20);
 
   }
 
 
+  getNeighborYaw(){
 
-  /*
-    沒攝像頭、沒麥克風時
-    微弱待機
-  */
+    let sum = 0;
+    let count = 0;
 
-  if(
+    if(this.index > 0){
 
-    !viewer.present
+      sum +=
+        devices[this.index - 1].yaw;
 
-    &&
+      count++;
 
-    !micReady
+    }
 
-  ){
+    if(this.index < DEVICE_COUNT - 1){
+
+      sum +=
+        devices[this.index + 1].yaw;
+
+      count++;
+
+    }
+
+    /*
+      千萬不要把 return 拆行。
+      這是上一版出錯的地方。
+    */
+    return count > 0
+      ? sum / count
+      : this.yaw;
+
+  }
 
 
-    const calm =
+  update(now){
 
-    Math.sin(
+    const distance =
+      Math.abs(
+        this.index -
+        selectedIndex
+      );
 
-      performance.now()
-      /
-      2200
 
-      +
+    /*
+      取得「傳到這一支」的聲音。
 
-      this.phase
+      選中的裝置：
+      delay = 0
 
-    )
+      距離一支：
+      delay = propagationDelay
 
-    *
-    3.5;
+      距離兩支：
+      delay = propagationDelay * 2
+    */
+    const snapshot =
+      getDelayedAudio(
+        now -
+        distance *
+        propagationDelay
+      );
 
+
+    const localVoice =
+      snapshot
+      ? levelFromRms(snapshot.rms)
+      : 0;
+
+
+    const neighborYaw =
+      this.getNeighborYaw();
+
+
+    /*
+      音量越大，
+      裝置越容易被擾動。
+
+      但聲音不直接決定
+      它要往左還是往右。
+    */
+    const voiceMotion =
+      Math.sin(
+        now / 410
+        +
+        this.phase
+      )
+
+      *
+
+      46
+
+      *
+
+      localVoice
+
+      *
+
+      this.responseWeight;
+
+
+    /*
+      群體自身的波動。
+    */
+    const systemWave =
+      Math.sin(
+        now / 850
+        +
+        this.phase * 1.7
+      )
+
+      *
+
+      11
+
+      *
+
+      globalChaos;
+
+
+    /*
+      受攝像頭觀者移動影響，
+      但不直接跟著人左右轉。
+    */
+    const presenceNoise =
+      viewer.present
+      ?
+      (
+        noise1D(
+          now * .0017
+          +
+          this.index * 9
+        )
+        -
+        .5
+      )
+      *
+      18
+      *
+      viewer.movement
+      *
+      7
+      :
+      0;
+
+
+    /*
+      聲音越強，
+      個體隨機偏差越大。
+    */
+    const individualNoise =
+      (
+        noise1D(
+          now * .0023
+          +
+          this.index * 20.7
+        )
+        -
+        .5
+      )
+
+      *
+      22
+
+      *
+      (
+        .12
+        +
+        localVoice
+        +
+        globalChaos * .5
+      );
+
+
+    /*
+      安靜時仍然有非常細微的自主活動。
+    */
+    const idleMotion =
+      Math.sin(
+        now / 2600
+        +
+        this.phase
+      )
+      *
+      3;
 
 
     this.targetYaw =
 
-    neighbor *
-    .42
-
-    +
-
-    this.memoryYaw *
-    .36
-
-    +
-
-    calm *
-    .22;
-
-
-
-    speed =
-    .016;
-
-  }
-
-
-
-  this.yaw =
-
-  lerp(
-
-    this.yaw,
-
-    this.targetYaw,
-
-    speed
-
-  );
-
-
-
-  this.activity =
-
-  lerp(
-
-    this.activity,
-
-    constrain(
-
-      globalChaos *
-      propagation
+      neighborYaw *
+      this.neighborWeight
 
       +
 
-      voiceLevel *
-      .9
+      this.memoryYaw *
+      this.memoryWeight
 
       +
 
-      presencePulse *
-      .25,
+      voiceMotion
 
-      0,
-      1
+      +
 
-    ),
+      systemWave
 
-    .025
+      +
 
-  );
+      presenceNoise
 
+      +
 
+      individualNoise
 
-  this.memoryYaw =
+      +
 
-  lerp(
-
-    this.memoryYaw,
-
-    this.yaw,
-
-    .002
-
-  );
-
-}
+      idleMotion;
 
 
-
-/* =====================================
-   鄰居
-===================================== */
-
-getNeighbor(){
-
-
-  let total = 0;
-
-  let count = 0;
+    this.targetYaw =
+      constrain(
+        this.targetYaw,
+        -68,
+        68
+      );
 
 
+    /*
+      距離說話對象越遠，
+      反應稍微慢一點。
+    */
+    let speed =
+      .025
+      +
+      localVoice * .075
+      +
+      globalChaos * .015;
 
-  if(
-    this.index >
-    0
-  ){
 
-    total +=
-
-    devices[
-      this.index - 1
-    ].yaw;
+    speed *=
+      Math.max(
+        .55,
+        1 -
+        distance * .13
+      );
 
 
-    count++;
+    this.yaw =
+      lerp(
+        this.yaw,
+        this.targetYaw,
+        speed
+      );
+
+
+    this.activity =
+      lerp(
+        this.activity,
+        constrain(
+          localVoice
+          +
+          globalChaos * .45,
+          0,
+          1
+        ),
+        .08
+      );
+
+
+    /*
+      裝置會留下很淡的過去狀態。
+    */
+    this.memoryYaw =
+      lerp(
+        this.memoryYaw,
+        this.yaw,
+        .0018
+      );
 
   }
 
-
-
-  if(
-    this.index <
-    DEVICE_COUNT - 1
-  ){
-
-    total +=
-
-    devices[
-      this.index + 1
-    ].yaw;
-
-
-    count++;
-
-  }
-
-
-
-  return
-
-  count
-
-  ?
-
-  total /
-  count
-
-  :
-
-  this.yaw;
-
 }
 
 
-}
-
-
-
-/* =====================================
+/* ==========================================================
    初始化
-===================================== */
+========================================================== */
 
-function init(){
+function resetDevices(){
 
-
-  devices.length =
-  0;
-
-
+  devices.length = 0;
 
   for(
     let i = 0;
@@ -1121,200 +858,116 @@ function init(){
   ){
 
     devices.push(
-
       new Device(i)
-
     );
 
   }
 
-
-
-  globalChaos =
-  0;
-
-
-  viewer.present =
-  false;
-
-
-  viewer.movement =
-  0;
-
-
-  viewer.stayTime =
-  0;
-
-
-  viewer.absentTime =
-  0;
-
-
-  selectedTalkIndex =
-  2;
-
-
-  audioHistory =
-  [];
-
-
-  voiceLevel =
-  0;
-
-
-  voiceActive =
-  false;
+  globalChaos = 0;
 
 }
 
 
+resetDevices();
 
-/* =====================================
+
+/* ==========================================================
    Resize
-===================================== */
+========================================================== */
 
-function resize(){
-
+function resizeCanvas(){
 
   const rect =
+    canvas
+    .parentElement
+    .getBoundingClientRect();
 
-  canvas
-  .parentElement
-  .getBoundingClientRect();
-
-
+  W = rect.width;
+  H = rect.height;
 
   canvas.width =
-
-  rect.width *
-  devicePixelRatio;
-
+    Math.round(
+      W * devicePixelRatio
+    );
 
   canvas.height =
-
-  rect.height *
-  devicePixelRatio;
-
-
+    Math.round(
+      H * devicePixelRatio
+    );
 
   canvas.style.width =
-
-  rect.width +
-  "px";
-
+    W + "px";
 
   canvas.style.height =
-
-  rect.height +
-  "px";
-
-
+    H + "px";
 
   ctx.setTransform(
-
     devicePixelRatio,
     0,
     0,
     devicePixelRatio,
     0,
     0
-
   );
-
-
-
-  W =
-  rect.width;
-
-
-  H =
-  rect.height;
 
 }
 
 
 window.addEventListener(
-
   "resize",
-
-  resize
-
+  resizeCanvas
 );
 
+resizeCanvas();
 
 
-/* =====================================
+/* ==========================================================
    五支棒子位置
-===================================== */
+========================================================== */
 
-function getPosition(index){
+function getDevicePosition(index){
 
-
-  return{
+  return {
 
     x:
-
-    map(
-
-      index,
-
-      0,
-      DEVICE_COUNT - 1,
-
-      W * .18,
-      W * .82
-
-    ),
-
+      mapValue(
+        index,
+        0,
+        DEVICE_COUNT - 1,
+        W * .17,
+        W * .83
+      ),
 
     y:
-
-    H * .51
+      H * .51
 
   };
 
 }
 
 
-
-/* =====================================
-   點選棒子
-===================================== */
+/* ==========================================================
+   點棒子 = 選擇你要跟誰講話
+========================================================== */
 
 canvas.addEventListener(
-
   "click",
-
-  e => {
-
+  event => {
 
     const rect =
+      canvas.getBoundingClientRect();
 
-    canvas
-    .getBoundingClientRect();
+    const mouseX =
+      event.clientX -
+      rect.left;
 
-
-
-    const x =
-
-    e.clientX -
-    rect.left;
-
-
-    const y =
-
-    e.clientY -
-    rect.top;
+    const mouseY =
+      event.clientY -
+      rect.top;
 
 
-
-    let best =
-    -1;
-
-
-    let bestD =
-    Infinity;
-
+    let chosen = -1;
+    let minimumDistance = Infinity;
 
 
     for(
@@ -1323,304 +976,114 @@ canvas.addEventListener(
       i++
     ){
 
-
       const p =
-
-      getPosition(i);
-
+        getDevicePosition(i);
 
       const dx =
-
-      x -
-      p.x;
-
+        mouseX - p.x;
 
       const dy =
-
-      y -
-      p.y;
-
+        mouseY - p.y;
 
       const d =
-
-      Math.sqrt(
-
-        dx * dx
-
-        +
-
-        dy * dy
-
-      );
-
+        Math.sqrt(
+          dx * dx
+          +
+          dy * dy
+        );
 
 
       if(
-
-        d <
-        115
-
+        d < 130
         &&
-
-        d <
-        bestD
-
+        d < minimumDistance
       ){
 
-
-        best =
-        i;
-
-
-        bestD =
-        d;
+        chosen = i;
+        minimumDistance = d;
 
       }
 
     }
 
 
+    if(chosen >= 0){
 
-    if(
-      best >=
-      0
-    ){
-
-
-      selectedTalkIndex =
-      best;
-
+      selectedIndex =
+        chosen;
 
       /*
-        換一支棒子時
-        清空前一段聲音
+        換說話對象時不需要關麥克風，
+        下一句聲音會從新選的棒子開始傳。
       */
-
-      audioHistory =
-      [];
 
     }
 
   }
-
 );
 
 
-
-/* =====================================
-   攝像頭
-===================================== */
-
-async function startCamera(){
-
-
-  try{
-
-
-    cameraStream =
-
-    await navigator
-    .mediaDevices
-    .getUserMedia({
-
-      video:{
-
-        width:{
-          ideal:640
-        },
-
-        height:{
-          ideal:480
-        },
-
-        facingMode:
-        "user"
-
-      },
-
-      audio:false
-
-    });
-
-
-
-    video.srcObject =
-
-    cameraStream;
-
-
-
-    await video.play();
-
-
-
-    cameraReady =
-    true;
-
-
-    previousFrame =
-    null;
-
-
-
-    document
-    .getElementById(
-      "cameraBtn"
-    )
-    .textContent =
-
-    "攝像頭已開啟";
-
-
-  }
-  catch(err){
-
-
-    cameraReady =
-    false;
-
-
-
-    document
-    .getElementById(
-      "globalStatus"
-    )
-    .innerHTML =
-
-    "<b>攝像頭啟動失敗</b><br>"
-
-    +
-
-    err.name
-
-    +
-
-    "："
-
-    +
-
-    err.message;
-
-  }
-
-}
-
-
-
-document
-.getElementById(
-  "cameraBtn"
-)
-.onclick =
-startCamera;
-
-
-
-document
-.getElementById(
-  "leaveBtn"
-)
-.onclick = () => {
-
-
-  viewer.present =
-  false;
-
-
-  viewer.movement =
-  0;
-
-
-  viewer.stayTime =
-  0;
-
-
-  viewer.absentTime =
-  0;
-
-};
-
-
-
-/* =====================================
+/* ==========================================================
    麥克風
-===================================== */
+========================================================== */
 
-async function startMic(){
-
+async function startMicrophone(){
 
   try{
-
 
     if(
-
-      !navigator
-      .mediaDevices
-      ?.getUserMedia
-
+      !navigator.mediaDevices
+      ||
+      !navigator.mediaDevices.getUserMedia
     ){
 
       throw new Error(
-
-        "瀏覽器不支援麥克風輸入"
-
+        "目前瀏覽器無法使用麥克風"
       );
 
     }
 
 
-
-    if(
-      micReady
-    ){
+    if(micReady){
 
       return;
 
     }
 
 
-
     micStream =
+      await navigator
+      .mediaDevices
+      .getUserMedia({
 
-    await navigator
-    .mediaDevices
-    .getUserMedia({
+        audio:{
 
-      audio:{
+          echoCancellation:true,
 
-        echoCancellation:true,
+          noiseSuppression:false,
 
-        noiseSuppression:false,
+          autoGainControl:false
 
-        autoGainControl:false
+        },
 
-      },
+        video:false
 
-      video:false
+      });
 
-    });
 
+    const AudioCtx =
+      window.AudioContext
+      ||
+      window.webkitAudioContext;
 
 
     audioContext =
-
-    new(
-
-      window.AudioContext
-
-      ||
-
-      window.webkitAudioContext
-
-    )();
-
+      new AudioCtx();
 
 
     if(
-
       audioContext.state ===
       "suspended"
-
     ){
 
       await audioContext.resume();
@@ -1628,238 +1091,203 @@ async function startMic(){
     }
 
 
-
     analyser =
-
-    audioContext
-    .createAnalyser();
-
-
-
-    analyser.fftSize =
-    1024;
-
-
-
-    analyser.smoothingTimeConstant =
-    .35;
-
-
-
-    audioBytes =
-
-    new Uint8Array(
-
-      analyser.fftSize
-
-    );
-
-
-
-    const source =
-
-    audioContext
-    .createMediaStreamSource(
-
-      micStream
-
-    );
-
+      audioContext
+      .createAnalyser();
 
 
     /*
-      只接到分析器
-
-      不接喇叭
-      避免回授
+      1024 點時域波形。
     */
+    analyser.fftSize = 1024;
 
-    source.connect(
+    analyser.smoothingTimeConstant = .18;
 
+
+    waveformBuffer =
+      new Uint8Array(
+        analyser.fftSize
+      );
+
+
+    microphoneSource =
+      audioContext
+      .createMediaStreamSource(
+        micStream
+      );
+
+
+    /*
+      麥克風 → Analyser
+
+      不接到 destination，
+      所以不會從喇叭播放自己的聲音，
+      避免回授。
+    */
+    microphoneSource.connect(
       analyser
-
     );
 
 
-
-    micReady =
-    true;
-
+    micReady = true;
 
 
     document
-    .getElementById(
-      "micBtn"
-    )
+    .getElementById("micBtn")
     .textContent =
+      "麥克風已開啟";
 
-    "麥克風已開啟";
+
+    document
+    .getElementById("micState")
+    .textContent =
+      "已啟動";
 
 
   }
-  catch(err){
+  catch(error){
 
+    micReady = false;
 
-    micReady =
-    false;
-
-
+    console.error(error);
 
     document
-    .getElementById(
-      "micState"
-    )
+    .getElementById("micState")
     .textContent =
+      "啟動失敗：" +
+      error.name;
 
-    "啟動失敗："
-
-    +
-
-    err.name;
+    alert(
+      "麥克風沒有成功開啟。\n\n" +
+      "錯誤：" +
+      error.name +
+      "\n\n請確認 Chrome 網站權限中的麥克風是「允許」。"
+    );
 
   }
 
 }
 
 
+async function stopMicrophone(){
 
-document
-.getElementById(
-  "micBtn"
-)
-.onclick =
-startMic;
-
-
-
-document
-.getElementById(
-  "micStopBtn"
-)
-.onclick =
-stopMic;
-
-
-
-async function stopMic(){
-
-
-  if(
-    micStream
-  ){
-
+  if(micStream){
 
     micStream
     .getTracks()
     .forEach(
-
       track =>
       track.stop()
-
     );
 
-
-    micStream =
-    null;
-
   }
 
 
+  micStream = null;
 
-  if(
-    audioContext
-  ){
 
+  if(microphoneSource){
 
     try{
-
-      await audioContext.close();
-
+      microphoneSource.disconnect();
     }
-    catch(e){}
-
-
-    audioContext =
-    null;
+    catch(error){}
 
   }
 
 
-
-  analyser =
-  null;
+  microphoneSource = null;
 
 
-  audioBytes =
-  null;
+  if(audioContext){
+
+    try{
+      await audioContext.close();
+    }
+    catch(error){}
+
+  }
 
 
-  micReady =
-  false;
+  audioContext = null;
 
+  analyser = null;
 
-  voiceLevel =
-  0;
+  waveformBuffer = null;
 
+  micReady = false;
 
-  voiceActive =
-  false;
+  voiceLevel = 0;
 
-
-  audioHistory =
-  [];
-
+  audioHistory.length = 0;
 
 
   document
-  .getElementById(
-    "micBtn"
-  )
+  .getElementById("micBtn")
   .textContent =
+    "開啟麥克風";
 
-  "開啟麥克風";
+
+  document
+  .getElementById("micState")
+  .textContent =
+    "未啟動";
 
 }
 
 
+document
+.getElementById("micBtn")
+.addEventListener(
+  "click",
+  startMicrophone
+);
 
-/* =====================================
-   即時擷取聲波
-===================================== */
+
+document
+.getElementById("micStopBtn")
+.addEventListener(
+  "click",
+  stopMicrophone
+);
+
+
+/* ==========================================================
+   聲音取樣
+========================================================== */
 
 function captureAudio(now){
 
-
   if(
-
     !micReady
-
     ||
-
     !analyser
-
     ||
-
-    !audioBytes
-
+    !waveformBuffer
   ){
+
+    voiceLevel =
+      lerp(
+        voiceLevel,
+        0,
+        .08
+      );
 
     return;
 
   }
 
 
-
   /*
-    約每 45ms 儲存一次
+    每 35ms 存一次。
+
+    五支棒子讀取不同時間點，
+    因此產生實際的傳遞延遲。
   */
-
   if(
-
     now -
     lastAudioCapture <
-    45
-
+    35
   ){
 
     return;
@@ -1867,192 +1295,110 @@ function captureAudio(now){
   }
 
 
-
-  lastAudioCapture =
-  now;
+  lastAudioCapture = now;
 
 
-
-  /*
-    取得真正的聲音時域波形
-  */
-
-  analyser
-  .getByteTimeDomainData(
-
-    audioBytes
-
+  analyser.getByteTimeDomainData(
+    waveformBuffer
   );
 
 
-
-  const sampleCount =
-  96;
-
-
+  const pointCount = 128;
 
   const samples =
-
-  new Float32Array(
-
-    sampleCount
-
-  );
-
-
-
-  let sum =
-  0;
-
-
-
-  for(
-
-    let i = 0;
-    i < sampleCount;
-    i++
-
-  ){
-
-
-    const src =
-
-    Math.floor(
-
-      i
-
-      *
-
-      (
-        audioBytes.length -
-        1
-      )
-
-      /
-
-      (
-        sampleCount -
-        1
-      )
-
+    new Float32Array(
+      pointCount
     );
 
 
+  let sumSquares = 0;
 
+
+  for(
+    let i = 0;
+    i < pointCount;
+    i++
+  ){
+
+    const sourceIndex =
+      Math.floor(
+        i
+        *
+        (
+          waveformBuffer.length - 1
+        )
+        /
+        (
+          pointCount - 1
+        )
+      );
+
+
+    /*
+      Web Audio 時域資料：
+      128 = 中線
+
+      轉成 -1 ～ +1。
+    */
     const value =
-
-    (
-      audioBytes[src]
-
-      -
-
-      128
-
-    )
-
-    /
-
-    128;
+      (
+        waveformBuffer[sourceIndex]
+        -
+        128
+      )
+      /
+      128;
 
 
+    samples[i] = value;
 
-    samples[i] =
-    value;
-
-
-
-    sum +=
-
-    value *
-    value;
+    sumSquares +=
+      value * value;
 
   }
 
 
-
-  /*
-    RMS：
-    大致代表聲音強度
-  */
-
   const rms =
+    Math.sqrt(
+      sumSquares /
+      pointCount
+    );
 
-  Math.sqrt(
 
-    sum /
-    sampleCount
-
-  );
-
+  const currentLevel =
+    levelFromRms(rms);
 
 
   voiceLevel =
+    lerp(
+      voiceLevel,
+      currentLevel,
+      .34
+    );
 
-  lerp(
-
-    voiceLevel,
-
-    constrain(
-
-      rms *
-      5.5,
-
-      0,
-      1
-
-    ),
-
-    .32
-
-  );
-
-
-
-  voiceActive =
-
-  voiceLevel >
-  .055;
-
-
-
-  /*
-    存入歷史
-
-    讓其他棒子讀到稍早的聲波
-  */
 
   audioHistory.push({
 
-    t:now,
+    time:now,
 
-    samples:samples,
+    rms:rms,
 
-    rms:rms
+    samples:samples
 
   });
 
 
-
   /*
-    最多保留 7 秒
+    保存 8 秒已經足夠。
   */
-
   const cutoff =
-
-  now -
-  7000;
-
+    now - 8000;
 
 
   while(
-
-    audioHistory.length
-
+    audioHistory.length > 0
     &&
-
-    audioHistory[0].t <
-    cutoff
-
+    audioHistory[0].time < cutoff
   ){
 
     audioHistory.shift();
@@ -2062,102 +1408,174 @@ function captureAudio(now){
 }
 
 
+/*
+  把 RMS 轉成比較適合互動的 0～1。
 
-/* =====================================
-   取得延遲後的聲音資料
-===================================== */
+  先扣除一點環境底噪，
+  再把正常說話音量放大。
+*/
+function levelFromRms(rms){
 
-function getSnapshot(
-  targetTime
-){
+  return constrain(
 
+    (
+      rms - .008
+    )
+    *
+    15,
 
-  if(
-    !audioHistory.length
-  ){
+    0,
+    1
 
-    return null;
-
-  }
-
-
-
-  /*
-    如果訊號還沒傳過來
-    先不顯示
-  */
-
-  if(
-
-    targetTime <
-    audioHistory[0].t
-
-  ){
-
-    return null;
-
-  }
-
-
-
-  let best =
-
-  audioHistory[0];
-
-
-
-  for(
-
-    let i = 1;
-    i < audioHistory.length;
-    i++
-
-  ){
-
-
-    if(
-
-      audioHistory[i].t <=
-      targetTime
-
-    ){
-
-      best =
-      audioHistory[i];
-
-    }
-    else{
-
-      break;
-
-    }
-
-  }
-
-
-
-  return best;
+  );
 
 }
 
 
+/* ==========================================================
+   取得延遲後的聲音
+========================================================== */
 
-/* =====================================
-   攝像頭畫面分析
-===================================== */
+function getDelayedAudio(targetTime){
+
+  if(
+    audioHistory.length === 0
+  ){
+
+    return null;
+
+  }
+
+
+  /*
+    targetTime 比目前最舊資料還早，
+    代表訊號尚未傳到。
+  */
+  if(
+    targetTime <
+    audioHistory[0].time
+  ){
+
+    return null;
+
+  }
+
+
+  /*
+    從最新往回找，
+    效率比從第一筆一路掃好。
+  */
+  for(
+    let i =
+      audioHistory.length - 1;
+
+    i >= 0;
+
+    i--
+  ){
+
+    if(
+      audioHistory[i].time
+      <=
+      targetTime
+    ){
+
+      return audioHistory[i];
+
+    }
+
+  }
+
+
+  return null;
+
+}
+
+
+/* ==========================================================
+   攝像頭
+========================================================== */
+
+async function startCamera(){
+
+  try{
+
+    cameraStream =
+      await navigator
+      .mediaDevices
+      .getUserMedia({
+
+        video:{
+
+          width:{
+            ideal:640
+          },
+
+          height:{
+            ideal:480
+          },
+
+          facingMode:"user"
+
+        },
+
+        audio:false
+
+      });
+
+
+    video.srcObject =
+      cameraStream;
+
+
+    await video.play();
+
+
+    cameraReady = true;
+
+    previousCameraFrame = null;
+
+
+    document
+    .getElementById("cameraBtn")
+    .textContent =
+      "攝像頭已開啟";
+
+  }
+  catch(error){
+
+    cameraReady = false;
+
+    console.error(error);
+
+    alert(
+      "攝像頭沒有成功開啟。\n\n" +
+      error.name
+    );
+
+  }
+
+}
+
+
+document
+.getElementById("cameraBtn")
+.addEventListener(
+  "click",
+  startCamera
+);
+
+
+/* ==========================================================
+   攝像頭移動偵測
+========================================================== */
 
 function analyzeCamera(){
 
-
   if(
-
     !cameraReady
-
     ||
-
-    video.readyState <
-    2
-
+    video.readyState < 2
   ){
 
     return;
@@ -2165,176 +1583,120 @@ function analyzeCamera(){
   }
 
 
-
-  analysisCtx.drawImage(
-
+  cameraCtx.drawImage(
     video,
-
     0,
     0,
-
-    analysisCanvas.width,
-    analysisCanvas.height
-
+    cameraAnalysis.width,
+    cameraAnalysis.height
   );
 
 
-
-  const data =
-
-  analysisCtx
-  .getImageData(
-
-    0,
-    0,
-
-    analysisCanvas.width,
-    analysisCanvas.height
-
-  )
-  .data;
-
-
-
-  if(
-    !previousFrame
-  ){
-
-
-    previousFrame =
-
-    new Uint8ClampedArray(
-
-      data
-
+  const image =
+    cameraCtx.getImageData(
+      0,
+      0,
+      cameraAnalysis.width,
+      cameraAnalysis.height
     );
 
 
+  const data =
+    image.data;
+
+
+  if(
+    !previousCameraFrame
+  ){
+
+    previousCameraFrame =
+      new Uint8ClampedArray(data);
+
     return;
 
   }
 
 
+  let changed = 0;
 
-  let changedPixels =
-  0;
-
-
-  let changedXTotal =
-  0;
-
+  let xTotal = 0;
 
 
   const width =
-
-  analysisCanvas.width;
-
+    cameraAnalysis.width;
 
   const height =
-
-  analysisCanvas.height;
-
+    cameraAnalysis.height;
 
 
   const threshold =
+    mapValue(
+      viewer.sensitivity,
+      5,
+      80,
+      82,
+      20
+    );
 
-  map(
 
-    viewer.sensitivity,
-
-    5,
-    80,
-
-    75,
-    18
-
-  );
-
+  let samplesChecked = 0;
 
 
   for(
-
     let y = 0;
     y < height;
     y += 4
-
   ){
 
-
     for(
-
       let x = 0;
       x < width;
       x += 4
-
     ){
 
-
       const index =
+        (
+          y * width + x
+        )
+        *
+        4;
 
-      (
-        y *
-        width
+
+      const difference =
+
+        Math.abs(
+          data[index]
+          -
+          previousCameraFrame[index]
+        )
 
         +
 
-        x
-      )
+        Math.abs(
+          data[index + 1]
+          -
+          previousCameraFrame[index + 1]
+        )
 
-      *
-      4;
+        +
+
+        Math.abs(
+          data[index + 2]
+          -
+          previousCameraFrame[index + 2]
+        );
 
 
-
-      const diff =
-
-      Math.abs(
-
-        data[index]
-
-        -
-
-        previousFrame[index]
-
-      )
-
-      +
-
-      Math.abs(
-
-        data[index+1]
-
-        -
-
-        previousFrame[index+1]
-
-      )
-
-      +
-
-      Math.abs(
-
-        data[index+2]
-
-        -
-
-        previousFrame[index+2]
-
-      );
-
+      samplesChecked++;
 
 
       if(
-        diff >
-        threshold
+        difference > threshold
       ){
 
+        changed++;
 
-        changedPixels++;
-
-
-        changedXTotal +=
-        x;
+        xTotal += x;
 
       }
 
@@ -2343,125 +1705,70 @@ function analyzeCamera(){
   }
 
 
-
-  previousFrame =
-
-  new Uint8ClampedArray(
-
-    data
-
-  );
+  previousCameraFrame =
+    new Uint8ClampedArray(data);
 
 
-
-  const sampleCount =
-
-  Math.ceil(
-    width / 4
-  )
-
-  *
-
-  Math.ceil(
-    height / 4
-  );
-
-
-
-  const movementRatio =
-
-  changedPixels
-
-  /
-
-  sampleCount;
-
+  const ratio =
+    changed /
+    Math.max(
+      1,
+      samplesChecked
+    );
 
 
   viewer.movement =
-
-  lerp(
-
-    viewer.movement,
-
-    movementRatio,
-
-    .28
-
-  );
+    lerp(
+      viewer.movement,
+      ratio,
+      .25
+    );
 
 
+  if(changed > 0){
 
-  if(
-    changedPixels >
-    0
-  ){
-
-
-    let avgX =
-
-    changedXTotal
-
-    /
-
-    changedPixels;
+    let averageX =
+      xTotal / changed;
 
 
-
-    avgX =
-
-    width -
-    avgX;
-
+    /*
+      前鏡頭畫面左右翻轉，
+      所以轉回使用者看到的方向。
+    */
+    averageX =
+      width -
+      averageX;
 
 
     viewer.movementX =
-
-    lerp(
-
-      viewer.movementX,
-
-      avgX /
-      width,
-
-      .25
-
-    );
+      lerp(
+        viewer.movementX,
+        averageX / width,
+        .2
+      );
 
   }
 
 
-
   if(
-    movementRatio >
-    .009
+    ratio > .009
   ){
 
+    viewer.present = true;
 
-    viewer.present =
-    true;
-
-
-    viewer.absentTime =
-    0;
+    viewer.absentTime = 0;
 
   }
   else{
 
-
-    viewer.absentTime +=
-    100;
-
+    viewer.absentTime += 100;
 
 
     if(
-      viewer.absentTime >
-      4000
+      viewer.absentTime > 3500
     ){
 
-
-      viewer.present =
-      false;
+      viewer.present = false;
 
     }
 
@@ -2470,840 +1777,536 @@ function analyzeCamera(){
 }
 
 
+/* ==========================================================
+   群體混亂程度
+========================================================== */
 
-/* =====================================
-   更新系統混亂度
-===================================== */
+function updateGlobalState(){
 
-function updateSystem(dt){
-
-
-  if(
-    viewer.present
-  ){
-
-
-    viewer.stayTime +=
-    dt;
-
-  }
-  else{
+  const cameraDisturbance =
+    constrain(
+      viewer.movement * 8,
+      0,
+      1
+    );
 
 
-    viewer.stayTime =
-    0;
+  const targetChaos =
+    constrain(
 
-  }
+      voiceLevel * .72
 
+      +
 
-
-  const movementFactor =
-
-  constrain(
-
-    viewer.movement *
-    8,
-
-    0,
-    1
-
-  );
-
-
-
-  const voiceFactor =
-
-  voiceLevel;
-
-
-
-  /*
-    攝像頭 + 聲音
-    都可以增加系統擾動
-  */
-
-  const target =
-
-  constrain(
-
-    (
-      viewer.present
-      ?
-      .10
-      :
-      0
-    )
-
-    +
-
-    movementFactor *
-    .25
-
-    +
-
-    voiceFactor *
-    .65,
-
-    0,
-    1
-
-  );
-
-
-
-  globalChaos =
-
-  lerp(
-
-    globalChaos,
-
-    target,
-
-    target >
-    globalChaos
-
-    ?
-
-    .035
-
-    :
-
-    .008
-
-  );
-
-
-
-  if(
-    !viewer.present
-  ){
-
-
-    viewer.movement =
-
-    lerp(
-
-      viewer.movement,
+      cameraDisturbance * .28,
 
       0,
-
-      .04
+      1
 
     );
 
-  }
+
+  globalChaos =
+    lerp(
+      globalChaos,
+      targetChaos,
+      targetChaos > globalChaos
+      ? .06
+      : .012
+    );
 
 }
 
 
-
-/* =====================================
-   地面
-===================================== */
+/* ==========================================================
+   場地
+========================================================== */
 
 function drawGround(){
 
+  const floorY =
+    H * .755;
+
 
   ctx.strokeStyle =
+    "rgba(45,49,48,.08)";
 
-  "rgba(45,49,48,.08)";
-
-
-  ctx.lineWidth =
-  1;
-
+  ctx.lineWidth = 1;
 
   ctx.beginPath();
 
-
   ctx.moveTo(
-
-    50,
-
-    H * .76
-
+    45,
+    floorY
   );
-
 
   ctx.lineTo(
-
-    W - 50,
-
-    H * .76
-
+    W - 45,
+    floorY
   );
-
 
   ctx.stroke();
 
 }
 
 
-
-/* =====================================
-   畫棒子
-===================================== */
+/* ==========================================================
+   畫五支棒子
+========================================================== */
 
 function drawDevice(
   device,
   now
 ){
 
-
-  const position =
-
-  getPosition(
-
-    device.index
-
-  );
-
+  const p =
+    getDevicePosition(
+      device.index
+    );
 
 
   const bodyHeight =
-
-  Math.min(
-
-    330,
-
-    H * .42
-
-  );
-
-
-
-  const bodyWidth =
-  18;
-
-
-
-  const yawRad =
-
-  device.yaw
-
-  *
-
-  Math.PI
-
-  /
-
-  180;
-
+    Math.min(
+      390,
+      H * .48
+    );
 
 
   /*
-    攝像頭、螢幕
-    跟著圓柱表面旋轉
+    很細長。
   */
+  const frontWidth =
+    20;
 
+
+  const yawRad =
+    device.yaw
+    *
+    Math.PI
+    /
+    180;
+
+
+  /*
+    圓柱轉向側面時，
+    本體寬度稍微變窄。
+
+    不會誇張到像一條線。
+  */
+  const visibleWidth =
+
+    11
+
+    +
+
+    9
+
+    *
+    Math.abs(
+      Math.cos(yawRad)
+    );
+
+
+  /*
+    攝像頭和螢幕都固定在
+    圓柱的同一個「正面」，
+
+    所以整支棒子轉動時，
+    兩個元件會一起繞過去。
+  */
   const surfaceX =
 
-  Math.sin(
-    yawRad
-  )
+    Math.sin(yawRad)
 
-  *
-
-  bodyWidth *
-  .55;
-
+    *
+    visibleWidth *
+    .57;
 
 
   const facing =
 
-  .35
+    .24
 
-  +
+    +
 
-  Math.abs(
+    .76
 
-    Math.cos(
-      yawRad
-    )
-
-  )
-
-  *
-  .65;
-
+    *
+    Math.abs(
+      Math.cos(yawRad)
+    );
 
 
   ctx.save();
 
-
-
   ctx.translate(
-
-    position.x,
-
-    position.y
-
+    p.x,
+    p.y
   );
 
 
-
-  /* =============================
-     黑色棒身
-  ============================= */
+  /* ==========================
+     棒身
+  ========================== */
 
   ctx.shadowBlur =
-
-  7
-
-  +
-
-  device.activity *
-  10;
-
-
+    7
+    +
+    device.activity * 14;
 
   ctx.shadowColor =
-
-  "rgba(0,0,0,.24)";
-
+    "rgba(0,0,0,.24)";
 
 
   const gradient =
+    ctx.createLinearGradient(
+      -visibleWidth/2,
+      0,
+      visibleWidth/2,
+      0
+    );
 
-  ctx.createLinearGradient(
 
-    -bodyWidth / 2,
-
-    0,
-
-    bodyWidth / 2,
-
-    0
-
-  );
-
+  /*
+    高光位置會隨 yaw 偏移，
+    進一步加強整支旋轉的感覺。
+  */
+  const lightShift =
+    Math.sin(yawRad)
+    *
+    .12;
 
 
   gradient.addColorStop(
-
     0,
-
     "#020202"
-
   );
 
-
   gradient.addColorStop(
-
-    .32,
-
+    constrain(
+      .30 + lightShift,
+      .15,
+      .43
+    ),
     "#0b0b0b"
-
   );
 
-
   gradient.addColorStop(
-
-    .52,
-
-    "#2a2a2a"
-
+    constrain(
+      .52 + lightShift,
+      .36,
+      .67
+    ),
+    "#292929"
   );
 
-
   gradient.addColorStop(
-
-    .72,
-
-    "#0f0f0f"
-
+    constrain(
+      .72 + lightShift,
+      .57,
+      .87
+    ),
+    "#101010"
   );
 
-
   gradient.addColorStop(
-
     1,
-
     "#020202"
-
   );
-
 
 
   ctx.fillStyle =
-  gradient;
-
+    gradient;
 
 
   ctx.beginPath();
 
-
   ctx.roundRect(
-
-    -bodyWidth / 2,
-
-    -bodyHeight / 2,
-
-    bodyWidth,
-
+    -visibleWidth/2,
+    -bodyHeight/2,
+    visibleWidth,
     bodyHeight,
-
-    bodyWidth / 2
-
+    visibleWidth/2
   );
-
 
   ctx.fill();
 
 
-
-  ctx.shadowBlur =
-  0;
+  ctx.shadowBlur = 0;
 
 
+  /* ==========================
+     上圓面
+  ========================== */
 
-  /* =============================
-     攝像頭元件
-  ============================= */
+  ctx.fillStyle =
+    "#151515";
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    0,
+    -bodyHeight/2,
+    visibleWidth/2,
+    3,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* ==========================
+     攝像頭模組
+  ========================== */
 
   const cameraY =
-
-  -bodyHeight *
-  .32;
+    -bodyHeight * .31;
 
 
+  const cameraW =
+    Math.max(
+      7,
+      20 * facing
+    );
 
-  const cameraWidth =
 
-  18 *
-  facing;
-
-
-
-  const cameraHeight =
-  15;
-
+  const cameraH =
+    16;
 
 
   ctx.fillStyle =
-  "#151b17";
-
+    "#171d19";
 
   ctx.strokeStyle =
-  "#3d433e";
+    "#464d47";
 
-
-  ctx.lineWidth =
-  1;
-
+  ctx.lineWidth = 1;
 
 
   ctx.beginPath();
 
-
   ctx.roundRect(
-
-    surfaceX
-
-    -
-
-    cameraWidth /
-    2,
-
-    cameraY
-
-    -
-
-    cameraHeight /
-    2,
-
-    cameraWidth,
-
-    cameraHeight,
-
+    surfaceX - cameraW/2,
+    cameraY - cameraH/2,
+    cameraW,
+    cameraH,
     2
-
   );
 
-
   ctx.fill();
-
   ctx.stroke();
 
 
-
-  const lensRadius =
-
-  Math.max(
-
-    2,
-
-    4.2 *
-    facing
-
-  );
-
-
-
-  ctx.fillStyle =
-  "#010101";
-
-
-  ctx.beginPath();
-
-
-  ctx.arc(
-
-    surfaceX,
-
-    cameraY,
-
-    lensRadius,
-
-    0,
-
-    Math.PI * 2
-
-  );
-
-
-  ctx.fill();
-
-
-
-  ctx.fillStyle =
-
-  "rgba(110,145,160,.42)";
-
-
-  ctx.beginPath();
-
-
-  ctx.arc(
-
-    surfaceX
-
-    -
-
-    lensRadius *
-    .25,
-
-    cameraY
-
-    -
-
-    lensRadius *
-    .25,
-
+  const lensR =
     Math.max(
+      2,
+      4.5 * facing
+    );
 
-      .7,
 
-      lensRadius *
-      .22
+  ctx.fillStyle =
+    "#020303";
 
-    ),
+  ctx.beginPath();
 
+  ctx.arc(
+    surfaceX,
+    cameraY,
+    lensR,
     0,
-
-    Math.PI * 2
-
+    Math.PI*2
   );
-
 
   ctx.fill();
 
 
+  ctx.fillStyle =
+    "rgba(125,160,170,.42)";
 
-  /* =============================
-     螢幕
-  ============================= */
+  ctx.beginPath();
+
+  ctx.arc(
+    surfaceX - lensR*.27,
+    cameraY - lensR*.27,
+    Math.max(
+      .7,
+      lensR*.22
+    ),
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* ==========================
+     小螢幕
+  ========================== */
 
   const screenY =
-  0;
+    -bodyHeight * .01;
 
 
-  const screenWidth =
-
-  50 *
-  facing;
-
-
-  const screenHeight =
-  72;
+  const screenW =
+    Math.max(
+      10,
+      54 * facing
+    );
 
 
-
-  ctx.fillStyle =
-  "#07090a";
-
+  const screenH =
+    82;
 
 
   /*
-    被點選的棒子
-    只有極淡的亮框
+    外框
   */
+  ctx.fillStyle =
+    "#060808";
+
 
   ctx.strokeStyle =
 
-  device.index ===
-  selectedTalkIndex
+    device.index ===
+    selectedIndex
 
-  ?
+    ?
 
-  "rgba(215,220,215,.75)"
+    "rgba(210,220,215,.82)"
 
-  :
+    :
 
-  "#292d2c";
-
+    "#303432";
 
 
   ctx.lineWidth =
 
-  device.index ===
-  selectedTalkIndex
+    device.index ===
+    selectedIndex
 
-  ?
+    ?
 
-  1.5
+    1.5
 
-  :
+    :
 
-  1;
-
+    1;
 
 
   ctx.beginPath();
 
-
   ctx.roundRect(
-
-    surfaceX
-
-    -
-
-    screenWidth /
-    2,
-
-    screenY
-
-    -
-
-    screenHeight /
-    2,
-
-    screenWidth,
-
-    screenHeight,
-
+    surfaceX - screenW/2,
+    screenY - screenH/2,
+    screenW,
+    screenH,
     3
-
   );
 
-
   ctx.fill();
-
   ctx.stroke();
 
 
-
   /*
-    限制聲波在螢幕內
+    限制聲波只能畫在螢幕裡。
   */
+  const innerX =
+    surfaceX - screenW/2 + 3;
+
+  const innerY =
+    screenY - screenH/2 + 3;
+
+  const innerW =
+    Math.max(
+      3,
+      screenW - 6
+    );
+
+  const innerH =
+    screenH - 6;
+
 
   ctx.save();
 
-
-
   ctx.beginPath();
 
-
   ctx.roundRect(
-
-    surfaceX
-
-    -
-
-    screenWidth /
+    innerX,
+    innerY,
+    innerW,
+    innerH,
     2
-
-    +
-
-    3,
-
-    screenY
-
-    -
-
-    screenHeight /
-    2
-
-    +
-
-    3,
-
-    Math.max(
-
-      2,
-
-      screenWidth -
-      6
-
-    ),
-
-    screenHeight -
-    6,
-
-    2
-
   );
-
 
   ctx.clip();
 
 
-
-  drawSignalScreen(
-
+  drawWaveScreen(
     device.index,
-
-    surfaceX
-
-    -
-
-    screenWidth /
-    2
-
-    +
-
-    3,
-
-    screenY
-
-    -
-
-    screenHeight /
-    2
-
-    +
-
-    3,
-
-    Math.max(
-
-      2,
-
-      screenWidth -
-      6
-
-    ),
-
-    screenHeight -
-    6,
-
+    innerX,
+    innerY,
+    innerW,
+    innerH,
     now
-
   );
-
 
 
   ctx.restore();
 
 
-
-  /* =============================
+  /* ==========================
      底座
-  ============================= */
+  ========================== */
 
   ctx.fillStyle =
-  "#171717";
-
+    "#151515";
 
   ctx.beginPath();
 
-
   ctx.ellipse(
-
     0,
-
-    bodyHeight /
-    2
-
-    +
-
-    8,
-
-    15,
-
+    bodyHeight/2 + 8,
+    16,
     4,
-
     0,
-
     0,
-
-    Math.PI * 2
-
+    Math.PI*2
   );
-
 
   ctx.fill();
 
 
-
   ctx.restore();
 
 
-
   /*
-    模擬畫面用：
-    告訴你目前選到哪一支
+    模擬操作提示。
 
-    未來實體作品可以拿掉
+    實體作品不需要。
   */
-
   if(
-
     device.index ===
-    selectedTalkIndex
-
+    selectedIndex
   ){
 
-
     ctx.strokeStyle =
+      "rgba(60,65,62,.24)";
 
-    "rgba(60,60,60,.28)";
-
-
-    ctx.lineWidth =
-    1;
-
+    ctx.lineWidth = 1;
 
     ctx.beginPath();
 
-
     ctx.ellipse(
-
-      position.x,
-
-      position.y
-
-      +
-
-      bodyHeight /
-      2
-
-      +
-
-      15,
-
-      27,
-
+      p.x,
+      p.y + bodyHeight/2 + 17,
+      29,
       7,
-
       0,
-
       0,
-
-      Math.PI * 2
-
+      Math.PI*2
     );
-
 
     ctx.stroke();
 
@@ -3312,13 +2315,12 @@ function drawDevice(
 }
 
 
+/* ==========================================================
+   螢幕聲波
+========================================================== */
 
-/* =====================================
-   螢幕聲波／雜訊
-===================================== */
-
-function drawSignalScreen(
-  index,
+function drawWaveScreen(
+  deviceIndex,
   x,
   y,
   w,
@@ -3326,945 +2328,586 @@ function drawSignalScreen(
   now
 ){
 
-
+  /*
+    螢幕底色
+  */
   ctx.fillStyle =
-  "#050708";
-
+    "#040708";
 
   ctx.fillRect(
-
     x,
     y,
     w,
     h
-
   );
 
-
-
-  /*
-    距離目前聲音來源幾支
-  */
 
   const distance =
+    Math.abs(
+      deviceIndex -
+      selectedIndex
+    );
 
-  Math.abs(
 
-    index
-
+  const targetTime =
+    now
     -
-
-    selectedTalkIndex
-
-  );
-
-
-
-  /*
-    越遠延遲越久
-  */
-
-  const delay =
-
-  distance
-
-  *
-
-  propagationDelay;
-
+    distance *
+    propagationDelay;
 
 
   const snapshot =
-
-  getSnapshot(
-
-    now -
-    delay
-
-  );
-
+    getDelayedAudio(
+      targetTime
+    );
 
 
   /*
-    越遠越失真
+    距離越遠 → 雜訊越重。
   */
-
-  const noiseBase =
-
-  constrain(
-
-    distance
-
-    *
-
-    .19
-
-    *
-
-    distortionStrength
-
-    +
-
-    globalChaos *
-    .12,
-
-    0,
-    .85
-
-  );
-
-
-
-  const alpha =
-
-  snapshot
-
-  ?
-
-  constrain(
-
-    .35
-
-    +
-
-    voiceLevel *
-    1.2,
-
-    0,
-    1
-
-  )
-
-  :
-
-  .25;
-
-
-
-  /* =============================
-     掃描線
-  ============================= */
-
-  const scan =
-
-  (
-    now /
-    18
-
-    +
-
-    index *
-    13
-  )
-
-  %
-
-  h;
-
-
-
-  ctx.fillStyle =
-
-  `rgba(
-    170,
-    205,
-    220,
-    ${.03 + noiseBase * .07}
-  )`;
-
-
-
-  ctx.fillRect(
-
-    x,
-
-    y + scan,
-
-    w,
-
-    1
-
-  );
-
-
-
-  /* =============================
-     失真橫條
-  ============================= */
-
-  if(
-
-    distance >
-    0
-
-    &&
-
-    snapshot
-
-  ){
-
-
-    const bars =
-
-    Math.floor(
+  const distortion =
+    constrain(
 
       distance
-
       *
-
+      .24
+      *
       distortionStrength
 
-      *
+      +
 
-      2.2
+      globalChaos
+      *
+      .08,
+
+      0,
+      .9
 
     );
 
 
-
-    for(
-
-      let b = 0;
-      b < bars;
-      b++
-
-    ){
-
-
-      const yy =
-
-      y
-
-      +
-
-      pseudo01(
-
-        index * 31
-
-        +
-
-        b * 17,
-
-        Math.floor(
-          now /
-          120
-        )
-
-      )
-
-      *
-
-      h;
-
-
-
-      const barHeight =
-
-      1
-
-      +
-
-      pseudo01(
-
-        index * 11
-
-        +
-
-        b * 7,
-
-        Math.floor(
-          now /
-          90
-        )
-
-      )
-
-      *
-
-      3;
-
-
-
-      ctx.fillStyle =
-
-      `rgba(
-        185,
-        215,
-        225,
-        ${.05 + noiseBase * .12}
-      )`;
-
-
-
-      ctx.fillRect(
-
-        x,
-
-        yy,
-
-        w,
-
-        barHeight
-
-      );
-
-    }
-
-  }
-
-
-
-  /* =============================
-     真實聲波
-  ============================= */
-
-  const samples =
-
-  snapshot
-
-  ?
-
-  snapshot.samples
-
-  :
-
-  null;
-
-
-
-  ctx.lineWidth =
-  1.5;
-
-
-
-  ctx.strokeStyle =
-
-  `rgba(
-    205,
-    235,
-    245,
-    ${alpha}
-  )`;
-
-
-
-  ctx.shadowBlur =
-  6;
-
-
-  ctx.shadowColor =
-
-  "rgba(170,220,240,.45)";
-
-
-
-  ctx.beginPath();
-
-
-
-  const points =
-  72;
-
-
-
-  for(
-
-    let i = 0;
-    i < points;
-    i++
-
-  ){
-
-
-    const t =
-
-    i
-
-    /
-
-    (
-      points -
-      1
+  /*
+    沒有聲音資料時，
+    顯示非常微弱的待機線。
+  */
+  if(!snapshot){
+
+    drawIdleSignal(
+      x,
+      y,
+      w,
+      h,
+      now,
+      deviceIndex
     );
-
-
-
-    /*
-      有麥克風：
-      使用真實聲波
-
-      沒有：
-      顯示極淡待機波
-    */
-
-    let sample =
-
-    samples
-
-    ?
-
-    samples[
-
-      Math.floor(
-
-        t
-
-        *
-
-        (
-          samples.length -
-          1
-        )
-
-      )
-
-    ]
-
-    :
-
-    Math.sin(
-
-      t *
-      Math.PI *
-      4
-
-      +
-
-      now /
-      900
-
-    )
-
-    *
-    .025;
-
-
-
-    /*
-      隨傳遞產生的雜訊
-    */
-
-    const phaseNoise =
-
-    (
-      pseudoNoise(
-
-        i * .45
-
-        +
-
-        index * 9.2,
-
-        now *
-        .0027
-
-      )
-
-      -
-
-      .5
-    )
-
-    *
-    2;
-
-
-
-    sample +=
-
-    phaseNoise
-
-    *
-
-    noiseBase
-
-    *
-
-    .65;
-
-
-
-    /*
-      傳兩支以上
-      開始有第二層波動
-    */
-
-    if(
-      distance >=
-      2
-    ){
-
-
-      sample +=
-
-      Math.sin(
-
-        t
-
-        *
-
-        (
-          10
-
-          +
-
-          distance *
-          7
-        )
-
-        +
-
-        now *
-        .01
-
-        +
-
-        index
-
-      )
-
-      *
-
-      noiseBase
-
-      *
-
-      .18;
-
-    }
-
-
-
-    const xx =
-
-    x
-
-    +
-
-    t *
-    w;
-
-
-
-    let yy =
-
-    y
-
-    +
-
-    h /
-    2
-
-    +
-
-    sample
-
-    *
-
-    h
-
-    *
-
-    .36;
-
-
-
-    /*
-      垂直位置漂移
-    */
-
-    yy +=
-
-    Math.sin(
-
-      (
-        t *
-        8
-
-        +
-
-        index
-      )
-
-      *
-      2
-
-      +
-
-      now *
-      .006
-
-    )
-
-    *
-
-    noiseBase
-
-    *
-
-    h
-
-    *
-
-    .05;
-
-
-
-    /*
-      越遠
-      線越容易斷掉
-    */
-
-    const cutChance =
-
-    noiseBase
-
-    *
-
-    (
-      distance >
-      0
-
-      ?
-
-      .18
-
-      :
-
-      .02
-    );
-
-
-
-    const cut =
-
-    pseudo01(
-
-      i
-
-      +
-
-      index *
-      91,
-
-      Math.floor(
-        now /
-        150
-      )
-
-    )
-
-    <
-    cutChance;
-
-
-
-    if(
-
-      i ===
-      0
-
-      ||
-
-      cut
-
-    ){
-
-
-      ctx.moveTo(
-
-        xx,
-
-        yy
-
-      );
-
-    }
-    else{
-
-
-      ctx.lineTo(
-
-        xx,
-
-        yy
-
-      );
-
-    }
-
-  }
-
-
-
-  ctx.stroke();
-
-
-
-  ctx.shadowBlur =
-  0;
-
-
-
-  /* =============================
-     雜訊像素
-  ============================= */
-
-  const dots =
-
-  Math.floor(
-
-    8
-
-    +
-
-    noiseBase *
-    85
-
-  );
-
-
-
-  for(
-
-    let i = 0;
-    i < dots;
-    i++
-
-  ){
-
-
-    const randomX =
-
-    pseudo01(
-
-      index * 101
-
-      +
-
-      i * 7,
-
-      Math.floor(
-        now /
-        70
-      )
-
-      +
-
-      3
-
-    )
-
-    *
-    w;
-
-
-
-    const randomY =
-
-    pseudo01(
-
-      index * 47
-
-      +
-
-      i * 13,
-
-      Math.floor(
-        now /
-        70
-      )
-
-      +
-
-      9
-
-    )
-
-    *
-    h;
-
-
-
-    const noiseAlpha =
-
-    .03
-
-    +
-
-    noiseBase
-
-    *
-
-    .22
-
-    *
-
-    pseudo01(
-
-      i * 23
-
-      +
-
-      index,
-
-      Math.floor(
-        now /
-        100
-      )
-
-    );
-
-
-
-    ctx.fillStyle =
-
-    `rgba(
-      220,
-      240,
-      245,
-      ${noiseAlpha}
-    )`;
-
-
-
-    ctx.fillRect(
-
-      x + randomX,
-
-      y + randomY,
-
-      1,
-
-      1
-
-    );
-
-  }
-
-}
-
-
-
-/* =====================================
-   攝像頭擾動提示
-===================================== */
-
-function drawViewerInfluence(){
-
-
-  if(
-    !viewer.present
-  ){
 
     return;
 
   }
 
 
-
-  const x =
-
-  map(
-
-    viewer.movementX,
-
-    0,
-    1,
-
-    W * .10,
-    W * .90
-
-  );
+  const localLevel =
+    levelFromRms(
+      snapshot.rms
+    );
 
 
-
-  const radius =
-
-  30
-
-  +
-
-  globalChaos *
-  80;
+  const samples =
+    snapshot.samples;
 
 
+  /* ==========================
+     掃描線
+  ========================== */
 
-  const gradient =
-
-  ctx.createRadialGradient(
-
-    x,
-    H * .86,
-    0,
-
-    x,
-    H * .86,
-    radius
-
-  );
-
-
-
-  gradient.addColorStop(
-
-    0,
-
-    `rgba(
-      50,
-      50,
-      50,
-      ${.05 + globalChaos * .05}
-    )`
-
-  );
-
-
-
-  gradient.addColorStop(
-
-    1,
-
-    "rgba(50,50,50,0)"
-
-  );
-
+  const scanY =
+    y
+    +
+    (
+      now / 18
+      +
+      deviceIndex * 17
+    )
+    %
+    h;
 
 
   ctx.fillStyle =
-  gradient;
+    `rgba(
+      180,
+      215,
+      220,
+      ${.025 + distortion*.06}
+    )`;
 
 
+  ctx.fillRect(
+    x,
+    scanY,
+    w,
+    1
+  );
+
+
+  /* ==========================
+     波形
+  ========================== */
 
   ctx.beginPath();
 
 
-  ctx.arc(
-
-    x,
-
-    H * .86,
-
-    radius,
-
-    0,
-
-    Math.PI * 2
-
-  );
+  const drawPoints = 80;
 
 
-  ctx.fill();
+  for(
+    let i = 0;
+    i < drawPoints;
+    i++
+  ){
+
+    const t =
+      i /
+      (
+        drawPoints - 1
+      );
+
+
+    const sourceIndex =
+      Math.floor(
+
+        t
+
+        *
+
+        (
+          samples.length - 1
+        )
+
+      );
+
+
+    let sample =
+      samples[sourceIndex];
+
+
+    /*
+      正常人聲常常不會把 -1～1 撐滿，
+      所以視覺上放大。
+
+      這只是螢幕顯示，
+      不改變實際音量資料。
+    */
+    sample *= 2.5;
+
+
+    /*
+      每傳一支，
+      加入逐漸增加的誤差。
+    */
+    if(distance > 0){
+
+      const n =
+        (
+          noise2D(
+            i * .13
+            +
+            deviceIndex * 13,
+            now * .003
+          )
+          -
+          .5
+        )
+        *
+        2;
+
+
+      sample +=
+        n
+        *
+        distortion
+        *
+        .65;
+
+    }
+
+
+    /*
+      第二層以上開始有重疊的訊號感。
+    */
+    if(distance >= 2){
+
+      sample +=
+
+        Math.sin(
+
+          t
+          *
+          Math.PI
+          *
+          (
+            8
+            +
+            distance * 5
+          )
+
+          +
+
+          now * .008
+
+        )
+
+        *
+        distortion
+        *
+        .17;
+
+    }
+
+
+    /*
+      波形垂直位移。
+    */
+    let px =
+      x
+      +
+      t * w;
+
+
+    let py =
+      y
+      +
+      h/2
+      +
+      sample
+      *
+      h
+      *
+      .27;
+
+
+    /*
+      訊號漂移。
+    */
+    py +=
+
+      Math.sin(
+        t * 10
+        +
+        now * .006
+        +
+        deviceIndex
+      )
+
+      *
+      distortion
+      *
+      h
+      *
+      .05;
+
+
+    /*
+      越遠越容易斷線。
+    */
+    const breakChance =
+      distance > 0
+      ?
+      distortion * .16
+      :
+      0;
+
+
+    const broken =
+      pseudoRandom(
+        i
+        +
+        deviceIndex * 71,
+        Math.floor(
+          now / 120
+        )
+      )
+      <
+      breakChance;
+
+
+    if(
+      i === 0
+      ||
+      broken
+    ){
+
+      ctx.moveTo(
+        px,
+        py
+      );
+
+    }
+    else{
+
+      ctx.lineTo(
+        px,
+        py
+      );
+
+    }
+
+  }
+
+
+  /*
+    聲音越大，
+    聲波越亮。
+  */
+  const waveAlpha =
+    constrain(
+      .35
+      +
+      localLevel * .8,
+      .28,
+      1
+    );
+
+
+  ctx.lineWidth =
+    1.35;
+
+
+  ctx.strokeStyle =
+    `rgba(
+      205,
+      232,
+      238,
+      ${waveAlpha}
+    )`;
+
+
+  ctx.shadowBlur =
+    5;
+
+
+  ctx.shadowColor =
+    "rgba(170,215,225,.45)";
+
+
+  ctx.stroke();
+
+
+  ctx.shadowBlur = 0;
+
+
+  /* ==========================
+     Glitch 橫條
+  ========================== */
+
+  const glitchCount =
+    Math.floor(
+      distance
+      *
+      distortionStrength
+      *
+      3
+    );
+
+
+  for(
+    let i = 0;
+    i < glitchCount;
+    i++
+  ){
+
+    const gy =
+      y
+      +
+      pseudoRandom(
+        deviceIndex * 50 + i * 9,
+        Math.floor(now / 100)
+      )
+      *
+      h;
+
+
+    const gh =
+      1
+      +
+      pseudoRandom(
+        deviceIndex * 20 + i * 4,
+        Math.floor(now / 80)
+      )
+      *
+      2;
+
+
+    ctx.fillStyle =
+      `rgba(
+        210,
+        230,
+        235,
+        ${.03 + distortion*.09}
+      )`;
+
+
+    ctx.fillRect(
+      x,
+      gy,
+      w,
+      gh
+    );
+
+  }
+
+
+  /* ==========================
+     雜訊點
+  ========================== */
+
+  const dotCount =
+    Math.floor(
+      distortion * 70
+    );
+
+
+  for(
+    let i = 0;
+    i < dotCount;
+    i++
+  ){
+
+    const px =
+      x
+      +
+      pseudoRandom(
+        deviceIndex * 100 + i * 11,
+        Math.floor(now / 70)
+      )
+      *
+      w;
+
+
+    const py =
+      y
+      +
+      pseudoRandom(
+        deviceIndex * 70 + i * 17,
+        Math.floor(now / 70) + 4
+      )
+      *
+      h;
+
+
+    ctx.fillStyle =
+      `rgba(
+        220,
+        240,
+        242,
+        ${.03 + distortion*.16}
+      )`;
+
+
+    ctx.fillRect(
+      px,
+      py,
+      1,
+      1
+    );
+
+  }
 
 }
 
 
+/* ==========================================================
+   待機訊號
+========================================================== */
 
-/* =====================================
+function drawIdleSignal(
+  x,
+  y,
+  w,
+  h,
+  now,
+  index
+){
+
+  ctx.beginPath();
+
+
+  for(
+    let i = 0;
+    i < 50;
+    i++
+  ){
+
+    const t =
+      i / 49;
+
+
+    const px =
+      x + t * w;
+
+
+    const py =
+      y
+      +
+      h/2
+
+      +
+
+      Math.sin(
+        t * Math.PI * 4
+        +
+        now / 1000
+        +
+        index
+      )
+
+      *
+      1.1;
+
+
+    if(i === 0){
+
+      ctx.moveTo(
+        px,
+        py
+      );
+
+    }
+    else{
+
+      ctx.lineTo(
+        px,
+        py
+      );
+
+    }
+
+  }
+
+
+  ctx.lineWidth = 1;
+
+  ctx.strokeStyle =
+    "rgba(145,170,165,.20)";
+
+  ctx.stroke();
+
+}
+
+
+/* ==========================================================
    UI
-===================================== */
+========================================================== */
 
 function updateUI(){
+
+  document
+  .getElementById(
+    "selectedStatus"
+  )
+  .innerHTML =
+
+  `目前說話對象：
+   <b>第 ${selectedIndex + 1} 支</b>`;
 
 
   document
@@ -4274,25 +2917,16 @@ function updateUI(){
   .textContent =
 
   micReady
-
   ?
-
   "已啟動"
-
   :
-
   "未啟動";
 
 
-
-  document
-  .getElementById(
-    "talkTarget"
-  )
-  .textContent =
-
-  `第 ${selectedTalkIndex + 1} 支`;
-
+  const percent =
+    Math.round(
+      voiceLevel * 100
+    );
 
 
   document
@@ -4300,14 +2934,7 @@ function updateUI(){
     "voicePercent"
   )
   .textContent =
-
-  Math.round(
-
-    voiceLevel *
-    100
-
-  );
-
+    percent;
 
 
   document
@@ -4315,22 +2942,12 @@ function updateUI(){
     "voiceMeter"
   )
   .style.width =
-
-  (
-    voiceLevel *
-    100
-  )
-  .toFixed(0)
-
-  +
-
-  "%";
-
+    percent + "%";
 
 
   document
   .getElementById(
-    "globalStatus"
+    "systemStatus"
   )
   .innerHTML = `
 
@@ -4342,19 +2959,6 @@ function updateUI(){
       "已啟動"
       :
       "未啟動"
-    }
-    </b>
-
-    <br>
-
-    畫面擾動：
-    <b>
-    ${
-      viewer.present
-      ?
-      "有"
-      :
-      "無"
     }
     </b>
 
@@ -4373,19 +2977,31 @@ function updateUI(){
 
     <br>
 
-    目前訊號源：
+    攝影機擾動：
     <b>
-    第 ${selectedTalkIndex + 1} 支
+    ${
+      viewer.present
+      ?
+      "偵測中"
+      :
+      "無"
+    }
     </b>
 
     <br>
 
-    群體混亂度：
+    聲音強度：
+    <b>
+    ${percent}%
+    </b>
+
+    <br>
+
+    系統擾動：
     <b>
     ${
       Math.round(
-        globalChaos *
-        100
+        globalChaos * 100
       )
     }%
     </b>
@@ -4395,98 +3011,22 @@ function updateUI(){
 }
 
 
-
-/* =====================================
-   sliders
-===================================== */
-
-document
-.getElementById(
-  "sensitivity"
-)
-.addEventListener(
-
-  "input",
-
-  e => {
-
-
-    viewer.sensitivity =
-
-    Number(
-      e.target.value
-    );
-
-
-
-    document
-    .getElementById(
-      "sensitivityValue"
-    )
-    .textContent =
-
-    viewer.sensitivity;
-
-  }
-
-);
-
-
+/* ==========================================================
+   Slider
+========================================================== */
 
 document
 .getElementById(
-  "distortion"
+  "delaySlider"
 )
 .addEventListener(
-
   "input",
-
-  e => {
-
-
-    distortionStrength =
-
-    Number(
-      e.target.value
-    )
-
-    /
-
-    100;
-
-
-
-    document
-    .getElementById(
-      "distortionValue"
-    )
-    .textContent =
-
-    e.target.value;
-
-  }
-
-);
-
-
-
-document
-.getElementById(
-  "delay"
-)
-.addEventListener(
-
-  "input",
-
-  e => {
-
+  event => {
 
     propagationDelay =
-
-    Number(
-      e.target.value
-    );
-
+      Number(
+        event.target.value
+      );
 
 
     document
@@ -4494,73 +3034,148 @@ document
       "delayValue"
     )
     .textContent =
-
-    e.target.value;
+      propagationDelay;
 
   }
-
 );
 
+
+document
+.getElementById(
+  "distortionSlider"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    distortionStrength =
+      Number(
+        event.target.value
+      )
+      /
+      100;
+
+
+    document
+    .getElementById(
+      "distortionValue"
+    )
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+document
+.getElementById(
+  "sensitivitySlider"
+)
+.addEventListener(
+  "input",
+  event => {
+
+    viewer.sensitivity =
+      Number(
+        event.target.value
+      );
+
+
+    document
+    .getElementById(
+      "sensitivityValue"
+    )
+    .textContent =
+      viewer.sensitivity;
+
+  }
+);
 
 
 document
 .getElementById(
   "resetBtn"
 )
-.onclick =
-init;
+.addEventListener(
+  "click",
+  () => {
+
+    resetDevices();
+
+    selectedIndex = 2;
+
+    audioHistory.length = 0;
+
+  }
+);
 
 
-
-/* =====================================
+/* ==========================================================
    Utility
-===================================== */
+========================================================== */
 
 function random(
   min,
   max
 ){
 
+  if(max === undefined){
 
-  if(
-    max ===
-    undefined
-  ){
-
-
-    max =
-    min;
-
-
-    min =
-    0;
+    max = min;
+    min = 0;
 
   }
 
-
-
-  return(
-
+  return (
     Math.random()
-
     *
-
     (
-      max -
-      min
+      max - min
     )
-
     +
-
     min
-
   );
 
 }
 
 
+function lerp(
+  a,
+  b,
+  t
+){
 
-function map(
+  return (
+    a
+    +
+    (
+      b - a
+    )
+    *
+    t
+  );
+
+}
+
+
+function constrain(
+  value,
+  minimum,
+  maximum
+){
+
+  return Math.max(
+    minimum,
+    Math.min(
+      maximum,
+      value
+    )
+  );
+
+}
+
+
+function mapValue(
   value,
   inMin,
   inMax,
@@ -4568,26 +3183,22 @@ function map(
   outMax
 ){
 
-
-  return(
+  return (
 
     (
-      value -
-      inMin
+      value - inMin
     )
 
     /
 
     (
-      inMax -
-      inMin
+      inMax - inMin
     )
 
     *
 
     (
-      outMax -
-      outMin
+      outMax - outMin
     )
 
     +
@@ -4599,260 +3210,176 @@ function map(
 }
 
 
-
-function lerp(
-  a,
-  b,
-  t
-){
-
-
-  return(
-
-    a
-
-    +
-
-    (
-      b -
-      a
-    )
-
-    *
-    t
-
-  );
-
-}
-
-
-
-function constrain(
-  value,
-  min,
-  max
-){
-
-
-  return Math.max(
-
-    min,
-
-    Math.min(
-
-      max,
-
-      value
-
-    )
-
-  );
-
-}
-
-
-
 /*
-  可重複的假隨機
-  用來做雜訊動畫
+  這不是音訊來源，
+  只是畫面與運動用的平滑假亂數。
 */
+function noise1D(x){
 
-function pseudo01(
+  const a =
+    Math.sin(
+      x * 1.7
+    )
+    *
+    .5;
+
+  const b =
+    Math.sin(
+      x * .73 + 1.2
+    )
+    *
+    .3;
+
+  const c =
+    Math.sin(
+      x * 2.41 + 4.1
+    )
+    *
+    .2;
+
+  return (
+    a + b + c
+  )
+  *
+  .5
+  +
+  .5;
+
+}
+
+
+function noise2D(
+  x,
+  y
+){
+
+  return pseudoRandom(
+    Math.floor(x * 100),
+    Math.floor(y * 100)
+  );
+
+}
+
+
+function pseudoRandom(
   a,
   b
 ){
 
-
-  const x =
-
-  Math.sin(
-
-    a *
-    12.9898
-
-    +
-
-    b *
-    78.233
-
-  )
-
-  *
-
-  43758.5453;
-
-
-
-  return(
-
-    x
-
-    -
-
-    Math.floor(x)
-
-  );
-
-}
-
-
-
-function pseudoNoise(
-  x,
-  t
-){
-
-
-  return pseudo01(
-
-    Math.floor(
-      x * 10
-    ),
-
-    Math.floor(
-      t * 10
+  const value =
+    Math.sin(
+      a * 12.9898
+      +
+      b * 78.233
     )
+    *
+    43758.5453;
 
+  return (
+    value
+    -
+    Math.floor(value)
   );
 
 }
 
 
-
-/* =====================================
+/* ==========================================================
    Animation
-===================================== */
+========================================================== */
 
-let lastTime =
-
-performance.now();
-
-
-let lastAnalyze =
-0;
-
-
-
-function draw(){
-
-
-  const now =
-
+let previousTime =
   performance.now();
 
+let previousCameraAnalysis =
+  0;
 
+
+function animate(now){
 
   const dt =
-
-  Math.min(
-
-    50,
-
-    now -
-    lastTime
-
-  );
+    Math.min(
+      50,
+      now - previousTime
+    );
 
 
-  lastTime =
-  now;
+  previousTime = now;
 
 
-
+  /*
+    攝像頭不用每個 frame 都分析。
+  */
   if(
-
     now -
-    lastAnalyze >
+    previousCameraAnalysis >
     100
-
   ){
-
 
     analyzeCamera();
 
-
-    lastAnalyze =
-    now;
+    previousCameraAnalysis = now;
 
   }
 
 
+  /*
+    取得麥克風聲音。
+  */
+  captureAudio(now);
 
-  captureAudio(
-    now
+
+  /*
+    更新群體擾動程度。
+  */
+  updateGlobalState();
+
+
+  /*
+    更新棒子轉向。
+  */
+  devices.forEach(
+    device =>
+      device.update(now)
   );
 
 
-  updateSystem(
-    dt
-  );
-
-
-
+  /*
+    清畫面。
+  */
   ctx.clearRect(
-
     0,
     0,
     W,
     H
-
   );
-
 
 
   drawGround();
 
 
-
   devices.forEach(
-
     device =>
-    device.update()
-
+      drawDevice(
+        device,
+        now
+      )
   );
-
-
-
-  devices.forEach(
-
-    device =>
-    drawDevice(
-
-      device,
-
-      now
-
-    )
-
-  );
-
-
-
-  drawViewerInfluence();
-
 
 
   updateUI();
 
 
-
   requestAnimationFrame(
-    draw
+    animate
   );
 
 }
 
 
-
-/* =====================================
-   Start
-===================================== */
-
-resize();
-
-init();
-
-draw();
+requestAnimationFrame(
+  animate
+);
 
 </script>
 
