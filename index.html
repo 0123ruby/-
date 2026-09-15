@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>誤會機器｜群體資訊傳遞</title>
 
 <style>
@@ -22,35 +21,29 @@ body{
   overflow:hidden;
   background:#ece9e2;
   color:#303532;
-
   font-family:
-  "Microsoft JhengHei",
-  "Noto Sans TC",
-  sans-serif;
+    "Microsoft JhengHei",
+    "Noto Sans TC",
+    sans-serif;
 }
 
 #app{
   width:100%;
   height:100vh;
-
   display:grid;
-
-  grid-template-columns:
-  minmax(0,1fr)
-  360px;
+  grid-template-columns:minmax(0,1fr) 360px;
 }
 
 #stageWrap{
   position:relative;
   overflow:hidden;
-
   background:
-  radial-gradient(
-    circle at 50% 42%,
-    #faf9f5 0%,
-    #eeebe4 58%,
-    #ded9cf 100%
-  );
+    radial-gradient(
+      circle at 50% 42%,
+      #faf9f5 0%,
+      #eeebe4 58%,
+      #ded9cf 100%
+    );
 }
 
 #stage{
@@ -61,10 +54,8 @@ body{
 
 #title{
   position:absolute;
-
   left:28px;
   top:24px;
-
   pointer-events:none;
 }
 
@@ -81,22 +72,14 @@ body{
 
 #phaseBox{
   position:absolute;
-
   left:28px;
   bottom:25px;
-
   padding:11px 15px;
-
   background:rgba(255,255,255,.92);
-
-  border:
-  1px solid rgba(0,0,0,.05);
-
+  border:1px solid rgba(0,0,0,.05);
   border-radius:10px;
-
   font-size:13px;
   line-height:1.65;
-
   pointer-events:none;
 }
 
@@ -106,13 +89,9 @@ body{
 
 #panel{
   padding:20px;
-
   overflow-y:auto;
-
   background:#faf9f6;
-
-  border-left:
-  1px solid #ddd8ce;
+  border-left:1px solid #ddd8ce;
 }
 
 .section{
@@ -121,39 +100,27 @@ body{
 
 .sectionTitle{
   margin-bottom:10px;
-
   font-size:13px;
   font-weight:700;
 }
 
 video{
   display:block;
-
   width:100%;
   min-height:145px;
-
   object-fit:cover;
-
   background:#111;
-
   border-radius:8px;
-
-  transform:
-  scaleX(-1);
+  transform:scaleX(-1);
 }
 
 button{
   width:100%;
-
   margin:0 0 8px;
-
   padding:11px;
-
   border:0;
   border-radius:9px;
-
   font-weight:700;
-
   cursor:pointer;
 }
 
@@ -177,25 +144,23 @@ button.test{
   color:#fff;
 }
 
-.status{
+.status,
+.legend{
   padding:11px;
-
   background:#fff;
-
-  border:
-  1px solid #dedad1;
-
+  border:1px solid #dedad1;
   border-radius:8px;
-
   font-size:12px;
   line-height:1.8;
 }
 
+.legend{
+  margin-top:10px;
+}
+
 label{
   display:block;
-
   margin:12px 0 5px;
-
   font-size:12px;
 }
 
@@ -205,13 +170,9 @@ input[type="range"]{
 
 .meter{
   height:8px;
-
   margin-top:7px;
-
   overflow:hidden;
-
   background:#e1ddd5;
-
   border-radius:999px;
 }
 
@@ -220,46 +181,15 @@ input[type="range"]{
 #chaosMeter{
   width:0%;
   height:100%;
-
   background:#373d3a;
-
-  transition:
-  width .07s linear;
-}
-
-.small{
-  margin-top:8px;
-
-  color:#777;
-
-  font-size:11px;
-  line-height:1.6;
-}
-
-.legend{
-  margin-top:10px;
-
-  padding:10px;
-
-  background:#fff;
-
-  border:
-  1px solid #dedad1;
-
-  border-radius:8px;
-
-  font-size:12px;
-  line-height:1.9;
+  transition:width .07s linear;
 }
 
 .dot{
   display:inline-block;
-
   width:9px;
   height:9px;
-
   margin-right:6px;
-
   border-radius:50%;
 }
 
@@ -281,58 +211,32 @@ input[type="range"]{
 </style>
 </head>
 
-
 <body>
 
 <div id="app">
-
-  <!-- =========================
-       LEFT STAGE
-  ========================== -->
 
   <div id="stageWrap">
 
     <canvas id="stage"></canvas>
 
     <div id="title">
-
-      <h1>
-        《誤會機器》
-      </h1>
-
-      <p>
-        看到你 → 聽你說話 → 群體資訊失真
-      </p>
-
+      <h1>《誤會機器》</h1>
+      <p>看到你 → 聽你說話 → 群體資訊失真</p>
     </div>
 
     <div id="phaseBox">
-
       目前狀態：
-
-      <span id="phaseName">
-        待機
-      </span>
-
+      <span id="phaseName">待機</span>
       <br>
-
       <span id="phaseDescription">
         裝置正在等待觀者。
       </span>
-
     </div>
 
   </div>
 
 
-  <!-- =========================
-       RIGHT PANEL
-  ========================== -->
-
   <aside id="panel">
-
-
-    <!-- CAMERA -->
 
     <div class="section">
 
@@ -358,7 +262,6 @@ input[type="range"]{
       <div class="status">
 
         攝像頭：
-
         <b id="cameraState">
           未啟動
         </b>
@@ -366,7 +269,6 @@ input[type="range"]{
         <br>
 
         觀者位置：
-
         <b id="viewerPosition">
           —
         </b>
@@ -374,11 +276,8 @@ input[type="range"]{
         <br>
 
         動作量：
-
         <b>
-          <span id="cameraPercent">
-            0
-          </span>%
+          <span id="cameraPercent">0</span>%
         </b>
 
         <div class="meter">
@@ -389,8 +288,6 @@ input[type="range"]{
 
     </div>
 
-
-    <!-- MICROPHONE -->
 
     <div class="section">
 
@@ -419,7 +316,6 @@ input[type="range"]{
       <div class="status">
 
         麥克風：
-
         <b id="micState">
           未啟動
         </b>
@@ -427,11 +323,8 @@ input[type="range"]{
         <br>
 
         聲音強度：
-
         <b>
-          <span id="voicePercent">
-            0
-          </span>%
+          <span id="voicePercent">0</span>%
         </b>
 
         <div class="meter">
@@ -443,8 +336,6 @@ input[type="range"]{
     </div>
 
 
-    <!-- SYSTEM -->
-
     <div class="section">
 
       <div class="sectionTitle">
@@ -454,27 +345,18 @@ input[type="range"]{
       <div class="status">
 
         階段：
-
-        <b id="modeText">
-          待機
-        </b>
+        <b id="modeText">待機</b>
 
         <br>
 
         起點裝置：
-
-        <b id="sourceText">
-          —
-        </b>
+        <b id="sourceText">—</b>
 
         <br>
 
         混亂程度：
-
         <b>
-          <span id="chaosPercent">
-            0
-          </span>%
+          <span id="chaosPercent">0</span>%
         </b>
 
         <div class="meter">
@@ -484,27 +366,24 @@ input[type="range"]{
         <br>
 
         同時傳遞：
-
         <b>
-          <span id="transferCount">
-            0
-          </span>
+          <span id="transferCount">0</span>
         </b>
-
         組
 
         <br>
 
-        平均資訊濃度：
+        傳遞剩餘：
+        <b id="activeRemaining">—</b>
 
+        <br>
+
+        平均資訊濃度：
         <b>
-          <span id="averageInfo">
-            0
-          </span>%
+          <span id="averageInfo">0</span>%
         </b>
 
       </div>
-
 
       <div class="legend">
 
@@ -531,20 +410,15 @@ input[type="range"]{
     </div>
 
 
-    <!-- SETTINGS -->
-
     <div class="section">
 
       <div class="sectionTitle">
         設定
       </div>
 
-
       <label>
         攝像頭敏感度：
-        <span id="sensitivityValue">
-          40
-        </span>
+        <span id="sensitivityValue">40</span>
       </label>
 
       <input
@@ -558,9 +432,7 @@ input[type="range"]{
 
       <label>
         順從最大偏角：
-        <span id="followAngleValue">
-          10
-        </span>°
+        <span id="followAngleValue">10</span>°
       </label>
 
       <input
@@ -574,25 +446,21 @@ input[type="range"]{
 
       <label>
         混亂最大偏角：
-        <span id="chaosAngleValue">
-          28
-        </span>°
+        <span id="chaosAngleValue">28</span>°
       </label>
 
       <input
         id="chaosAngleSlider"
         type="range"
         min="10"
-        max="90"
+        max="45"
         value="28"
       >
 
 
       <label>
         說話觸發門檻：
-        <span id="voiceThresholdValue">
-          16
-        </span>%
+        <span id="voiceThresholdValue">16</span>%
       </label>
 
       <input
@@ -606,9 +474,7 @@ input[type="range"]{
 
       <label>
         資訊傳遞強度：
-        <span id="transmissionRateValue">
-          70
-        </span>%
+        <span id="transmissionRateValue">70</span>%
       </label>
 
       <input
@@ -622,9 +488,7 @@ input[type="range"]{
 
       <label>
         混亂成長速度：
-        <span id="chaosSpeedValue">
-          45
-        </span>%
+        <span id="chaosSpeedValue">45</span>%
       </label>
 
       <input
@@ -663,27 +527,25 @@ input[type="range"]{
    DOM
 ========================================================= */
 
+const $ =
+  id =>
+  document.getElementById(id);
+
+
 const canvas =
-  document.getElementById(
-    "stage"
-  );
+  $("stage");
+
 
 const ctx =
-  canvas.getContext(
-    "2d"
-  );
+  canvas.getContext("2d");
 
 
 const video =
-  document.getElementById(
-    "video"
-  );
+  $("video");
 
 
 const analysisCanvas =
-  document.getElementById(
-    "cameraAnalysis"
-  );
+  $("cameraAnalysis");
 
 
 const analysisCtx =
@@ -703,56 +565,44 @@ const DEVICE_COUNT =
   5;
 
 
-/*
-  最多同時有幾組資訊在跑。
-
-  數字越高畫面越亂。
-*/
-
 const MAX_TRANSFERS =
   7;
 
 
-let W = 0;
-
-let H = 0;
-
-
-const devices = [];
-
-
 /*
-  activeTransfers 裡面可以
-  同時存在很多組：
-
-  1 → 2
-  3 → 4
-  5 → 3
-  ...
+  每次傳遞維持 8 秒。
 */
 
-let activeTransfers = [];
+const ACTIVE_DURATION =
+  8000;
 
 
-/*
-  MODE：
+let W =
+  0;
 
-  IDLE
-  FOLLOW
-  LISTEN
-  ACTIVE
-*/
+
+let H =
+  0;
+
 
 let mode =
   "IDLE";
+
+
+let chaos =
+  0;
 
 
 let sourceIndex =
   -1;
 
 
-let chaos =
+let activeUntil =
   0;
+
+
+let networkClosing =
+  false;
 
 
 let speakingUntil =
@@ -761,6 +611,18 @@ let speakingUntil =
 
 let manualActivationAt =
   0;
+
+
+let speechBurstActive =
+  false;
+
+
+let activeTransfers =
+  [];
+
+
+const devices =
+  [];
 
 
 /* =========================================================
@@ -874,58 +736,32 @@ class Device{
       0;
 
 
-    /*
-      資訊量。
-    */
-
     this.info =
       0;
 
-
-    /*
-      收到資訊的次數。
-    */
 
     this.receiveCount =
       0;
 
 
-    /*
-      接收／傳遞瞬間發光。
-    */
-
     this.flash =
       0;
 
 
-    /*
-      每支裝置自己的時間差。
-    */
-
     this.phase =
-
       Math.random()
-
       *
-
       Math.PI
-
       *
-
       2;
 
 
     this.followWeight =
-
       random(
         .97,
         1.03
       );
 
-
-    /*
-      群體混亂時的方向。
-    */
 
     this.chaosTarget =
       0;
@@ -935,39 +771,24 @@ class Device{
       0;
 
 
-    /*
-      限制傳送頻率。
-    */
-
     this.sendCooldown =
-
       random(
         250,
         650
       );
 
 
-    /*
-      粒子能量：
-
-      每收到資訊一次會增加。
-    */
-
     this.particleEnergy =
       0;
 
-
-    /*
-      每支裝置自己的混亂程度。
-    */
 
     this.localNoise =
       0;
 
 
-    /* =====================================
-       LIQUID INERTIA
-    ===================================== */
+    /* =============================
+       LIQUID
+    ============================== */
 
     this.lastAngle =
       0;
@@ -985,10 +806,6 @@ class Device{
       0;
 
 
-    /* =====================================
-       PARTICLE SEEDS
-    ===================================== */
-
     this.fluidSeeds =
       [];
 
@@ -1002,36 +819,25 @@ class Device{
       this.fluidSeeds.push({
 
         phase:
-
           Math.random()
-
           *
-
           Math.PI
-
           *
-
           2,
 
-
         speed:
-
           random(
             .55,
             1.65
           ),
 
-
         size:
-
           random(
             .45,
             1.8
           ),
 
-
         offset:
-
           random(
             -1,
             1
@@ -1046,152 +852,105 @@ class Device{
 
 
   /* =======================================================
-     DEVICE MOVEMENT
+     MOVEMENT
   ======================================================= */
 
-  update(now,dt){
-
-    /*
-      Flash 慢慢退掉。
-    */
+  update(
+    now,
+    dt
+  ){
 
     this.flash =
-
       Math.max(
-
         0,
-
         this.flash
-
         -
-
         dt /
         500
-
       );
 
-
-    /*
-      傳送 cooldown。
-    */
 
     this.sendCooldown -=
       dt;
 
 
     /*
-      資訊會非常慢地衰減。
+      資訊慢慢退去。
     */
 
     this.info =
-
       Math.max(
-
         0,
-
         this.info
-
         -
-
         dt *
         .000015
-
       );
 
 
     /*
-      粒子擾動會比資訊本身
-      稍微快一點恢復。
+      粒子慢慢恢復。
     */
 
     this.particleEnergy =
-
       Math.max(
-
         0,
-
         this.particleEnergy
-
         -
-
         dt *
         .00012
-
       );
 
 
     this.localNoise =
-
       Math.max(
-
         0,
-
         this.localNoise
-
         -
-
         dt *
         .000045
-
       );
 
 
-    /* =====================================
-       IDLE / FOLLOW / LISTEN
-    ===================================== */
+    /* =============================
+       FOLLOW
+    ============================== */
 
     if(
       mode === "IDLE"
-
       ||
-
       mode === "FOLLOW"
-
       ||
-
       mode === "LISTEN"
     ){
 
       const observerAngle =
-
         viewer.present
-
         ?
-
         (
-          viewer.x -
+          viewer.x
+          -
           .5
         )
-
         *
         2
-
         *
         followMaxAngle
-
         :
-
         0;
 
 
       this.targetAngle =
-
         observerAngle
-
         *
         this.followWeight;
 
 
       this.angle =
-
         lerp(
-
           this.angle,
-
           this.targetAngle,
-
           .055
-
         );
 
 
@@ -1200,17 +959,13 @@ class Device{
     }
 
 
-    /* =====================================
-       ACTIVE CHAOS
-    ===================================== */
+    /* =============================
+       ACTIVE
+    ============================== */
 
     if(
       mode === "ACTIVE"
     ){
-
-      /*
-        每支會自己改變方向。
-      */
 
       if(
         now >
@@ -1218,11 +973,8 @@ class Device{
       ){
 
         this.nextChaosShift =
-
           now
-
           +
-
           random(
             500,
             1800
@@ -1230,21 +982,13 @@ class Device{
 
 
         this.chaosTarget =
-
           random(
-
             -chaosMaxAngle,
-
             chaosMaxAngle
-
           );
 
       }
 
-
-      /* =====================================
-         NEIGHBOR
-      ===================================== */
 
       let neighborAverage =
         0;
@@ -1260,7 +1004,6 @@ class Device{
       ){
 
         neighborAverage +=
-
           devices[
             this.index -
             1
@@ -1279,7 +1022,6 @@ class Device{
       ){
 
         neighborAverage +=
-
           devices[
             this.index +
             1
@@ -1297,131 +1039,131 @@ class Device{
       ){
 
         neighborAverage /=
-
           neighborCount;
 
       }
 
 
-      /* =====================================
-         VIEWER
-      ===================================== */
-
       const followAngle =
-
         viewer.present
-
         ?
-
         (
           viewer.x -
           .5
         )
-
         *
         2
-
         *
         followMaxAngle
-
         :
-
         0;
 
 
-      /*
-        Chaos 越高，
-        觀者影響越低。
-      */
-
       const obedience =
-
         Math.max(
-
           .10,
-
           1
-
           -
-
           chaos *
           .88
-
         );
 
 
-      /*
-        每支資訊越亂，
-        自己的小震盪越大。
-      */
-
       const internalOscillation =
-
         Math.sin(
-
           now
-
           *
           (
             .0015
-
             +
-
             this.index *
             .00023
           )
-
           +
-
           this.phase
-
         )
-
         *
-
         (
           this.localNoise *
           8
-
           +
-
           this.particleEnergy *
           4
         );
 
 
       /*
-        最終角度是：
-
-        人
-        +
-        自己
-        +
-        鄰居
-        +
-        內部資訊
+        正在互傳的裝置
+        會稍微朝對方靠。
       */
 
+      let transferLean =
+        0;
+
+
+      for(
+        const transfer
+        of activeTransfers
+      ){
+
+        if(
+          transfer.from ===
+          this.index
+        ){
+
+          transferLean +=
+            Math.sign(
+              transfer.to
+              -
+              this.index
+            )
+            *
+            5;
+
+        }
+
+
+        if(
+          transfer.to ===
+          this.index
+        ){
+
+          transferLean +=
+            Math.sign(
+              transfer.from
+              -
+              this.index
+            )
+            *
+            4;
+
+        }
+
+      }
+
+
+      transferLean =
+        constrain(
+          transferLean,
+          -8,
+          8
+        );
+
+
       this.targetAngle =
-
         followAngle
-
         *
         obedience
 
         +
 
         this.chaosTarget
-
         *
         chaos
-
         *
         (
           .28
-
           +
-
           this.localNoise *
           .48
         )
@@ -1429,51 +1171,39 @@ class Device{
         +
 
         neighborAverage
-
         *
         chaos
-
         *
         .16
 
         +
 
-        internalOscillation;
+        internalOscillation
+
+        +
+
+        transferLean;
 
 
       this.targetAngle =
-
         constrain(
-
           this.targetAngle,
-
           -chaosMaxAngle,
-
           chaosMaxAngle
-
         );
 
 
       this.angle =
-
         lerp(
-
           this.angle,
-
           this.targetAngle,
-
           .020
-
           +
-
           chaos *
           .022
-
           +
-
           this.localNoise *
           .012
-
         );
 
     }
@@ -1489,29 +1219,19 @@ class Device{
   updateFluidPhysics(dt){
 
     const safeDt =
-
       Math.max(
         1,
         dt
       );
 
 
-    /*
-      角速度。
-    */
-
     const newAngularVelocity =
-
       (
         this.angle
-
         -
-
         this.lastAngle
       )
-
       /
-
       (
         safeDt /
         16.67
@@ -1519,15 +1239,10 @@ class Device{
 
 
     this.angularVelocity =
-
       lerp(
-
         this.angularVelocity,
-
         newAngularVelocity,
-
         .22
-
       );
 
 
@@ -1535,35 +1250,22 @@ class Device{
       this.angle;
 
 
-    /*
-      旋轉造成液體慣性。
-    */
-
     const targetOffset =
-
       constrain(
-
         -this.angularVelocity
-
         *
         .18,
-
         -.7,
         .7
-
       );
 
 
     this.fluidVelocity +=
-
       (
         targetOffset
-
         -
-
         this.fluidOffset
       )
-
       *
       .075;
 
@@ -1573,7 +1275,6 @@ class Device{
 
 
     this.fluidOffset +=
-
       this.fluidVelocity;
 
   }
@@ -1591,12 +1292,20 @@ function resetSystem(){
     "IDLE";
 
 
+  chaos =
+    0;
+
+
   sourceIndex =
     -1;
 
 
-  chaos =
+  activeUntil =
     0;
+
+
+  networkClosing =
+    false;
 
 
   speakingUntil =
@@ -1605,6 +1314,10 @@ function resetSystem(){
 
   manualActivationAt =
     0;
+
+
+  speechBurstActive =
+    false;
 
 
   voiceHold =
@@ -1626,9 +1339,7 @@ function resetSystem(){
   ){
 
     devices.push(
-
       new Device(i)
-
     );
 
   }
@@ -1646,7 +1357,6 @@ resetSystem();
 function resizeCanvas(){
 
   const rect =
-
     canvas
     .parentElement
     .getBoundingClientRect();
@@ -1660,47 +1370,43 @@ function resizeCanvas(){
     rect.height;
 
 
+  const dpr =
+    window.devicePixelRatio
+    ||
+    1;
+
+
   canvas.width =
-
     Math.round(
-
-      W
-
-      *
-      devicePixelRatio
-
+      W *
+      dpr
     );
 
 
   canvas.height =
-
     Math.round(
-
-      H
-
-      *
-      devicePixelRatio
-
+      H *
+      dpr
     );
 
 
   canvas.style.width =
-    W + "px";
+    W +
+    "px";
 
 
   canvas.style.height =
-    H + "px";
+    H +
+    "px";
 
 
   ctx.setTransform(
-
-    devicePixelRatio,
+    dpr,
     0,
     0,
-    devicePixelRatio,
+    dpr,
     0,
     0
-
   );
 
 }
@@ -1710,11 +1416,8 @@ resizeCanvas();
 
 
 window.addEventListener(
-
   "resize",
-
   resizeCanvas
-
 );
 
 
@@ -1724,7 +1427,8 @@ window.addEventListener(
 
 function getBaseY(){
 
-  return H * .73;
+  return H *
+  .73;
 
 }
 
@@ -1732,11 +1436,9 @@ function getBaseY(){
 function getBodyHeight(){
 
   return Math.min(
-
     245,
-
-    H * .34
-
+    H *
+    .34
   );
 
 }
@@ -1745,11 +1447,9 @@ function getBodyHeight(){
 function getBodyWidth(){
 
   return Math.min(
-
     65,
-
-    W * .055
-
+    W *
+    .055
   );
 
 }
@@ -1758,54 +1458,42 @@ function getBodyWidth(){
 function getDeviceX(index){
 
   return mapValue(
-
     index,
-
     0,
-    DEVICE_COUNT - 1,
-
-    W * .16,
-    W * .84
-
+    DEVICE_COUNT -
+    1,
+    W *
+    .16,
+    W *
+    .84
   );
 
 }
 
 
-/* =========================================================
-   NEAREST DEVICE
-========================================================= */
-
 function getNearestDeviceIndex(){
 
-  if(
-    !viewer.present
-  ){
+  return viewer.present
 
-    return 2;
+    ?
 
-  }
+    constrain(
+      Math.round(
+        viewer.x
+        *
+        (
+          DEVICE_COUNT -
+          1
+        )
+      ),
+      0,
+      DEVICE_COUNT -
+      1
+    )
 
+    :
 
-  return constrain(
-
-    Math.round(
-
-      viewer.x
-
-      *
-      (
-        DEVICE_COUNT -
-        1
-      )
-
-    ),
-
-    0,
-    DEVICE_COUNT -
-    1
-
-  );
+    2;
 
 }
 
@@ -1819,13 +1507,11 @@ async function startCamera(){
   try{
 
     cameraStream =
-
       await navigator
       .mediaDevices
       .getUserMedia({
 
         video:{
-
           width:{
             ideal:640
           },
@@ -1836,7 +1522,6 @@ async function startCamera(){
 
           facingMode:
             "user"
-
         },
 
         audio:false
@@ -1859,18 +1544,12 @@ async function startCamera(){
       null;
 
 
-    document
-    .getElementById(
-      "cameraState"
-    )
+    $("cameraState")
     .textContent =
       "已啟動";
 
 
-    document
-    .getElementById(
-      "cameraBtn"
-    )
+    $("cameraBtn")
     .textContent =
       "攝像頭已開啟";
 
@@ -1878,19 +1557,16 @@ async function startCamera(){
 
   catch(error){
 
-    cameraReady =
-      false;
-
-
     console.error(
       error
     );
 
 
-    document
-    .getElementById(
-      "cameraState"
-    )
+    cameraReady =
+      false;
+
+
+    $("cameraState")
     .textContent =
       "啟動失敗";
 
@@ -1899,10 +1575,7 @@ async function startCamera(){
 }
 
 
-document
-.getElementById(
-  "cameraBtn"
-)
+$("cameraBtn")
 .addEventListener(
   "click",
   startCamera
@@ -1917,9 +1590,7 @@ function analyzeCamera(){
 
   if(
     !cameraReady
-
     ||
-
     video.readyState <
     2
   ){
@@ -1930,29 +1601,21 @@ function analyzeCamera(){
 
 
   analysisCtx.drawImage(
-
     video,
-
     0,
     0,
-
     analysisCanvas.width,
     analysisCanvas.height
-
   );
 
 
   const frame =
-
     analysisCtx
     .getImageData(
-
       0,
       0,
-
       analysisCanvas.width,
       analysisCanvas.height
-
     )
     .data;
 
@@ -1962,7 +1625,6 @@ function analyzeCamera(){
   ){
 
     previousCameraFrame =
-
       new Uint8ClampedArray(
         frame
       );
@@ -1982,17 +1644,12 @@ function analyzeCamera(){
 
 
   const threshold =
-
     mapValue(
-
       viewer.sensitivity,
-
       5,
       80,
-
       88,
       18
-
     );
 
 
@@ -2021,54 +1678,37 @@ function analyzeCamera(){
     ){
 
       const i =
-
         (
           y *
           width
-
           +
-
           x
         )
-
         *
         4;
 
 
       const diff =
-
         Math.abs(
-
           frame[i]
-
           -
-
           previousCameraFrame[i]
-
         )
 
         +
 
         Math.abs(
-
           frame[i + 1]
-
           -
-
           previousCameraFrame[i + 1]
-
         )
 
         +
 
         Math.abs(
-
           frame[i + 2]
-
           -
-
           previousCameraFrame[i + 2]
-
         );
 
 
@@ -2082,6 +1722,7 @@ function analyzeCamera(){
 
         changed++;
 
+
         xTotal +=
           x;
 
@@ -2093,18 +1734,14 @@ function analyzeCamera(){
 
 
   previousCameraFrame =
-
     new Uint8ClampedArray(
       frame
     );
 
 
   const ratio =
-
     changed
-
     /
-
     Math.max(
       1,
       checked
@@ -2112,23 +1749,15 @@ function analyzeCamera(){
 
 
   viewer.movement =
-
     lerp(
-
       viewer.movement,
-
       constrain(
-
         ratio *
         3,
-
         0,
         1
-
       ),
-
       .3
-
     );
 
 
@@ -2138,45 +1767,31 @@ function analyzeCamera(){
   ){
 
     let averageX =
-
       xTotal
-
       /
-
       changed;
 
 
     /*
-      Video 是鏡像。
+      Video 顯示為鏡像。
     */
 
     averageX =
-
       width
-
       -
-
       averageX;
 
 
     viewer.x =
-
       lerp(
-
         viewer.x,
-
         constrain(
-
           averageX /
           width,
-
           0,
           1
-
         ),
-
         .32
-
       );
 
   }
@@ -2215,16 +1830,9 @@ function analyzeCamera(){
   }
 
 
-  /*
-    看到觀者後進入 FOLLOW。
-  */
-
   if(
-    mode ===
-    "IDLE"
-
+    mode === "IDLE"
     &&
-
     viewer.present
   ){
 
@@ -2235,11 +1843,8 @@ function analyzeCamera(){
 
 
   if(
-    mode ===
-    "FOLLOW"
-
+    mode === "FOLLOW"
     &&
-
     !viewer.present
   ){
 
@@ -2269,19 +1874,14 @@ async function startMicrophone(){
 
 
     micStream =
-
       await navigator
       .mediaDevices
       .getUserMedia({
 
         audio:{
-
           echoCancellation:true,
-
           noiseSuppression:false,
-
           autoGainControl:false
-
         },
 
         video:false
@@ -2290,16 +1890,12 @@ async function startMicrophone(){
 
 
     const AudioCtx =
-
       window.AudioContext
-
       ||
-
       window.webkitAudioContext;
 
 
     audioContext =
-
       new AudioCtx();
 
 
@@ -2314,7 +1910,6 @@ async function startMicrophone(){
 
 
     analyser =
-
       audioContext
       .createAnalyser();
 
@@ -2328,14 +1923,12 @@ async function startMicrophone(){
 
 
     micBuffer =
-
       new Uint8Array(
         analyser.fftSize
       );
 
 
     micSource =
-
       audioContext
       .createMediaStreamSource(
         micStream
@@ -2351,18 +1944,12 @@ async function startMicrophone(){
       true;
 
 
-    document
-    .getElementById(
-      "micState"
-    )
+    $("micState")
     .textContent =
       "已啟動";
 
 
-    document
-    .getElementById(
-      "micBtn"
-    )
+    $("micBtn")
     .textContent =
       "麥克風已開啟";
 
@@ -2370,19 +1957,16 @@ async function startMicrophone(){
 
   catch(error){
 
-    micReady =
-      false;
-
-
     console.error(
       error
     );
 
 
-    document
-    .getElementById(
-      "micState"
-    )
+    micReady =
+      false;
+
+
+    $("micState")
     .textContent =
       "啟動失敗";
 
@@ -2390,10 +1974,6 @@ async function startMicrophone(){
 
 }
 
-
-/* =========================================================
-   STOP MICROPHONE
-========================================================= */
 
 async function stopMicrophone(){
 
@@ -2404,17 +1984,11 @@ async function stopMicrophone(){
     micStream
     .getTracks()
     .forEach(
-
       track =>
         track.stop()
-
     );
 
   }
-
-
-  micStream =
-    null;
 
 
   if(
@@ -2422,11 +1996,8 @@ async function stopMicrophone(){
   ){
 
     try{
-
       micSource.disconnect();
-
     }
-
     catch(error){}
 
   }
@@ -2437,17 +2008,14 @@ async function stopMicrophone(){
   ){
 
     try{
-
       await audioContext.close();
-
     }
-
     catch(error){}
 
   }
 
 
-  micSource =
+  micStream =
     null;
 
 
@@ -2456,6 +2024,10 @@ async function stopMicrophone(){
 
 
   analyser =
+    null;
+
+
+  micSource =
     null;
 
 
@@ -2475,38 +2047,30 @@ async function stopMicrophone(){
     0;
 
 
-  document
-  .getElementById(
-    "micState"
-  )
+  speechBurstActive =
+    false;
+
+
+  $("micState")
   .textContent =
     "未啟動";
 
 
-  document
-  .getElementById(
-    "micBtn"
-  )
+  $("micBtn")
   .textContent =
     "開啟麥克風";
 
 }
 
 
-document
-.getElementById(
-  "micBtn"
-)
+$("micBtn")
 .addEventListener(
   "click",
   startMicrophone
 );
 
 
-document
-.getElementById(
-  "micStopBtn"
-)
+$("micStopBtn")
 .addEventListener(
   "click",
   stopMicrophone
@@ -2514,33 +2078,27 @@ document
 
 
 /* =========================================================
-   AUDIO
+   AUDIO UPDATE
 ========================================================= */
 
-function updateAudio(dt,now){
+function updateAudio(
+  dt,
+  now
+){
 
   if(
     !micReady
-
     ||
-
     !analyser
-
     ||
-
     !micBuffer
   ){
 
     voiceLevel =
-
       lerp(
-
         voiceLevel,
-
         0,
-
         .06
-
       );
 
 
@@ -2574,24 +2132,17 @@ function updateAudio(dt,now){
   ){
 
     const value =
-
       (
         micBuffer[i]
-
         -
-
         128
       )
-
       /
       128;
 
 
     sum +=
-
-      value
-
-      *
+      value *
       value;
 
 
@@ -2601,108 +2152,116 @@ function updateAudio(dt,now){
 
 
   const rms =
-
     Math.sqrt(
-
       sum
-
       /
-
       Math.max(
         1,
         count
       )
-
-    );
-
-
-  const level =
-
-    constrain(
-
-      (
-        rms
-
-        -
-
-        .006
-      )
-
-      *
-      15,
-
-      0,
-      1
-
     );
 
 
   voiceLevel =
-
     lerp(
-
       voiceLevel,
-
-      level,
-
+      constrain(
+        (
+          rms -
+          .006
+        )
+        *
+        15,
+        0,
+        1
+      ),
       .32
-
     );
 
 
-  /* =====================================
-     YELLOW
-  ===================================== */
+  const speakingNow =
+    voiceLevel >
+    voiceThreshold;
+
 
   if(
-    voiceLevel >
-    voiceThreshold
+    speakingNow
   ){
 
     speakingUntil =
-
-      now
-
-      +
-
+      now +
       650;
 
 
+    /*
+      新的一次說話。
+    */
+
     if(
-      mode ===
-      "FOLLOW"
-
-      ||
-
-      mode ===
-      "IDLE"
+      !speechBurstActive
     ){
 
-      mode =
-        "LISTEN";
+      speechBurstActive =
+        true;
+
+
+      /*
+        已經在傳：
+        再製造一波，
+        重新倒數 8 秒。
+      */
+
+      if(
+        mode ===
+        "ACTIVE"
+      ){
+
+        activateChaosTransmission(
+          now
+        );
+
+      }
+
+      else if(
+        mode ===
+        "IDLE"
+        ||
+        mode ===
+        "FOLLOW"
+      ){
+
+        mode =
+          "LISTEN";
+
+      }
 
     }
 
   }
 
+  else if(
+    voiceLevel
+    <
+    voiceThreshold *
+    .65
+  ){
 
-  /* =====================================
-     START ACTIVE
-  ===================================== */
+    speechBurstActive =
+      false;
+
+  }
+
 
   if(
     mode ===
     "LISTEN"
-
     ||
-
     mode ===
     "FOLLOW"
   ){
 
     if(
-      voiceLevel >
-      voiceThreshold
+      speakingNow
     ){
 
       voiceHold +=
@@ -2713,22 +2272,21 @@ function updateAudio(dt,now){
     else{
 
       voiceHold =
-
         Math.max(
-
           0,
-
           voiceHold
-
           -
-
           dt *
           1.7
-
         );
 
     }
 
+
+    /*
+      說話超過約 360ms
+      才正式觸發。
+    */
 
     if(
       voiceHold >
@@ -2748,36 +2306,22 @@ function updateAudio(dt,now){
   }
 
 
-  /*
-    聲音太短，
-    沒有真的進入傳遞。
-  */
-
   if(
     mode ===
     "LISTEN"
-
     &&
-
     now >
     speakingUntil
-
     &&
-
     chaos <=
     0
   ){
 
     mode =
-
       viewer.present
-
       ?
-
       "FOLLOW"
-
       :
-
       "IDLE";
 
   }
@@ -2789,61 +2333,44 @@ function updateAudio(dt,now){
    MANUAL TEST
 ========================================================= */
 
-document
-.getElementById(
-  "simulateVoiceBtn"
-)
+$("simulateVoiceBtn")
 .addEventListener(
+
   "click",
 
   () => {
 
     const now =
-
       performance.now();
 
 
-    /*
-      先黃燈。
-    */
-
     speakingUntil =
-
-      now
-
-      +
-
+      now +
       900;
 
 
     if(
       mode ===
-      "IDLE"
-
-      ||
-
-      mode ===
-      "FOLLOW"
-
-      ||
-
-      mode ===
-      "LISTEN"
+      "ACTIVE"
     ){
 
-      mode =
-        "LISTEN";
-
-
-      manualActivationAt =
-
+      activateChaosTransmission(
         now
+      );
 
-        +
 
-        650;
+      return;
 
     }
+
+
+    mode =
+      "LISTEN";
+
+
+    manualActivationAt =
+      now +
+      650;
 
   }
 
@@ -2851,139 +2378,81 @@ document
 
 
 /* =========================================================
-   ACTIVATE TRANSMISSION
+   START TRANSMISSION
 ========================================================= */
 
 function activateChaosTransmission(now){
 
+  const source =
+    getNearestDeviceIndex();
+
+
+  sourceIndex =
+    source;
+
+
   /*
-    如果已經在傳遞，
-    再次說話會額外加一波資訊。
+    從現在重新倒數 8 秒。
   */
 
+  activeUntil =
+    now +
+    ACTIVE_DURATION;
+
+
+  networkClosing =
+    false;
+
+
   if(
-    mode ===
+    mode !==
     "ACTIVE"
   ){
 
-    const source =
-
-      getNearestDeviceIndex();
-
-
-    sourceIndex =
-      source;
-
-
-    boostDevice(
-
-      source,
-
-      1,
-
-      .65,
-
-      .60
-
-    );
+    mode =
+      "ACTIVE";
 
 
     chaos =
-
-      constrain(
-
-        chaos
-
-        +
-
-        .08,
-
-        0,
-        1
-
+      Math.max(
+        chaos,
+        .12
       );
 
 
-    /*
-      再立即送出兩三條。
-    */
+    boostDevice(
+      source,
+      1,
+      .75,
+      .65
+    );
 
-    for(
-      let i = 0;
-      i < 3;
-      i++
-    ){
+  }
 
-      const target =
+  else{
 
-        chooseTargetFor(
-          source
-        );
-
-
-      if(
-        target !==
-        null
-      ){
-
-        addTransfer(
-
-          source,
-
-          target
-
-        );
-
-      }
-
-    }
+    chaos =
+      constrain(
+        chaos +
+        .08,
+        0,
+        1
+      );
 
 
-    return;
+    boostDevice(
+      source,
+      1,
+      .65,
+      .60
+    );
 
   }
 
 
-  /* =====================================
-     FIRST ACTIVATION
-  ===================================== */
-
-  mode =
-    "ACTIVE";
-
-
-  chaos =
-
-    Math.max(
-
-      chaos,
-
-      .12
-
-    );
-
-
-  sourceIndex =
-
-    getNearestDeviceIndex();
-
-
-  boostDevice(
-
-    sourceIndex,
-
-    1,
-
-    .75,
-
-    .65
-
-  );
-
-
   /*
-    一開始就不是只傳一條，
-    而是同時發出 3 條。
+    一次丟出多組，
+    不是只一傳一。
   */
 
   for(
@@ -2993,9 +2462,8 @@ function activateChaosTransmission(now){
   ){
 
     const target =
-
       chooseTargetFor(
-        sourceIndex
+        source
       );
 
 
@@ -3005,11 +2473,8 @@ function activateChaosTransmission(now){
     ){
 
       addTransfer(
-
-        sourceIndex,
-
+        source,
         target
-
       );
 
     }
@@ -3020,7 +2485,7 @@ function activateChaosTransmission(now){
 
 
 /* =========================================================
-   TRANSFER HELPERS
+   TRANSFER
 ========================================================= */
 
 function deviceIsTransferring(index){
@@ -3041,11 +2506,6 @@ function deviceIsTransferring(index){
 
 }
 
-
-/*
-  完全相同方向的傳遞，
-  短時間內不要重複塞太多。
-*/
 
 function transferPairExists(
   a,
@@ -3068,10 +2528,6 @@ function transferPairExists(
 
 }
 
-
-/* =========================================================
-   CHOOSE TARGET
-========================================================= */
 
 function chooseTargetFor(
   fromIndex
@@ -3098,15 +2554,9 @@ function chooseTargetFor(
 
 
     const distance =
-
       Math.abs(
-
-        i
-
-        -
-
+        i -
         fromIndex
-
       );
 
 
@@ -3115,7 +2565,7 @@ function chooseTargetFor(
 
 
     /*
-      初期比較喜歡傳給鄰居。
+      前期比較喜歡鄰居。
     */
 
     if(
@@ -3124,19 +2574,16 @@ function chooseTargetFor(
     ){
 
       weight =
-
         1.8
-
         +
-
         chaos *
         .5;
 
     }
 
+
     /*
-      Chaos 增加後，
-      開始跨一支傳。
+      越亂越容易跨裝置。
     */
 
     else if(
@@ -3145,19 +2592,13 @@ function chooseTargetFor(
     ){
 
       weight =
-
         .15
-
         +
-
         chaos *
         1.3;
 
     }
 
-    /*
-      更後期可以跨更遠。
-    */
 
     else if(
       distance ===
@@ -3165,26 +2606,20 @@ function chooseTargetFor(
     ){
 
       weight =
-
         chaos *
         .85;
 
     }
 
+
     else{
 
       weight =
-
         chaos *
         .55;
 
     }
 
-
-    /*
-      同一對正在傳時，
-      降低再次選到的機率。
-    */
 
     if(
       transferPairExists(
@@ -3199,21 +2634,13 @@ function chooseTargetFor(
     }
 
 
-    /*
-      已經很亂的裝置，
-      更容易被選中。
-    */
-
     weight +=
-
       devices[i]
       .localNoise
-
       *
-      .22;
+      .22
 
-
-    weight +=
+      +
 
       random(
         0,
@@ -3239,26 +2666,20 @@ function chooseTargetFor(
   }
 
 
-  if(
-    weights.length ===
-    0
-  ){
+  return weights.length
 
-    return null;
+    ?
 
-  }
+    weightedPick(
+      weights
+    )
 
+    :
 
-  return weightedPick(
-    weights
-  );
+    null;
 
 }
 
-
-/* =========================================================
-   ADD TRANSFER
-========================================================= */
 
 function addTransfer(
   from,
@@ -3266,26 +2687,13 @@ function addTransfer(
 ){
 
   if(
-    from ===
-    to
-  ){
-
-    return;
-
-  }
-
-
-  if(
+    networkClosing
+    ||
+    from === to
+    ||
     activeTransfers.length >=
     MAX_TRANSFERS
-  ){
-
-    return;
-
-  }
-
-
-  if(
+    ||
     transferPairExists(
       from,
       to
@@ -3303,46 +2711,31 @@ function addTransfer(
 
     to:to,
 
-
     progress:0,
 
-
     duration:
-
       random(
         350,
         820
       ),
 
-
-    /*
-      不畫線，
-      但粒子仍會走不同弧線。
-    */
-
     curvature:
-
       random(
         -1,
         1
       ),
 
-
     pulse:
-
       random(
         0,
-        Math.PI * 2
+        Math.PI *
+        2
       )
 
   });
 
 }
 
-
-/* =========================================================
-   BOOST DEVICE
-========================================================= */
 
 function boostDevice(
   index,
@@ -3356,52 +2749,33 @@ function boostDevice(
 
 
   device.info =
-
     constrain(
-
       Math.max(
-
         device.info,
-
         infoBoost
-
       ),
-
       0,
       1
-
     );
 
 
   device.particleEnergy =
-
     constrain(
-
       device.particleEnergy
-
       +
-
       energyBoost,
-
       0,
       1
-
     );
 
 
   device.localNoise =
-
     constrain(
-
       device.localNoise
-
       +
-
       noiseBoost,
-
       0,
       1
-
     );
 
 
@@ -3415,7 +2789,7 @@ function boostDevice(
 
 
 /* =========================================================
-   DELIVERY
+   RECEIVE INFORMATION
 ========================================================= */
 
 function deliverTransfer(
@@ -3423,28 +2797,24 @@ function deliverTransfer(
 ){
 
   const from =
-
     devices[
       transfer.from
     ];
 
 
   const to =
-
     devices[
       transfer.to
     ];
 
 
   /*
-    資訊不是完整複製，
-    每次都會稍微失真。
+    資訊每傳一次
+    都會有失真。
   */
 
   const mutation =
-
     from.info
-
     *
     random(
       .62,
@@ -3454,7 +2824,6 @@ function deliverTransfer(
     +
 
     from.localNoise
-
     *
     random(
       .08,
@@ -3464,7 +2833,6 @@ function deliverTransfer(
     +
 
     chaos
-
     *
     random(
       .03,
@@ -3472,17 +2840,9 @@ function deliverTransfer(
     );
 
 
-  /*
-    接收者自己的舊資訊
-    和新資訊混在一起。
-  */
-
-  const mixedInfo =
-
+  const mixed =
     constrain(
-
       to.info
-
       *
       random(
         .30,
@@ -3492,132 +2852,83 @@ function deliverTransfer(
       +
 
       mutation
-
       *
       random(
         .58,
         .90
       ),
-
       0,
       1
-
     );
 
 
   to.info =
-
     Math.max(
-
       to.info,
-
-      mixedInfo
-
+      mixed
     );
 
 
   /*
     每收到一次，
-    粒子能量增加。
+    粒子變得更活躍。
   */
 
   to.particleEnergy =
-
     constrain(
-
       to.particleEnergy
-
       +
-
       .16
-
       +
-
       from.particleEnergy
-
       *
       .20
-
       +
-
       random(
         .03,
         .13
       ),
-
       0,
       1
-
     );
 
 
-  /*
-    每傳一次也會增加錯亂。
-  */
-
   to.localNoise =
-
     constrain(
-
       to.localNoise
-
       +
-
       .13
-
       +
-
       from.localNoise
-
       *
       .22
-
       +
-
       random(
         .02,
         .11
       ),
-
       0,
       1
-
     );
 
 
-  /*
-    傳送者本身也會受到影響。
-  */
-
   from.particleEnergy =
-
     constrain(
-
       from.particleEnergy
-
       +
-
       .045,
-
       0,
       1
-
     );
 
 
   from.localNoise =
-
     constrain(
-
       from.localNoise
-
       +
-
       .025,
-
       0,
       1
-
     );
 
 
@@ -3632,25 +2943,23 @@ function deliverTransfer(
   to.receiveCount++;
 
 
-  chaos =
+  if(
+    !networkClosing
+  ){
 
-    constrain(
+    chaos =
+      constrain(
+        chaos
+        +
+        .028
+        +
+        to.localNoise *
+        .024,
+        0,
+        1
+      );
 
-      chaos
-
-      +
-
-      .028
-
-      +
-
-      to.localNoise *
-      .024,
-
-      0,
-      1
-
-    );
+  }
 
 }
 
@@ -3675,153 +2984,212 @@ function updateTransmissionNetwork(
 
 
   /*
-    混亂會隨時間成長。
+    8 秒到了。
   */
 
-  chaos =
-
-    constrain(
-
-      chaos
-
-      +
-
-      dt
-
-      *
-      .000018
-
-      *
-      chaosGrowthSpeed,
-
-      0,
-      1
-
-    );
-
-
-  const chanceScale =
-
-    dt /
-    16.67;
-
-
-  /* =====================================
-     EACH DEVICE MAY SEND
-  ===================================== */
-
-  for(
-    let i = 0;
-    i < DEVICE_COUNT;
-    i++
+  if(
+    now >=
+    activeUntil
   ){
 
-    const device =
+    networkClosing =
+      true;
 
-      devices[i];
-
-
-    /*
-      至少要有一點資訊才能傳。
-    */
-
-    if(
-      device.info <
-      .06
-    ){
-
-      continue;
-
-    }
+  }
 
 
-    if(
-      device.sendCooldown >
-      0
-    ){
+  /* =============================
+     還在產生資訊
+  ============================== */
 
-      continue;
+  if(
+    !networkClosing
+  ){
 
-    }
-
-
-    /*
-      Chaos 越高、
-      裝置越亂，
-      越容易主動傳。
-    */
-
-    const sendChance =
-
-      (
-        .014
-
+    chaos =
+      constrain(
+        chaos
         +
+        dt *
+        .000018 *
+        chaosGrowthSpeed,
+        0,
+        1
+      );
 
+
+    const chanceScale =
+      dt /
+      16.67;
+
+
+    for(
+      let i = 0;
+      i < DEVICE_COUNT;
+      i++
+    ){
+
+      const device =
+        devices[i];
+
+
+      if(
+        device.info <
+        .06
+        ||
+        device.sendCooldown >
+        0
+      ){
+
+        continue;
+
+      }
+
+
+      const sendChance =
+        (
+          .014
+          +
+          chaos *
+          .030
+          +
+          device.localNoise *
+          .025
+        )
+        *
+        transmissionRate;
+
+
+      if(
+        Math.random()
+        <
+        sendChance *
+        chanceScale
+      ){
+
+        /*
+          越混亂，
+          越容易一次送兩組。
+        */
+
+        const burstCount =
+          Math.random()
+          <
+          (
+            .22
+            +
+            chaos *
+            .68
+          )
+
+          ?
+
+          2
+
+          :
+
+          1;
+
+
+        for(
+          let k = 0;
+          k < burstCount;
+          k++
+        ){
+
+          const target =
+            chooseTargetFor(
+              i
+            );
+
+
+          if(
+            target !==
+            null
+          ){
+
+            addTransfer(
+              i,
+              target
+            );
+
+          }
+
+        }
+
+
+        device.sendCooldown =
+          random(
+            140,
+            Math.max(
+              260,
+              700
+              -
+              chaos *
+              320
+            )
+          );
+
+      }
+
+    }
+
+
+    /*
+      額外製造交叉傳遞。
+    */
+
+    const desiredTransfers =
+      Math.floor(
+        2
+        +
         chaos *
-        .030
-
-        +
-
-        device.localNoise *
-        .025
-
-      )
-
-      *
-      transmissionRate;
+        5
+      );
 
 
     if(
-      Math.random()
-
+      activeTransfers.length
       <
-
-      sendChance
-
+      desiredTransfers
+      &&
+      Math.random()
+      <
+      (
+        .025
+        +
+        chaos *
+        .04
+      )
       *
       chanceScale
     ){
 
-      /*
-        後期更容易一次送給兩支。
-      */
-
-      const burstCount =
-
-        Math.random()
-
-        <
-
-        (
-          .22
-
-          +
-
-          chaos *
-          .68
-
-        )
-
-        ?
-
-        2
-
-        :
-
-        1;
+      const candidates =
+        devices.filter(
+          device =>
+            device.info >
+            .10
+        );
 
 
-      for(
-        let k = 0;
-        k < burstCount;
-        k++
+      if(
+        candidates.length
       ){
 
-        const target =
+        const sender =
+          candidates[
+            Math.floor(
+              Math.random()
+              *
+              candidates.length
+            )
+          ];
 
+
+        const target =
           chooseTargetFor(
-            i
+            sender.index
           );
 
 
@@ -3831,51 +3199,27 @@ function updateTransmissionNetwork(
         ){
 
           addTransfer(
-
-            i,
-
+            sender.index,
             target
-
           );
 
         }
 
       }
 
-
-      device.sendCooldown =
-
-        random(
-
-          140,
-
-          Math.max(
-
-            260,
-
-            700
-
-            -
-
-            chaos *
-            320
-
-          )
-
-        );
-
     }
 
   }
 
 
-  /* =====================================
-     UPDATE EXISTING TRANSFERS
-  ===================================== */
+  /* =============================
+     已經飛出去的粒子跑完
+  ============================== */
 
   for(
     let i =
-      activeTransfers.length - 1;
+      activeTransfers.length -
+      1;
 
     i >= 0;
 
@@ -3883,16 +3227,11 @@ function updateTransmissionNetwork(
   ){
 
     const transfer =
-
       activeTransfers[i];
 
 
     transfer.progress +=
-
-      dt
-
-      /
-
+      dt /
       transfer.duration;
 
 
@@ -3916,113 +3255,71 @@ function updateTransmissionNetwork(
   }
 
 
-  /* =====================================
-     BACKGROUND CHAOTIC EVENTS
-  ===================================== */
-
-  const desiredTransfers =
-
-    Math.floor(
-
-      2
-
-      +
-
-      chaos *
-      5
-
-    );
-
+  /* =============================
+     收尾
+  ============================== */
 
   if(
-    activeTransfers.length <
-    desiredTransfers
+    networkClosing
   ){
 
-    const extraChance =
+    chaos =
+      Math.max(
+        0,
+        chaos
+        -
+        dt *
+        .00030
+      );
 
-      (
-        .025
 
-        +
-
-        chaos *
-        .04
-      )
-
-      *
-      chanceScale;
-
+    /*
+      最後一組資訊抵達後
+      正式結束。
+    */
 
     if(
-      Math.random()
-
-      <
-      extraChance
+      activeTransfers.length ===
+      0
     ){
 
-      /*
-        從目前有資訊的裝置中
-        隨機挑一支。
-      */
-
-      const candidates =
-
-        devices.filter(
-
-          device =>
-
-            device.info >
-            .10
-
-        );
+      networkClosing =
+        false;
 
 
-      if(
-        candidates.length >
-        0
-      ){
-
-        const sender =
-
-          candidates[
-
-            Math.floor(
-
-              Math.random()
-
-              *
-
-              candidates.length
-
-            )
-
-          ];
+      activeUntil =
+        0;
 
 
-        const target =
-
-          chooseTargetFor(
-            sender.index
-          );
+      sourceIndex =
+        -1;
 
 
-        if(
-          target !==
-          null
-        ){
+      chaos =
+        0;
 
-          addTransfer(
 
-            sender.index,
+      mode =
+        viewer.present
+        ?
+        "FOLLOW"
+        :
+        "IDLE";
 
-            target
 
-          );
+      devices.forEach(
+
+        device => {
+
+          device.sendCooldown =
+            random(
+              300,
+              700
+            );
 
         }
 
-      }
+      );
 
     }
 
@@ -4038,11 +3335,8 @@ function updateTransmissionNetwork(
 function drawTable(){
 
   const y =
-
     getBaseY()
-
     +
-
     18;
 
 
@@ -4051,18 +3345,13 @@ function drawTable(){
 
 
   ctx.fillRect(
-
     W *
     .055,
-
     y,
-
     W *
     .89,
-
     H *
     .19
-
   );
 
 
@@ -4071,24 +3360,19 @@ function drawTable(){
 
 
   ctx.fillRect(
-
     W *
     .055,
-
     y,
-
     W *
     .89,
-
     4
-
   );
 
 }
 
 
 /* =========================================================
-   DRAW DEVICE
+   DEVICE
 ========================================================= */
 
 function drawDevice(
@@ -4097,7 +3381,6 @@ function drawDevice(
 ){
 
   const x =
-
     getDeviceX(
       device.index
     );
@@ -4116,12 +3399,9 @@ function drawDevice(
 
 
   const angleRad =
-
     device.angle
-
     *
     Math.PI
-
     /
     180;
 
@@ -4130,17 +3410,12 @@ function drawDevice(
 
 
   ctx.translate(
-
     x,
-
     baseY
-
   );
 
 
-  /* =====================================
-     SHADOW
-  ===================================== */
+  /* SHADOW */
 
   ctx.fillStyle =
     "rgba(0,0,0,.09)";
@@ -4150,61 +3425,43 @@ function drawDevice(
 
 
   ctx.ellipse(
-
     5,
     12,
-
     bodyWidth *
     .68,
-
     7,
-
     0,
     0,
-
     Math.PI *
     2
-
   );
 
 
   ctx.fill();
 
 
-  /* =====================================
-     BASE
-  ===================================== */
+  /* BASE */
 
   ctx.fillStyle =
     "#171817";
 
 
-  ctx.beginPath();
-
-
-  ctx.roundRect(
-
+  roundRect(
+    ctx,
     -bodyWidth *
     .63,
-
     -5,
-
     bodyWidth *
     1.26,
-
     18,
-
     7
-
   );
 
 
   ctx.fill();
 
 
-  /* =====================================
-     PIVOT
-  ===================================== */
+  /* PIVOT */
 
   ctx.fillStyle =
     "#353936";
@@ -4214,17 +3471,12 @@ function drawDevice(
 
 
   ctx.arc(
-
     0,
     0,
-
     8,
-
     0,
-
     Math.PI *
     2
-
   );
 
 
@@ -4239,17 +3491,12 @@ function drawDevice(
 
 
   ctx.arc(
-
     0,
     0,
-
     4,
-
     0,
-
     Math.PI *
     2
-
   );
 
 
@@ -4257,7 +3504,7 @@ function drawDevice(
 
 
   /*
-    整支旋轉。
+    整支裝置旋轉。
   */
 
   ctx.rotate(
@@ -4265,51 +3512,34 @@ function drawDevice(
   );
 
 
-  /* =====================================
-     BODY
-  ===================================== */
+  /* BODY */
 
   const bodyGradient =
-
     ctx.createLinearGradient(
-
       -bodyWidth /
       2,
-
       0,
-
       bodyWidth /
       2,
-
       0
-
     );
 
 
   bodyGradient.addColorStop(
-
     0,
-
     "#050605"
-
   );
 
 
   bodyGradient.addColorStop(
-
     .45,
-
     "#2b2d2c"
-
   );
 
 
   bodyGradient.addColorStop(
-
     1,
-
     "#070807"
-
   );
 
 
@@ -4325,22 +3555,14 @@ function drawDevice(
     "rgba(0,0,0,.20)";
 
 
-  ctx.beginPath();
-
-
-  ctx.roundRect(
-
+  roundRect(
+    ctx,
     -bodyWidth /
     2,
-
     -bodyHeight,
-
     bodyWidth,
-
     bodyHeight,
-
     7
-
   );
 
 
@@ -4351,32 +3573,18 @@ function drawDevice(
     0;
 
 
-  /* =====================================
-     LED
-  ===================================== */
-
   drawLED(
-
     device,
-
     now,
-
     bodyWidth,
-
     bodyHeight
-
   );
 
 
-  /* =====================================
-     CAMERA
-  ===================================== */
+  /* CAMERA */
 
   const cameraY =
-
-    -bodyHeight
-
-    *
+    -bodyHeight *
     .73;
 
 
@@ -4388,18 +3596,12 @@ function drawDevice(
 
 
   ctx.arc(
-
     0,
-
     cameraY,
-
     9,
-
     0,
-
     Math.PI *
     2
-
   );
 
 
@@ -4414,25 +3616,6 @@ function drawDevice(
     1;
 
 
-  ctx.beginPath();
-
-
-  ctx.arc(
-
-    0,
-
-    cameraY,
-
-    9,
-
-    0,
-
-    Math.PI *
-    2
-
-  );
-
-
   ctx.stroke();
 
 
@@ -4444,18 +3627,12 @@ function drawDevice(
 
 
   ctx.arc(
-
     0,
-
     cameraY,
-
     5.5,
-
     0,
-
     Math.PI *
     2
-
   );
 
 
@@ -4470,56 +3647,38 @@ function drawDevice(
 
 
   ctx.arc(
-
     -1.5,
-
     cameraY -
     1.7,
-
     1.7,
-
     0,
-
     Math.PI *
     2
-
   );
 
 
   ctx.fill();
 
 
-  /* =====================================
-     SCREEN
-  ===================================== */
+  /* SCREEN */
 
   const screenW =
-
-    bodyWidth
-
-    *
+    bodyWidth *
     .70;
 
 
   const screenH =
-
-    bodyHeight
-
-    *
+    bodyHeight *
     .31;
 
 
   const screenX =
-
     -screenW /
     2;
 
 
   const screenY =
-
-    -bodyHeight
-
-    *
+    -bodyHeight *
     .56;
 
 
@@ -4527,21 +3686,13 @@ function drawDevice(
     "#020405";
 
 
-  ctx.beginPath();
-
-
-  ctx.roundRect(
-
+  roundRect(
+    ctx,
     screenX,
-
     screenY,
-
     screenW,
-
     screenH,
-
     3
-
   );
 
 
@@ -4552,35 +3703,23 @@ function drawDevice(
     "#303635";
 
 
-  ctx.lineWidth =
-    1;
-
-
   ctx.stroke();
 
 
   ctx.save();
 
 
-  ctx.beginPath();
-
-
-  ctx.roundRect(
-
+  roundRect(
+    ctx,
     screenX +
     3,
-
     screenY +
     3,
-
     screenW -
     6,
-
     screenH -
     6,
-
     2
-
   );
 
 
@@ -4588,23 +3727,16 @@ function drawDevice(
 
 
   drawFluidScreen(
-
     device,
-
     now,
-
     screenX +
     3,
-
     screenY +
     3,
-
     screenW -
     6,
-
     screenH -
     6
-
   );
 
 
@@ -4628,38 +3760,27 @@ function drawLED(
 ){
 
   /*
-    優先順序：
-
-    紅 > 黃 > 綠 > 白
+    白：待機
+    綠：看到觀者
+    黃：說話
+    紅：傳遞
   */
 
 
   const breath =
-
     (
       Math.sin(
-
         now *
         .0025
-
         +
-
         device.phase
-
       )
-
       +
-
       1
     )
-
     /
     2;
 
-
-  /*
-    待機白。
-  */
 
   let r =
     190;
@@ -4674,18 +3795,13 @@ function drawLED(
 
 
   let brightness =
-
     .16
-
     +
-
     breath *
     .08;
 
 
-  /* =====================================
-     GREEN
-  ===================================== */
+  /* GREEN */
 
   if(
     viewer.present
@@ -4704,56 +3820,22 @@ function drawLED(
 
 
     brightness =
-
       .55
-
       +
-
       breath *
       .18;
 
   }
 
 
-  /* =====================================
-     YELLOW
-  ===================================== */
-
-  const speaking =
-
-    now <
-    speakingUntil;
-
-
-  const speakingDevice =
-
-    getNearestDeviceIndex();
-
+  /* YELLOW */
 
   if(
-    speaking
-
+    now <
+    speakingUntil
     &&
-
     device.index ===
-    speakingDevice
-
-    &&
-
-    (
-      mode ===
-      "LISTEN"
-
-      ||
-
-      mode ===
-      "FOLLOW"
-
-      ||
-
-      mode ===
-      "IDLE"
-    )
+    getNearestDeviceIndex()
   ){
 
     r =
@@ -4769,27 +3851,19 @@ function drawLED(
 
 
     brightness =
-
       constrain(
-
         .72
-
         +
-
         voiceLevel *
         .55,
-
         .72,
         1
-
       );
 
   }
 
 
-  /* =====================================
-     RED
-  ===================================== */
+  /* RED */
 
   if(
     deviceIsTransferring(
@@ -4810,103 +3884,65 @@ function drawLED(
 
 
     const pulse =
-
       (
         Math.sin(
-
           now *
           .013
-
           +
-
           device.phase
-
         )
-
         +
-
         1
       )
-
       /
       2;
 
 
     brightness =
-
       .68
-
       +
-
       pulse *
       .32;
 
   }
 
 
-  brightness +=
-
-    device.flash
-
-    *
-    .20;
-
-
   brightness =
-
     constrain(
-
-      brightness,
-
+      brightness
+      +
+      device.flash *
+      .20,
       .10,
       1
-
     );
 
-
-  /* LED BASE */
 
   ctx.fillStyle =
     "rgba(45,50,50,.35)";
 
 
   ctx.fillRect(
-
     -width /
     2
-
     +
     3,
-
-    -height
-
-    +
+    -height +
     9,
-
-    width
-
-    -
+    width -
     6,
-
     5
-
   );
 
 
-  /* LED LIGHT */
-
   ctx.shadowBlur =
-
     5
-
     +
-
     brightness *
     18;
 
 
   ctx.shadowColor =
-
     `rgba(
       ${r},
       ${g},
@@ -4916,7 +3952,6 @@ function drawLED(
 
 
   ctx.fillStyle =
-
     `rgba(
       ${r},
       ${g},
@@ -4926,25 +3961,15 @@ function drawLED(
 
 
   ctx.fillRect(
-
     -width /
     2
-
     +
     3,
-
-    -height
-
-    +
+    -height +
     9,
-
-    width
-
-    -
+    width -
     6,
-
     4
-
   );
 
 
@@ -4955,7 +3980,7 @@ function drawLED(
 
 
 /* =========================================================
-   LIQUID SCREEN
+   LIQUID
 ========================================================= */
 
 function drawFluidScreen(
@@ -4967,47 +3992,31 @@ function drawFluidScreen(
   h
 ){
 
-  /* =====================================
-     BACKGROUND
-  ===================================== */
-
   const bg =
-
     ctx.createLinearGradient(
-
       x,
       y,
-
       x,
-      y + h
-
+      y +
+      h
     );
 
 
   bg.addColorStop(
-
     0,
-
     "#071653"
-
   );
 
 
   bg.addColorStop(
-
     .5,
-
     "#06144a"
-
   );
 
 
   bg.addColorStop(
-
     1,
-
     "#030c32"
-
   );
 
 
@@ -5016,486 +4025,304 @@ function drawFluidScreen(
 
 
   ctx.fillRect(
-
     x,
     y,
     w,
     h
-
   );
 
 
   const info =
-
     constrain(
-
       device.info,
-
       0,
       1
-
     );
 
 
   const motionStrength =
-
     constrain(
-
       Math.abs(
-
         device.angularVelocity
-
       )
-
       *
       1.7,
-
       0,
       1
-
     );
 
 
   /*
-    每次收到資訊後，
-    particleEnergy / localNoise 都會增加。
+    接收越多次資訊，
+    粒子越亂。
   */
 
-  const particleVariation =
-
+  const variation =
     constrain(
-
-      device.particleEnergy
-
-      *
+      device.particleEnergy *
       .85
-
       +
-
-      device.localNoise
-
-      *
+      device.localNoise *
       .75
-
       +
-
-      chaos
-
-      *
+      chaos *
       .35,
-
       0,
       1
-
     );
 
-
-  /*
-    粒子越亂，
-    液面波動越強。
-  */
 
   const turbulence =
-
     .01
-
     +
-
     chaos *
     .035
-
     +
-
-    particleVariation *
+    variation *
     .09
-
     +
-
     motionStrength *
     .04;
 
 
-  /* =====================================
-     GRAVITY
-  ===================================== */
-
   const angleRad =
-
     device.angle
-
     *
     Math.PI
-
     /
     180;
 
 
   /*
-    世界重力轉換成
-    裝置自己的座標。
+    重力方向。
+
+    裝置往右倒，
+    液體就往右下堆。
+
+    往左倒，
+    就往左下堆。
+
+    旋轉時會加入慣性，
+    所以不會像貼死在螢幕。
   */
 
   let gravityX =
-
     Math.sin(
       angleRad
-    );
+    )
+
+    -
+
+    device.angularVelocity *
+    .11
+
+    +
+
+    device.fluidOffset *
+    .10;
 
 
   let gravityY =
-
     Math.cos(
       angleRad
     );
 
 
-  /*
-    旋轉慣性。
-  */
-
-  gravityX +=
-
-    -device.angularVelocity
-
-    *
-    .11;
-
-
-  gravityX +=
-
-    device.fluidOffset
-
-    *
-    .10;
-
-
   const gravityLength =
-
     Math.sqrt(
-
       gravityX *
       gravityX
-
       +
-
       gravityY *
       gravityY
-
     )
-
     ||
-
     1;
 
 
   gravityX /=
-
     gravityLength;
 
 
   gravityY /=
-
     gravityLength;
 
 
-  /*
-    液面方向。
-  */
-
   const tangentX =
-
     gravityY;
 
 
   const tangentY =
-
     -gravityX;
 
 
-  /* =====================================
-     LIQUID AMOUNT
-  ===================================== */
-
-  /*
-    資訊越多，
-    液體看起來越多。
-  */
-
   const fillAmount =
-
     constrain(
-
       .30
-
       +
-
       info *
       .22
-
       +
-
-      device.particleEnergy
-
-      *
+      device.particleEnergy *
       .10,
-
       .22,
       .72
-
     );
 
 
   const threshold =
-
     lerp(
-
       .58,
-
       -.35,
-
       fillAmount
-
     );
 
 
-  const cellSize =
-    2;
-
-
   const time =
-
-    now
-
-    *
+    now *
     .001;
 
 
-  /* =====================================
-     MAIN LIQUID
-  ===================================== */
+  const cell =
+    2;
+
+
+  /* =============================
+     LIQUID BODY
+  ============================== */
 
   for(
     let py = 0;
     py < h;
-    py += cellSize
+    py += cell
   ){
 
     for(
       let px = 0;
       px < w;
-      px += cellSize
+      px += cell
     ){
 
       const nx =
-
-        (
-          px /
-          w
-        )
-
-        *
+        px /
+        w *
         2
-
         -
         1;
 
 
       const ny =
-
-        (
-          py /
-          h
-        )
-
-        *
+        py /
+        h *
         2
-
         -
         1;
 
 
-      const gravityDepth =
-
+      const depthAxis =
         nx *
         gravityX
-
         +
-
         ny *
         gravityY;
 
 
-      const tangentPosition =
-
+      const tangent =
         nx *
         tangentX
-
         +
-
         ny *
         tangentY;
 
 
-      /*
-        第一層波。
-      */
-
-      let surfaceWave =
-
+      let wave =
         Math.sin(
-
-          tangentPosition
-
+          tangent
           *
           (
             6
-
             +
-
-            particleVariation *
+            variation *
             4
           )
-
           +
-
           time *
           2
-
           +
-
           device.phase
-
         )
-
         *
         (
           .015
-
           +
-
           turbulence *
           .028
         );
 
 
-      /*
-        第二層較碎的波。
-      */
-
-      surfaceWave +=
-
+      wave +=
         Math.sin(
-
-          tangentPosition *
+          tangent *
           14
-
           -
-
           time
-
           *
           (
             3.2
-
             +
-
-            particleVariation *
+            variation *
             2
           )
-
         )
-
         *
         (
           .008
-
           +
-
-          particleVariation *
+          variation *
           .035
         );
 
 
-      /*
-        高混亂時出現局部雜訊。
-      */
-
-      surfaceWave +=
-
+      wave +=
         Math.sin(
-
           (
-            nx
-
-            +
-
+            nx +
             ny
           )
-
           *
           10
-
           +
-
           time *
           5
-
           +
-
           device.phase *
           1.7
-
         )
-
         *
-        (
-          particleVariation
-
-          *
-          .015
-        );
+        variation *
+        .015;
 
 
-      /*
-        裝置動作引起的液面波。
-      */
-
-      surfaceWave +=
-
+      wave +=
         motionStrength
-
         *
         Math.sin(
-
-          tangentPosition *
+          tangent *
           18
-
           -
-
           time *
           4.2
-
         )
-
         *
         .025;
 
 
-      const insideLiquid =
-
-        gravityDepth
-
-        >
-
-        threshold
-
-        +
-
-        surfaceWave;
-
-
       if(
-        !insideLiquid
+        depthAxis
+        <=
+        threshold
+        +
+        wave
       ){
 
         continue;
@@ -5504,85 +4331,56 @@ function drawFluidScreen(
 
 
       const depth =
-
         constrain(
-
           (
-            gravityDepth
-
+            depthAxis
             -
-
             threshold
-
             -
-
-            surfaceWave
+            wave
           )
-
           *
           2.1,
-
           0,
           1
-
         );
 
 
       const alpha =
-
         .58
-
         +
-
         depth *
         .28
-
         +
-
-        particleVariation *
+        variation *
         .12;
 
 
       const green =
-
         Math.round(
-
           210
-
           +
-
           depth *
           30
-
           +
-
-          particleVariation *
+          variation *
           12
-
         );
 
 
       const blue =
-
         Math.round(
-
           245
-
           -
-
           depth *
           18
-
           +
-
-          particleVariation *
+          variation *
           5
-
         );
 
 
       ctx.fillStyle =
-
         `rgba(
           35,
           ${green},
@@ -5592,93 +4390,60 @@ function drawFluidScreen(
 
 
       ctx.fillRect(
-
-        x + px,
-
-        y + py,
-
-        cellSize,
-
-        cellSize
-
+        x +
+        px,
+        y +
+        py,
+        cell,
+        cell
       );
 
 
-      /* =================================
-         MICRO PARTICLES
-      ================================= */
-
       const sparkle =
-
         pseudoLiquidNoise(
-
           px,
-
           py,
-
           device.index,
-
           Math.floor(
-
             now /
             90
-
           )
-
         );
 
 
-      /*
-        particleVariation 越高，
-        越容易出現亮點。
-      */
-
       if(
         sparkle
-
         >
-
-        (
-          .94
-
-          -
-
-          particleVariation *
-          .09
-        )
+        .94
+        -
+        variation *
+        .09
       ){
 
         ctx.fillStyle =
-
           `rgba(
             185,
             255,
             255,
             ${
               .08
-
               +
-
               depth *
               .24
-
               +
-
-              particleVariation *
+              variation *
               .25
             }
           )`;
 
 
         ctx.fillRect(
-
-          x + px,
-
-          y + py,
-
+          x +
+          px,
+          y +
+          py,
           1,
           1
-
         );
 
       }
@@ -5688,270 +4453,173 @@ function drawFluidScreen(
   }
 
 
-  /* =====================================
+  /* =============================
      SURFACE PARTICLES
-  ===================================== */
+  ============================== */
 
-  const surfaceParticleCount =
-
+  const surfaceCount =
     Math.floor(
-
       18
-
       +
-
       info *
       18
-
       +
-
-      particleVariation *
+      variation *
       36
-
       +
-
       motionStrength *
       14
-
     );
 
 
   for(
     let i = 0;
-    i < surfaceParticleCount;
+    i < surfaceCount;
     i++
   ){
 
     const t =
-
-      (
-        i
-
-        /
-
-        Math.max(
-
-          1,
-
-          surfaceParticleCount -
-          1
-
-        )
+      i
+      /
+      Math.max(
+        1,
+        surfaceCount -
+        1
       )
-
       *
       2
-
       -
       1;
 
 
     let localX =
-
       tangentX *
       t
-
       +
-
       gravityX *
       threshold;
 
 
     let localY =
-
       tangentY *
       t
-
       +
-
       gravityY *
       threshold;
 
 
     const wave =
-
       Math.sin(
-
         t
-
         *
         (
           8
-
           +
-
-          particleVariation *
+          variation *
           5
         )
-
         +
-
         time
-
         *
         (
           2.1
-
           +
-
-          particleVariation *
+          variation *
           1.6
         )
-
         +
-
         device.phase
-
       )
-
       *
       (
         .02
-
         +
-
         motionStrength *
         .02
-
         +
-
-        particleVariation *
+        variation *
         .03
       );
 
 
     localX +=
-
-      gravityX
-
-      *
+      gravityX *
       wave;
 
 
     localY +=
-
-      gravityY
-
-      *
+      gravityY *
       wave;
 
 
-    /*
-      資訊越亂，
-      粒子越散。
-    */
-
-    const randomDepth =
-
+    const depth =
       Math.abs(
-
         Math.sin(
-
           i
-
           *
           (
             19.73
-
             +
-
-            particleVariation *
+            variation *
             8
           )
-
           +
-
           device.phase
-
         )
-
       )
-
       *
       (
         .10
-
         +
-
-        particleVariation *
+        variation *
         .10
       );
 
 
     localX +=
-
-      gravityX
-
-      *
-      randomDepth;
+      gravityX *
+      depth;
 
 
     localY +=
-
-      gravityY
-
-      *
-      randomDepth;
+      gravityY *
+      depth;
 
 
     const screenX =
-
       x
-
       +
-
       (
-        localX
-
-        +
+        localX +
         1
       )
-
       *
       .5
-
       *
       w;
 
 
     const screenY =
-
       y
-
       +
-
       (
-        localY
-
-        +
+        localY +
         1
       )
-
       *
       .5
-
       *
       h;
 
 
     if(
-      screenX <
-      x
-
+      screenX < x
       ||
-
-      screenX >
-      x + w
-
+      screenX > x + w
       ||
-
-      screenY <
-      y
-
+      screenY < y
       ||
-
-      screenY >
-      y + h
+      screenY > y + h
     ){
 
       continue;
@@ -5960,28 +4628,17 @@ function drawFluidScreen(
 
 
     const size =
-
       i
-
       %
-
       Math.max(
-
         2,
-
         5
-
         -
-
         Math.floor(
-
-          particleVariation *
+          variation *
           2
-
         )
-
       )
-
       ===
       0
 
@@ -5995,62 +4652,45 @@ function drawFluidScreen(
 
 
     ctx.fillStyle =
-
       `rgba(
         165,
         255,
         255,
         ${
           .22
-
           +
-
           info *
           .18
-
           +
-
-          particleVariation *
+          variation *
           .38
         }
       )`;
 
 
     ctx.fillRect(
-
       screenX,
-
       screenY,
-
       size,
-
       size
-
     );
 
   }
 
 
-  /* =====================================
+  /* =============================
      FLOATING PARTICLES
-  ===================================== */
+  ============================== */
 
   const floatingCount =
-
     Math.floor(
-
       8
-
       +
-
-      particleVariation *
+      variation *
       30
-
       +
-
       info *
       10
-
     );
 
 
@@ -6061,72 +4701,50 @@ function drawFluidScreen(
   ){
 
     const seed =
-
       device
       .fluidSeeds[
-        i %
+        i
+        %
         device.fluidSeeds.length
       ];
 
 
     const t =
-
       fract(
-
-        now
-
-        *
-        .00012
-
-        *
+        now *
+        .00012 *
         seed.speed
-
         +
-
         seed.phase
-
       );
 
 
     const drift =
-
       Math.sin(
-
         now *
         .0025
-
         +
-
         seed.phase
-
       )
-
       *
       (
         .02
-
         +
-
-        particleVariation *
+        variation *
         .08
       );
 
 
     const localX =
-
       tangentX
-
       *
       (
         seed.offset
-
         *
         (
           .65
-
           +
-
-          particleVariation *
+          variation *
           .35
         )
       )
@@ -6134,17 +4752,12 @@ function drawFluidScreen(
       +
 
       gravityX
-
       *
       (
         threshold
-
         +
-
         .18
-
         +
-
         t *
         .55
       )
@@ -6155,20 +4768,15 @@ function drawFluidScreen(
 
 
     const localY =
-
       tangentY
-
       *
       (
         seed.offset
-
         *
         (
           .65
-
           +
-
-          particleVariation *
+          variation *
           .35
         )
       )
@@ -6176,80 +4784,51 @@ function drawFluidScreen(
       +
 
       gravityY
-
       *
       (
         threshold
-
         +
-
         .18
-
         +
-
         t *
         .55
       );
 
 
     const screenX =
-
       x
-
       +
-
       (
-        localX
-
-        +
+        localX +
         1
       )
-
       *
       .5
-
       *
       w;
 
 
     const screenY =
-
       y
-
       +
-
       (
-        localY
-
-        +
+        localY +
         1
       )
-
       *
       .5
-
       *
       h;
 
 
     if(
-      screenX <
-      x
-
+      screenX < x
       ||
-
-      screenX >
-      x + w
-
+      screenX > x + w
       ||
-
-      screenY <
-      y
-
+      screenY < y
       ||
-
-      screenY >
-      y + h
+      screenY > y + h
     ){
 
       continue;
@@ -6258,17 +4837,14 @@ function drawFluidScreen(
 
 
     ctx.fillStyle =
-
       `rgba(
         195,
         255,
         255,
         ${
           .08
-
           +
-
-          particleVariation *
+          variation *
           .25
         }
       )`;
@@ -6278,28 +4854,18 @@ function drawFluidScreen(
 
 
     ctx.arc(
-
       screenX,
-
       screenY,
-
       .6
-
       +
-
       seed.size *
       .32
-
       +
-
-      particleVariation *
+      variation *
       .28,
-
       0,
-
       Math.PI *
       2
-
     );
 
 
@@ -6308,9 +4874,9 @@ function drawFluidScreen(
   }
 
 
-  /* =====================================
-     INFORMATION FLASH
-  ===================================== */
+  /*
+    接收資訊瞬間亮一下。
+  */
 
   if(
     device.flash >
@@ -6318,7 +4884,6 @@ function drawFluidScreen(
   ){
 
     ctx.fillStyle =
-
       `rgba(
         170,
         255,
@@ -6328,12 +4893,10 @@ function drawFluidScreen(
 
 
     ctx.fillRect(
-
       x,
       y,
       w,
       h
-
     );
 
   }
@@ -6343,14 +4906,11 @@ function drawFluidScreen(
 
 /* =========================================================
    TRANSFER PARTICLES
-
-   ★ 這裡完全沒有任何連接線。
-   ★ 只有紅色粒子在裝置間移動。
+   沒有虛線
+   沒有連接線
 ========================================================= */
 
-function drawAllTransferContacts(
-  now
-){
+function drawAllTransferParticles(now){
 
   for(
     const transfer
@@ -6358,11 +4918,8 @@ function drawAllTransferContacts(
   ){
 
     drawTransferParticles(
-
       transfer,
-
       now
-
     );
 
   }
@@ -6370,184 +4927,116 @@ function drawAllTransferContacts(
 }
 
 
-/* =========================================================
-   TRANSFER PARTICLES
-========================================================= */
-
 function drawTransferParticles(
   transfer,
   now
 ){
 
   const pointA =
-
     getTopPoint(
       transfer.from
     );
 
 
   const pointB =
-
     getTopPoint(
       transfer.to
     );
 
 
   const midX =
-
     (
-      pointA.x
-
-      +
-
+      pointA.x +
       pointB.x
     )
-
     /
     2;
 
 
   const midY =
-
     (
-      pointA.y
-
-      +
-
+      pointA.y +
       pointB.y
     )
-
     /
     2;
 
 
   const dx =
-
-    pointB.x
-
-    -
-
+    pointB.x -
     pointA.x;
 
 
   const dy =
-
-    pointB.y
-
-    -
-
+    pointB.y -
     pointA.y;
 
 
   const distance =
-
     Math.sqrt(
-
       dx *
       dx
-
       +
-
       dy *
       dy
-
     )
-
     ||
-
     1;
 
 
-  /*
-    垂直方向。
-    只是用來計算粒子彎曲路徑，
-    不會畫成線。
-  */
-
   const nx =
-
-    -dy
-
-    /
+    -dy /
     distance;
 
 
   const ny =
-
-    dx
-
-    /
+    dx /
     distance;
 
 
+  /*
+    只是粒子走的隱形曲線，
+    不會畫線。
+  */
+
   const bend =
-
     12
-
     +
-
     Math.abs(
-
       transfer.curvature
-
     )
-
     *
     22;
 
 
   const controlX =
-
     midX
-
     +
-
     nx
-
     *
     bend
-
     *
     transfer.curvature;
 
 
   const controlY =
-
     midY
-
     +
-
     ny
-
     *
     bend
-
     *
     transfer.curvature;
 
 
-  /*
-    Chaos 越高，
-    粒子越多。
-  */
-
   const particleCount =
-
     5
-
     +
-
     Math.floor(
-
       chaos *
       12
-
     );
 
-
-  /* =====================================
-     MOVING RED PARTICLES
-  ===================================== */
 
   for(
     let i = 0;
@@ -6555,144 +5044,81 @@ function drawTransferParticles(
     i++
   ){
 
-    /*
-      顆粒彼此錯開。
-    */
-
-    const offset =
-
-      i
-
-      /
-      particleCount;
-
-
-    /*
-      每顆粒子沿著同一條
-      隱形路徑往前跑。
-
-      注意：
-      只有數學路徑，
-      畫面不畫線。
-    */
-
     const p =
-
       fract(
-
         transfer.progress
-
         +
-
-        offset *
+        (
+          i /
+          particleCount
+        )
+        *
         .72
-
         +
-
         now *
         .00017
-
       );
 
 
-    const pos =
-
+    const position =
       getQuadraticPoint(
-
         pointA.x,
         pointA.y,
-
         controlX,
         controlY,
-
         pointB.x,
         pointB.y,
-
         p
-
       );
 
 
-    /*
-      混亂越高，
-      顆粒越散。
-    */
-
     const scatter =
-
       1
-
       +
-
       chaos *
       6;
 
 
     const scatterX =
-
       Math.sin(
-
         i *
         8.37
-
         +
-
         now *
         .006
-
         +
-
         transfer.pulse
-
       )
-
       *
       scatter;
 
 
     const scatterY =
-
       Math.cos(
-
         i *
         5.61
-
         +
-
         now *
         .005
-
         +
-
         transfer.pulse
-
       )
-
       *
       scatter;
 
 
-    /*
-      越靠後稍微越淡。
-    */
-
     const alpha =
-
       .22
-
       +
-
       (
         1 -
         p
       )
-
       *
       .43;
 
 
     const size =
-
       i %
       4 ===
       0
@@ -6707,7 +5133,6 @@ function drawTransferParticles(
 
 
     ctx.shadowBlur =
-
       i %
       4 ===
       0
@@ -6722,12 +5147,10 @@ function drawTransferParticles(
 
 
     ctx.shadowColor =
-
       "rgba(255,70,55,.65)";
 
 
     ctx.fillStyle =
-
       `rgba(
         255,
         65,
@@ -6740,26 +5163,14 @@ function drawTransferParticles(
 
 
     ctx.arc(
-
-      pos.x
-
-      +
-
+      position.x +
       scatterX,
-
-      pos.y
-
-      +
-
+      position.y +
       scatterY,
-
       size,
-
       0,
-
       Math.PI *
       2
-
     );
 
 
@@ -6772,83 +5183,60 @@ function drawTransferParticles(
   }
 
 
-  /* =====================================
-     LEADING PARTICLE
+  /*
+    最前面的資訊核心。
+  */
 
-     最前面的資訊核心。
-  ===================================== */
-
-  const highlight =
-
+  const head =
     getQuadraticPoint(
-
       pointA.x,
       pointA.y,
-
       controlX,
       controlY,
-
       pointB.x,
       pointB.y,
-
       constrain(
         transfer.progress,
         0,
         1
       )
-
     );
 
 
   const pulse =
-
     (
       Math.sin(
-
         now *
         .025
-
         +
-
         transfer.pulse
-
       )
-
       +
-
       1
     )
-
     /
     2;
 
 
   ctx.shadowBlur =
-
     7
-
     +
-
     pulse *
     7;
 
 
   ctx.shadowColor =
-
     "rgba(255,60,45,.70)";
 
 
   ctx.fillStyle =
-
     `rgba(
       255,
       90,
       65,
       ${
         .50
-
         +
-
         pulse *
         .30
       }
@@ -6859,23 +5247,15 @@ function drawTransferParticles(
 
 
   ctx.arc(
-
-    highlight.x,
-
-    highlight.y,
-
+    head.x,
+    head.y,
     2
-
     +
-
     pulse *
     1.7,
-
     0,
-
     Math.PI *
     2
-
   );
 
 
@@ -6889,7 +5269,7 @@ function drawTransferParticles(
 
 
 /* =========================================================
-   QUADRATIC POSITION
+   POINTS
 ========================================================= */
 
 function getQuadraticPoint(
@@ -6902,52 +5282,38 @@ function getQuadraticPoint(
   t
 ){
 
-  const mt =
-
-    1
-
-    -
-
+  const m =
+    1 -
     t;
 
 
   return{
 
     x:
-
-      mt *
-      mt *
+      m *
+      m *
       x1
-
       +
-
       2 *
-      mt *
+      m *
       t *
       cx
-
       +
-
       t *
       t *
       x2,
 
 
     y:
-
-      mt *
-      mt *
+      m *
+      m *
       y1
-
       +
-
       2 *
-      mt *
+      m *
       t *
       cy
-
       +
-
       t *
       t *
       y2
@@ -6957,61 +5323,44 @@ function getQuadraticPoint(
 }
 
 
-/* =========================================================
-   TOP POINT
-========================================================= */
-
 function getTopPoint(index){
 
   const device =
-
     devices[index];
 
 
   const angle =
-
     device.angle
-
     *
     Math.PI
-
     /
     180;
 
 
   const height =
-
     getBodyHeight();
 
 
   return{
 
     x:
-
       getDeviceX(
         index
       )
-
       +
-
       Math.sin(
         angle
       )
-
       *
       height,
 
 
     y:
-
       getBaseY()
-
       -
-
       Math.cos(
         angle
       )
-
       *
       height
 
@@ -7034,206 +5383,126 @@ function updateUI(now){
     viewer.present
   ){
 
-    if(
+    viewerText =
       viewer.x <
       .32
-    ){
 
-      viewerText =
-        "左側";
+      ?
 
-    }
+      "左側"
 
-    else if(
+      :
+
       viewer.x >
       .68
-    ){
 
-      viewerText =
-        "右側";
+      ?
 
-    }
+      "右側"
 
-    else{
+      :
 
-      viewerText =
-        "中央";
-
-    }
+      "中央";
 
   }
 
 
-  document
-  .getElementById(
-    "viewerPosition"
-  )
+  $("viewerPosition")
   .textContent =
     viewerText;
 
 
   const cameraPercent =
-
     Math.round(
-
       constrain(
-
-        viewer.movement
-
-        *
+        viewer.movement *
         4,
-
         0,
         1
-
       )
-
       *
       100
-
     );
 
 
-  document
-  .getElementById(
-    "cameraPercent"
-  )
+  $("cameraPercent")
   .textContent =
     cameraPercent;
 
 
-  document
-  .getElementById(
-    "cameraMeter"
-  )
+  $("cameraMeter")
   .style.width =
-
-    cameraPercent
-
-    +
+    cameraPercent +
     "%";
 
 
   const voicePercent =
-
     Math.round(
-
-      voiceLevel
-
-      *
+      voiceLevel *
       100
-
     );
 
 
-  document
-  .getElementById(
-    "voicePercent"
-  )
+  $("voicePercent")
   .textContent =
     voicePercent;
 
 
-  document
-  .getElementById(
-    "voiceMeter"
-  )
+  $("voiceMeter")
   .style.width =
-
-    voicePercent
-
-    +
+    voicePercent +
     "%";
 
 
   const chaosPercent =
-
     Math.round(
-
-      chaos
-
-      *
+      chaos *
       100
-
     );
 
 
-  document
-  .getElementById(
-    "chaosPercent"
-  )
+  $("chaosPercent")
   .textContent =
     chaosPercent;
 
 
-  document
-  .getElementById(
-    "chaosMeter"
-  )
+  $("chaosMeter")
   .style.width =
-
-    chaosPercent
-
-    +
+    chaosPercent +
     "%";
 
 
-  document
-  .getElementById(
-    "transferCount"
-  )
+  $("transferCount")
   .textContent =
-
     activeTransfers.length;
 
 
-  const avgInfo =
+  /*
+    這裡就是前一版出錯的地方。
+    這版改成同一行箭頭函式。
+  */
 
+  const averageInfo =
     devices.reduce(
-
-      (
-        sum,
-        device
-      )
-
-      =>
-
-      sum
-
-      +
-
-      device.info,
-
+      (sum,device) =>
+        sum +
+        device.info,
       0
-
     )
-
     /
     DEVICE_COUNT;
 
 
-  document
-  .getElementById(
-    "averageInfo"
-  )
+  $("averageInfo")
   .textContent =
-
     Math.round(
-
-      avgInfo
-
-      *
+      averageInfo *
       100
-
     );
 
 
-  document
-  .getElementById(
-    "sourceText"
-  )
+  $("sourceText")
   .textContent =
-
     sourceIndex >=
     0
 
@@ -7244,6 +5513,54 @@ function updateUI(now){
     :
 
     "—";
+
+
+  /* TIMER */
+
+  if(
+    mode ===
+    "ACTIVE"
+    &&
+    !networkClosing
+  ){
+
+    $("activeRemaining")
+    .textContent =
+      (
+        Math.max(
+          0,
+          activeUntil -
+          now
+        )
+        /
+        1000
+      )
+      .toFixed(1)
+      +
+      " 秒";
+
+  }
+
+  else if(
+    mode ===
+    "ACTIVE"
+    &&
+    networkClosing
+  ){
+
+    $("activeRemaining")
+    .textContent =
+      "收尾中";
+
+  }
+
+  else{
+
+    $("activeRemaining")
+    .textContent =
+      "—";
+
+  }
 
 
   let modeText =
@@ -7264,7 +5581,7 @@ function updateUI(now){
 
 
     description =
-      "裝置已拍到觀者，LED 變成綠色並跟隨觀者。";
+      "裝置拍到觀者，LED 變綠色並跟隨觀者。";
 
   }
 
@@ -7279,7 +5596,7 @@ function updateUI(now){
 
 
     description =
-      "最近的裝置正在接收你的聲音，LED 變成黃色。";
+      "最近的裝置正在接收聲音，LED 變黃色。";
 
   }
 
@@ -7287,6 +5604,8 @@ function updateUI(now){
   if(
     mode ===
     "ACTIVE"
+    &&
+    !networkClosing
   ){
 
     modeText =
@@ -7294,31 +5613,39 @@ function updateUI(now){
 
 
     description =
-      "資訊正在反覆、交叉傳遞；紅色粒子在裝置之間流竄。";
+      "資訊正在反覆、交叉傳遞；沒有連接線，只有紅色資訊粒子。";
 
   }
 
 
-  document
-  .getElementById(
-    "modeText"
-  )
+  if(
+    mode ===
+    "ACTIVE"
+    &&
+    networkClosing
+  ){
+
+    modeText =
+      "傳遞收尾";
+
+
+    description =
+      "已停止產生新資訊，剩下的粒子正在完成最後傳遞。";
+
+  }
+
+
+  $("modeText")
   .textContent =
     modeText;
 
 
-  document
-  .getElementById(
-    "phaseName"
-  )
+  $("phaseName")
   .textContent =
     modeText;
 
 
-  document
-  .getElementById(
-    "phaseDescription"
-  )
+  $("phaseDescription")
   .textContent =
     description;
 
@@ -7329,193 +5656,123 @@ function updateUI(now){
    SLIDERS
 ========================================================= */
 
-document
-.getElementById(
-  "sensitivitySlider"
-)
-.addEventListener(
-  "input",
+function bindSlider(
+  id,
+  valueId,
+  callback
+){
 
-  e => {
+  $(id)
+  .addEventListener(
 
+    "input",
+
+    event => {
+
+      const value =
+        Number(
+          event.target.value
+        );
+
+
+      callback(
+        value
+      );
+
+
+      $(valueId)
+      .textContent =
+        event.target.value;
+
+    }
+
+  );
+
+}
+
+
+bindSlider(
+
+  "sensitivitySlider",
+
+  "sensitivityValue",
+
+  value =>
     viewer.sensitivity =
-
-      Number(
-        e.target.value
-      );
-
-
-    document
-    .getElementById(
-      "sensitivityValue"
-    )
-    .textContent =
-
-      e.target.value;
-
-  }
+    value
 
 );
 
 
-document
-.getElementById(
-  "followAngleSlider"
-)
-.addEventListener(
-  "input",
+bindSlider(
 
-  e => {
+  "followAngleSlider",
 
+  "followAngleValue",
+
+  value =>
     followMaxAngle =
-
-      Number(
-        e.target.value
-      );
-
-
-    document
-    .getElementById(
-      "followAngleValue"
-    )
-    .textContent =
-
-      e.target.value;
-
-  }
+    value
 
 );
 
 
-document
-.getElementById(
-  "chaosAngleSlider"
-)
-.addEventListener(
-  "input",
+bindSlider(
 
-  e => {
+  "chaosAngleSlider",
 
+  "chaosAngleValue",
+
+  value =>
     chaosMaxAngle =
-
-      Number(
-        e.target.value
-      );
-
-
-    document
-    .getElementById(
-      "chaosAngleValue"
-    )
-    .textContent =
-
-      e.target.value;
-
-  }
+    value
 
 );
 
 
-document
-.getElementById(
-  "voiceThresholdSlider"
-)
-.addEventListener(
-  "input",
+bindSlider(
 
-  e => {
+  "voiceThresholdSlider",
 
+  "voiceThresholdValue",
+
+  value =>
     voiceThreshold =
-
-      Number(
-        e.target.value
-      )
-
-      /
-      100;
-
-
-    document
-    .getElementById(
-      "voiceThresholdValue"
-    )
-    .textContent =
-
-      e.target.value;
-
-  }
+    value /
+    100
 
 );
 
 
-document
-.getElementById(
-  "transmissionRateSlider"
-)
-.addEventListener(
-  "input",
+bindSlider(
 
-  e => {
+  "transmissionRateSlider",
 
+  "transmissionRateValue",
+
+  value =>
     transmissionRate =
-
-      Number(
-        e.target.value
-      )
-
-      /
-      100;
-
-
-    document
-    .getElementById(
-      "transmissionRateValue"
-    )
-    .textContent =
-
-      e.target.value;
-
-  }
+    value /
+    100
 
 );
 
 
-document
-.getElementById(
-  "chaosSpeedSlider"
-)
-.addEventListener(
-  "input",
+bindSlider(
 
-  e => {
+  "chaosSpeedSlider",
 
+  "chaosSpeedValue",
+
+  value =>
     chaosGrowthSpeed =
-
-      Number(
-        e.target.value
-      )
-
-      /
-      100;
-
-
-    document
-    .getElementById(
-      "chaosSpeedValue"
-    )
-    .textContent =
-
-      e.target.value;
-
-  }
+    value /
+    100
 
 );
 
 
-document
-.getElementById(
-  "resetBtn"
-)
+$("resetBtn")
 .addEventListener(
   "click",
   resetSystem
@@ -7547,22 +5804,14 @@ function random(
 
 
   return(
-
     Math.random()
-
     *
     (
-      max
-
-      -
-
+      max -
       min
     )
-
     +
-
     min
-
   );
 
 }
@@ -7575,22 +5824,14 @@ function lerp(
 ){
 
   return(
-
     a
-
     +
-
     (
-      b
-
-      -
-
+      b -
       a
     )
-
     *
     t
-
   );
 
 }
@@ -7603,17 +5844,11 @@ function constrain(
 ){
 
   return Math.max(
-
     min,
-
     Math.min(
-
       max,
-
       value
-
     )
-
   );
 
 }
@@ -7628,39 +5863,22 @@ function mapValue(
 ){
 
   return(
-
     (
-      value
-
-      -
-
+      value -
       inMin
     )
-
     /
-
     (
-      inMax
-
-      -
-
+      inMax -
       inMin
     )
-
     *
-
     (
-      outMax
-
-      -
-
+      outMax -
       outMin
     )
-
     +
-
     outMin
-
   );
 
 }
@@ -7669,15 +5887,10 @@ function mapValue(
 function fract(value){
 
   return(
-
-    value
-
-    -
-
+    value -
     Math.floor(
       value
     )
-
   );
 
 }
@@ -7691,84 +5904,46 @@ function pseudoLiquidNoise(
 ){
 
   const value =
-
     Math.sin(
-
       x *
       12.9898
-
       +
-
       y *
       78.233
-
       +
-
       deviceIndex *
       37.719
-
       +
-
       frame *
       .137
-
     )
-
     *
     43758.5453;
 
 
   return(
-
-    value
-
-    -
-
+    value -
     Math.floor(
       value
     )
-
   );
 
 }
 
 
-/* =========================================================
-   WEIGHTED RANDOM
-========================================================= */
-
 function weightedPick(items){
 
   let total =
-    0;
+    items.reduce(
+      (sum,item) =>
+        sum +
+        item.weight,
+      0
+    );
 
 
-  for(
-    const item
-    of items
-  ){
-
-    total +=
-      item.weight;
-
-  }
-
-
-  if(
-    total <=
-    0
-  ){
-
-    return items[0]
-    .index;
-
-  }
-
-
-  let r =
-
+  let randomValue =
     Math.random()
-
     *
     total;
 
@@ -7778,12 +5953,12 @@ function weightedPick(items){
     of items
   ){
 
-    r -=
+    randomValue -=
       item.weight;
 
 
     if(
-      r <=
+      randomValue <=
       0
     ){
 
@@ -7802,12 +5977,100 @@ function weightedPick(items){
 }
 
 
+/*
+  自己畫圓角矩形，
+  避免不同瀏覽器的 roundRect 問題。
+*/
+
+function roundRect(
+  context,
+  x,
+  y,
+  width,
+  height,
+  radius
+){
+
+  const r =
+    Math.min(
+      radius,
+      Math.abs(
+        width
+      )
+      /
+      2,
+      Math.abs(
+        height
+      )
+      /
+      2
+    );
+
+
+  context.beginPath();
+
+
+  context.moveTo(
+    x +
+    r,
+    y
+  );
+
+
+  context.arcTo(
+    x +
+    width,
+    y,
+    x +
+    width,
+    y +
+    height,
+    r
+  );
+
+
+  context.arcTo(
+    x +
+    width,
+    y +
+    height,
+    x,
+    y +
+    height,
+    r
+  );
+
+
+  context.arcTo(
+    x,
+    y +
+    height,
+    x,
+    y,
+    r
+  );
+
+
+  context.arcTo(
+    x,
+    y,
+    x +
+    width,
+    y,
+    r
+  );
+
+
+  context.closePath();
+
+}
+
+
 /* =========================================================
    MAIN LOOP
 ========================================================= */
 
 let previousTime =
-
   performance.now();
 
 
@@ -7818,17 +6081,10 @@ let lastCameraAnalysis =
 function animate(now){
 
   const dt =
-
     Math.min(
-
       50,
-
-      now
-
-      -
-
+      now -
       previousTime
-
     );
 
 
@@ -7836,21 +6092,15 @@ function animate(now){
     now;
 
 
-  /* =====================================
-     MANUAL SPEECH
-  ===================================== */
+  /* MANUAL TEST */
 
   if(
     manualActivationAt >
     0
-
     &&
-
     now >=
     manualActivationAt
-
     &&
-
     mode !==
     "ACTIVE"
   ){
@@ -7866,18 +6116,11 @@ function animate(now){
   }
 
 
-  /* =====================================
-     CAMERA
-  ===================================== */
+  /* CAMERA */
 
   if(
-    now
-
-    -
-
-    lastCameraAnalysis
-
-    >
+    now -
+    lastCameraAnalysis >
     100
   ){
 
@@ -7890,9 +6133,7 @@ function animate(now){
   }
 
 
-  /* =====================================
-     AUDIO
-  ===================================== */
+  /* AUDIO */
 
   updateAudio(
     dt,
@@ -7900,9 +6141,7 @@ function animate(now){
   );
 
 
-  /* =====================================
-     TRANSMISSION
-  ===================================== */
+  /* NETWORK */
 
   updateTransmissionNetwork(
     now,
@@ -7910,9 +6149,7 @@ function animate(now){
   );
 
 
-  /* =====================================
-     DEVICES
-  ===================================== */
+  /* DEVICES */
 
   devices.forEach(
 
@@ -7933,18 +6170,13 @@ function animate(now){
   );
 
 
-  /* =====================================
-     DRAW
-  ===================================== */
+  /* DRAW */
 
   ctx.clearRect(
-
     0,
     0,
-
     W,
     H
-
   );
 
 
@@ -7956,11 +6188,8 @@ function animate(now){
     device => {
 
       drawDevice(
-
         device,
-
         now
-
       );
 
     }
@@ -7969,10 +6198,11 @@ function animate(now){
 
 
   /*
-    ★ 只有粒子，不畫線。
+    沒有任何線。
+    只有紅色資訊粒子。
   */
 
-  drawAllTransferContacts(
+  drawAllTransferParticles(
     now
   );
 
