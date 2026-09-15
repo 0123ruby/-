@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>誤會機器｜順從 → 傳遞 → 群體偏差</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>誤會機器｜混亂傳遞版</title>
 
 <style>
 *{
   box-sizing:border-box;
 }
 
-html,
-body{
+html,body{
   width:100%;
   height:100%;
 }
@@ -73,7 +71,7 @@ body{
   left:28px;
   bottom:25px;
   padding:11px 15px;
-  background:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.92);
   border:1px solid rgba(0,0,0,.05);
   border-radius:10px;
   font-size:13px;
@@ -203,10 +201,10 @@ input[type="range"]{
   border-radius:50%;
 }
 
-.dot.white{background:#ccd5d5;}
-.dot.green{background:#35ff73;}
-.dot.yellow{background:#ffd52d;}
-.dot.red{background:#ff3c34;}
+.dot.white{ background:#ccd5d5; }
+.dot.green{ background:#35ff73; }
+.dot.yellow{ background:#ffd52d; }
+.dot.red{ background:#ff3c34; }
 
 </style>
 </head>
@@ -221,5273 +219,1621 @@ input[type="range"]{
 
     <div id="title">
       <h1>《誤會機器》</h1>
-      <p>順從 → 說話 → 資訊傳遞 → 群體偏差</p>
+      <p>看到你 → 聽你說話 → 群體失真式傳遞</p>
     </div>
 
     <div id="phaseBox">
       目前狀態：
-      <span id="phaseName">順從</span>
+      <span id="phaseName">待機</span>
       <br>
-      <span id="phaseDescription">
-        裝置正在等待觀者。
-      </span>
+      <span id="phaseDescription">裝置正在等待觀者。</span>
     </div>
 
   </div>
 
-
   <aside id="panel">
 
-    <!-- CAMERA -->
-
     <div class="section">
+      <div class="sectionTitle">觀者位置</div>
 
-      <div class="sectionTitle">
-        觀者位置
-      </div>
-
-      <video
-        id="video"
-        autoplay
-        muted
-        playsinline>
-      </video>
-
+      <video id="video" autoplay muted playsinline></video>
       <br>
 
-      <button
-        id="cameraBtn"
-        class="dark">
-        開啟攝像頭
-      </button>
+      <button id="cameraBtn" class="dark">開啟攝像頭</button>
 
       <div class="status">
-
-        攝像頭：
-        <b id="cameraState">未啟動</b>
-
-        <br>
-
-        觀者位置：
-        <b id="viewerPosition">—</b>
-
-        <br>
-
-        動作量：
-        <b>
-          <span id="cameraPercent">0</span>%
-        </b>
-
+        攝像頭：<b id="cameraState">未啟動</b><br>
+        觀者位置：<b id="viewerPosition">—</b><br>
+        動作量：<b><span id="cameraPercent">0</span>%</b>
         <div class="meter">
           <div id="cameraMeter"></div>
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- MICROPHONE -->
-
     <div class="section">
+      <div class="sectionTitle">聲音觸發</div>
 
-      <div class="sectionTitle">
-        聲音觸發
-      </div>
-
-      <button
-        id="micBtn"
-        class="dark">
-        開啟麥克風
-      </button>
-
-      <button
-        id="micStopBtn"
-        class="light">
-        停止麥克風
-      </button>
-
-      <button
-        id="simulateVoiceBtn"
-        class="test">
-        模擬說話／開始傳遞
-      </button>
+      <button id="micBtn" class="dark">開啟麥克風</button>
+      <button id="micStopBtn" class="light">停止麥克風</button>
+      <button id="simulateVoiceBtn" class="test">模擬說話／引發混亂</button>
 
       <div class="status">
-
-        麥克風：
-        <b id="micState">未啟動</b>
-
-        <br>
-
-        聲音強度：
-        <b>
-          <span id="voicePercent">0</span>%
-        </b>
-
+        麥克風：<b id="micState">未啟動</b><br>
+        聲音強度：<b><span id="voicePercent">0</span>%</b>
         <div class="meter">
           <div id="voiceMeter"></div>
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- SYSTEM -->
-
     <div class="section">
-
-      <div class="sectionTitle">
-        群體狀態
-      </div>
+      <div class="sectionTitle">群體狀態</div>
 
       <div class="status">
-
-        階段：
-        <b id="modeText">順從</b>
-
-        <br>
-
-        資訊起點：
-        <b id="sourceText">—</b>
-
-        <br>
-
-        混亂程度：
-        <b>
-          <span id="chaosPercent">0</span>%
-        </b>
-
+        階段：<b id="modeText">待機</b><br>
+        起點裝置：<b id="sourceText">—</b><br>
+        混亂程度：<b><span id="chaosPercent">0</span>%</b>
         <div class="meter">
           <div id="chaosMeter"></div>
         </div>
-
         <br>
-
-        已接收資訊：
-        <b>
-          <span id="infectedCount">0</span> / 5
-        </b>
-
+        活動中的傳遞：<b><span id="transferCount">0</span></b><br>
+        平均資訊濃度：<b><span id="averageInfo">0</span>%</b>
       </div>
 
       <div class="legend">
-
-        <span class="dot white"></span>
-        待機
-
-        <br>
-
-        <span class="dot green"></span>
-        拍到觀者
-
-        <br>
-
-        <span class="dot yellow"></span>
-        觀者說話
-
-        <br>
-
-        <span class="dot red"></span>
-        傳遞資訊
-
+        <span class="dot white"></span>待機<br>
+        <span class="dot green"></span>拍到觀者<br>
+        <span class="dot yellow"></span>正在接收說話<br>
+        <span class="dot red"></span>正在傳遞資訊
       </div>
-
     </div>
 
-
-    <!-- SETTINGS -->
-
     <div class="section">
-
-      <div class="sectionTitle">
-        動作設定
-      </div>
+      <div class="sectionTitle">設定</div>
 
       <label>
         攝像頭敏感度：
         <span id="sensitivityValue">40</span>
       </label>
-
-      <input
-        id="sensitivitySlider"
-        type="range"
-        min="5"
-        max="80"
-        value="40"
-      >
-
+      <input id="sensitivitySlider" type="range" min="5" max="80" value="40">
 
       <label>
         順從時最大偏角：
         <span id="followAngleValue">10</span>°
       </label>
-
-      <input
-        id="followAngleSlider"
-        type="range"
-        min="3"
-        max="20"
-        value="10"
-      >
-
+      <input id="followAngleSlider" type="range" min="3" max="20" value="10">
 
       <label>
         混亂時最大偏角：
         <span id="chaosAngleValue">28</span>°
       </label>
-
-      <input
-        id="chaosAngleSlider"
-        type="range"
-        min="10"
-        max="90"
-        value="28"
-      >
-
+      <input id="chaosAngleSlider" type="range" min="10" max="90" value="28">
 
       <label>
         說話觸發門檻：
         <span id="voiceThresholdValue">16</span>%
       </label>
-
-      <input
-        id="voiceThresholdSlider"
-        type="range"
-        min="5"
-        max="50"
-        value="16"
-      >
-
+      <input id="voiceThresholdSlider" type="range" min="5" max="50" value="16">
 
       <label>
-        靠近速度：
-        <span id="transferTimeValue">1200</span> ms
+        傳遞強度：
+        <span id="transmissionRateValue">60</span>%
       </label>
-
-      <input
-        id="transferTimeSlider"
-        type="range"
-        min="500"
-        max="2500"
-        step="100"
-        value="1200"
-      >
-
+      <input id="transmissionRateSlider" type="range" min="10" max="100" value="60">
 
       <label>
         混亂成長速度：
         <span id="chaosSpeedValue">40</span>%
       </label>
-
-      <input
-        id="chaosSpeedSlider"
-        type="range"
-        min="10"
-        max="100"
-        value="40"
-      >
-
+      <input id="chaosSpeedSlider" type="range" min="10" max="100" value="40">
     </div>
 
+    <button id="resetBtn" class="gray">回到初始狀態</button>
 
-    <button
-      id="resetBtn"
-      class="gray">
-      回到順從狀態
-    </button>
+    <div class="small">
+      這版不是單一路徑傳遞，而是多點、反覆、交錯式傳播。<br>
+      資訊每被傳一次，粒子都會更亂、更亮、更密。
+    </div>
 
   </aside>
 
 </div>
 
-
-<canvas
-  id="cameraAnalysis"
-  width="160"
-  height="120"
-  style="display:none">
-</canvas>
-
+<canvas id="cameraAnalysis" width="160" height="120" style="display:none"></canvas>
 
 <script>
-
 /* =========================================================
    DOM
 ========================================================= */
 
-const canvas =
-  document.getElementById("stage");
+const canvas = document.getElementById("stage");
+const ctx = canvas.getContext("2d");
 
-const ctx =
-  canvas.getContext("2d");
-
-const video =
-  document.getElementById("video");
-
-const analysisCanvas =
-  document.getElementById("cameraAnalysis");
-
-const analysisCtx =
-  analysisCanvas.getContext(
-    "2d",
-    {
-      willReadFrequently:true
-    }
-  );
-
+const video = document.getElementById("video");
+const analysisCanvas = document.getElementById("cameraAnalysis");
+const analysisCtx = analysisCanvas.getContext("2d", { willReadFrequently:true });
 
 /* =========================================================
    SYSTEM
 ========================================================= */
 
 const DEVICE_COUNT = 5;
+const MAX_TRANSFERS = 6;
 
 let W = 0;
 let H = 0;
 
 const devices = [];
+let activeTransfers = [];
 
-let mode = "FOLLOW";
-
+let mode = "IDLE"; // IDLE / FOLLOW / LISTEN / ACTIVE
+let sourceIndex = -1;
 let chaos = 0;
 
-let sourceIndex = -1;
-
-let visited =
-  new Set();
-
-let pendingEdges = [];
-
-let currentTransfer = null;
-
-
-/*
-  黃燈顯示時間。
-
-  麥克風一偵測到說話，
-  黃燈至少保持一小段時間，
-  不會閃一下就直接消失。
-*/
-
 let speakingUntil = 0;
-
-
-/*
-  模擬說話按鈕用。
-
-  先讓黃燈亮一段時間，
-  再正式開始資訊傳遞。
-*/
-
-let manualTransferAt = 0;
-
+let manualActivationAt = 0;
 
 /* =========================================================
    SETTINGS
 ========================================================= */
 
 let followMaxAngle = 10;
-
 let chaosMaxAngle = 28;
-
 let voiceThreshold = .16;
-
-let transferApproachTime = 1200;
-
 let chaosGrowthSpeed = .40;
-
+let transmissionRate = .60;
 
 /* =========================================================
    CAMERA
 ========================================================= */
 
 let cameraStream = null;
-
 let cameraReady = false;
-
 let previousCameraFrame = null;
 
-
 const viewer = {
-
   present:false,
-
   x:.5,
-
   movement:0,
-
   absentTime:0,
-
   sensitivity:40
-
 };
-
 
 /* =========================================================
    MICROPHONE
 ========================================================= */
 
 let micStream = null;
-
 let audioContext = null;
-
 let analyser = null;
-
 let micSource = null;
-
 let micBuffer = null;
-
 let micReady = false;
-
 let voiceLevel = 0;
-
 let voiceHold = 0;
 
-
 /* =========================================================
-   DEVICE
+   DEVICE CLASS
 ========================================================= */
 
 class Device{
-
   constructor(index){
-
     this.index = index;
 
     this.angle = 0;
-
     this.targetAngle = 0;
 
     this.info = 0;
+    this.receiveCount = 0;
 
     this.flash = 0;
+    this.phase = Math.random() * Math.PI * 2;
 
-
-    this.phase =
-      Math.random() *
-      Math.PI *
-      2;
-
-
-    this.followWeight =
-      random(
-        .97,
-        1.03
-      );
-
+    this.followWeight = random(.97, 1.03);
 
     this.chaosTarget = 0;
-
     this.nextChaosShift = 0;
 
-
-    /* ===============================
-       LIQUID INERTIA
-    =============================== */
-
     this.lastAngle = 0;
-
     this.angularVelocity = 0;
-
     this.fluidOffset = 0;
-
     this.fluidVelocity = 0;
 
+    this.sendCooldown = random(300, 800);
 
-    /* ===============================
-       PARTICLES
-    =============================== */
+    this.particleEnergy = 0;
+    this.localNoise = 0;
 
     this.fluidSeeds = [];
-
-
-    for(
-      let i = 0;
-      i < 80;
-      i++
-    ){
-
+    for(let i = 0; i < 90; i++){
       this.fluidSeeds.push({
-
-        phase:
-          Math.random() *
-          Math.PI *
-          2,
-
-        speed:
-          random(
-            .65,
-            1.4
-          ),
-
-        size:
-          random(
-            .5,
-            1.7
-          ),
-
-        offset:
-          random(
-            -1,
-            1
-          )
-
+        phase: Math.random() * Math.PI * 2,
+        speed: random(.6, 1.5),
+        size: random(.5, 1.8),
+        offset: random(-1, 1)
       });
-
     }
-
   }
 
+  update(now, dt){
+    this.flash = Math.max(0, this.flash - dt / 520);
+    this.sendCooldown -= dt;
 
-  /* =======================================================
-     DEVICE MOVEMENT
-  ======================================================= */
+    this.info = Math.max(0, this.info - dt * 0.00002);
+    this.particleEnergy = Math.max(0, this.particleEnergy - dt * 0.00018);
+    this.localNoise = Math.max(0, this.localNoise - dt * 0.00008);
 
-  update(now,dt){
+    if(mode === "IDLE" || mode === "FOLLOW" || mode === "LISTEN"){
+      const observerAngle = viewer.present
+        ? (viewer.x - .5) * 2 * followMaxAngle
+        : 0;
 
-    this.flash =
-      Math.max(
-        0,
-        this.flash -
-        dt / 520
-      );
+      this.targetAngle = observerAngle * this.followWeight;
+      this.angle = lerp(this.angle, this.targetAngle, .055);
 
-
-    /* =====================================
-       FOLLOW
-    ===================================== */
-
-    if(
-      mode === "FOLLOW"
-    ){
-
-      const observerAngle =
-
-        viewer.present
-        ?
-        (
-          viewer.x -
-          .5
-        )
-        *
-        2
-        *
-        followMaxAngle
-        :
-        0;
-
-
-      this.targetAngle =
-        observerAngle *
-        this.followWeight;
-
-
-      this.angle =
-        lerp(
-          this.angle,
-          this.targetAngle,
-          .055
-        );
-
-
-      this.info =
-        lerp(
-          this.info,
-          0,
-          .035
-        );
-
-
-      return;
-
-    }
-
-
-    /* =====================================
-       TRANSFER
-    ===================================== */
-
-    if(
-      mode === "TRANSFER"
-    ){
-
-      /*
-        正在傳資訊的兩支，
-        由 updateTransfer 控制。
-      */
-
-      if(
-        currentTransfer
-        &&
-        currentTransfer.from !== undefined
-        &&
-        currentTransfer.to !== undefined
-        &&
-        (
-          this.index ===
-          currentTransfer.from
-          ||
-          this.index ===
-          currentTransfer.to
-        )
-      ){
-
+      if(mode !== "ACTIVE"){
         return;
-
       }
-
-
-      if(
-        now >
-        this.nextChaosShift
-      ){
-
-        this.nextChaosShift =
-          now +
-          random(
-            900,
-            2100
-          );
-
-
-        this.chaosTarget =
-          random(
-            -chaosMaxAngle,
-            chaosMaxAngle
-          );
-
-      }
-
-
-      const followAngle =
-
-        viewer.present
-        ?
-        (
-          viewer.x -
-          .5
-        )
-        *
-        2
-        *
-        followMaxAngle
-        :
-        0;
-
-
-      const obedience =
-        1 -
-        chaos * .55;
-
-
-      this.targetAngle =
-
-        followAngle *
-        obedience
-
-        +
-
-        this.chaosTarget *
-        chaos *
-        .22;
-
-
-      this.targetAngle =
-        constrain(
-          this.targetAngle,
-          -chaosMaxAngle,
-          chaosMaxAngle
-        );
-
-
-      this.angle =
-        lerp(
-          this.angle,
-          this.targetAngle,
-          .035 +
-          chaos * .018
-        );
-
-
-      return;
-
     }
 
-
-    /* =====================================
-       CHAOS
-    ===================================== */
-
-    if(
-      mode === "CHAOS"
-    ){
-
-      if(
-        now >
-        this.nextChaosShift
-      ){
-
-        this.nextChaosShift =
-          now +
-          random(
-            900,
-            2400
-          );
-
-
-        this.chaosTarget =
-          random(
-            -chaosMaxAngle,
-            chaosMaxAngle
-          );
-
+    if(mode === "ACTIVE"){
+      if(now > this.nextChaosShift){
+        this.nextChaosShift = now + random(500, 1800);
+        this.chaosTarget = random(-chaosMaxAngle, chaosMaxAngle);
       }
 
+      const followAngle = viewer.present
+        ? (viewer.x - .5) * 2 * followMaxAngle
+        : 0;
 
       let neighborAverage = 0;
-
       let neighborCount = 0;
 
-
-      if(
-        this.index > 0
-      ){
-
-        neighborAverage +=
-          devices[
-            this.index - 1
-          ].angle;
-
+      if(this.index > 0){
+        neighborAverage += devices[this.index - 1].angle;
         neighborCount++;
-
       }
-
-
-      if(
-        this.index <
-        DEVICE_COUNT - 1
-      ){
-
-        neighborAverage +=
-          devices[
-            this.index + 1
-          ].angle;
-
+      if(this.index < DEVICE_COUNT - 1){
+        neighborAverage += devices[this.index + 1].angle;
         neighborCount++;
-
+      }
+      if(neighborCount > 0){
+        neighborAverage /= neighborCount;
       }
 
-
-      if(
-        neighborCount > 0
-      ){
-
-        neighborAverage /=
-          neighborCount;
-
-      }
-
-
-      const followAngle =
-
-        viewer.present
-        ?
-        (
-          viewer.x -
-          .5
-        )
-        *
-        2
-        *
-        followMaxAngle
-        :
-        0;
-
-
-      const obedience =
-        Math.max(
-          .15,
-          1 - chaos
-        );
-
+      const obedience = Math.max(.1, 1 - chaos * .85);
+      const internalOscillation =
+        Math.sin(now * (.0014 + this.index * .00023) + this.phase) *
+        (this.localNoise * 10 + this.particleEnergy * 6);
 
       this.targetAngle =
+        followAngle * obedience
+        + this.chaosTarget * chaos * (.30 + this.localNoise * .55)
+        + neighborAverage * chaos * .18
+        + internalOscillation;
 
-        followAngle *
-        obedience
+      this.targetAngle = constrain(this.targetAngle, -chaosMaxAngle, chaosMaxAngle);
 
-        +
-
-        this.chaosTarget *
-        chaos *
-        .38
-
-        +
-
-        neighborAverage *
-        chaos *
-        .10;
-
-
-      this.targetAngle =
-        constrain(
-          this.targetAngle,
-          -chaosMaxAngle,
-          chaosMaxAngle
-        );
-
-
-      this.angle =
-        lerp(
-          this.angle,
-          this.targetAngle,
-          .024 +
-          chaos * .018
-        );
-
+      this.angle = lerp(
+        this.angle,
+        this.targetAngle,
+        .02 + chaos * .025 + this.localNoise * .015
+      );
     }
-
   }
-
-
-  /* =======================================================
-     LIQUID PHYSICS
-  ======================================================= */
 
   updateFluidPhysics(dt){
-
-    const safeDt =
-      Math.max(
-        1,
-        dt
-      );
-
+    const safeDt = Math.max(1, dt);
 
     const newAngularVelocity =
+      (this.angle - this.lastAngle) / (safeDt / 16.67);
 
-      (
-        this.angle -
-        this.lastAngle
-      )
+    this.angularVelocity = lerp(
+      this.angularVelocity,
+      newAngularVelocity,
+      .22
+    );
 
-      /
+    this.lastAngle = this.angle;
 
-      (
-        safeDt /
-        16.67
-      );
-
-
-    this.angularVelocity =
-      lerp(
-        this.angularVelocity,
-        newAngularVelocity,
-        .22
-      );
-
-
-    this.lastAngle =
-      this.angle;
-
-
-    /*
-      裝置旋轉時，
-      液體會有短暫慣性。
-    */
-
-    const targetOffset =
-      constrain(
-        -this.angularVelocity *
-        .18,
-        -.7,
-        .7
-      );
-
+    const targetOffset = constrain(
+      -this.angularVelocity * .18,
+      -.7,
+      .7
+    );
 
     this.fluidVelocity +=
+      (targetOffset - this.fluidOffset) * .075;
 
-      (
-        targetOffset -
-        this.fluidOffset
-      )
-
-      *
-      .075;
-
-
-    this.fluidVelocity *=
-      .86;
-
-
-    this.fluidOffset +=
-      this.fluidVelocity;
-
+    this.fluidVelocity *= .86;
+    this.fluidOffset += this.fluidVelocity;
   }
-
 }
-
 
 /* =========================================================
    RESET
 ========================================================= */
 
 function resetSystem(){
+  mode = "IDLE";
+  sourceIndex = -1;
+  chaos = 0;
+  speakingUntil = 0;
+  manualActivationAt = 0;
+  voiceHold = 0;
+  activeTransfers = [];
 
-  mode =
-    "FOLLOW";
-
-
-  chaos =
-    0;
-
-
-  sourceIndex =
-    -1;
-
-
-  visited =
-    new Set();
-
-
-  pendingEdges =
-    [];
-
-
-  currentTransfer =
-    null;
-
-
-  voiceHold =
-    0;
-
-
-  speakingUntil =
-    0;
-
-
-  manualTransferAt =
-    0;
-
-
-  devices.length =
-    0;
-
-
-  for(
-    let i = 0;
-    i < DEVICE_COUNT;
-    i++
-  ){
-
-    devices.push(
-      new Device(i)
-    );
-
+  devices.length = 0;
+  for(let i = 0; i < DEVICE_COUNT; i++){
+    devices.push(new Device(i));
   }
-
 }
-
-
 resetSystem();
-
 
 /* =========================================================
    CANVAS
 ========================================================= */
 
 function resizeCanvas(){
+  const rect = canvas.parentElement.getBoundingClientRect();
 
-  const rect =
-    canvas
-    .parentElement
-    .getBoundingClientRect();
+  W = rect.width;
+  H = rect.height;
 
+  canvas.width = Math.round(W * devicePixelRatio);
+  canvas.height = Math.round(H * devicePixelRatio);
 
-  W =
-    rect.width;
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
 
-
-  H =
-    rect.height;
-
-
-  canvas.width =
-    Math.round(
-      W *
-      devicePixelRatio
-    );
-
-
-  canvas.height =
-    Math.round(
-      H *
-      devicePixelRatio
-    );
-
-
-  canvas.style.width =
-    W + "px";
-
-
-  canvas.style.height =
-    H + "px";
-
-
-  ctx.setTransform(
-    devicePixelRatio,
-    0,
-    0,
-    devicePixelRatio,
-    0,
-    0
-  );
-
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
 }
-
-
 resizeCanvas();
-
-
-window.addEventListener(
-  "resize",
-  resizeCanvas
-);
-
+window.addEventListener("resize", resizeCanvas);
 
 /* =========================================================
    LAYOUT
 ========================================================= */
 
 function getBaseY(){
-
   return H * .73;
-
 }
-
 
 function getBodyHeight(){
-
-  return Math.min(
-    245,
-    H * .34
-  );
-
+  return Math.min(245, H * .34);
 }
-
 
 function getBodyWidth(){
-
-  return Math.min(
-    65,
-    W * .055
-  );
-
+  return Math.min(65, W * .055);
 }
-
 
 function getDeviceX(index){
-
-  return mapValue(
-
-    index,
-
-    0,
-    DEVICE_COUNT - 1,
-
-    W * .16,
-    W * .84
-
-  );
-
+  return mapValue(index, 0, DEVICE_COUNT - 1, W * .16, W * .84);
 }
-
-
-/* =========================================================
-   NEAREST DEVICE
-========================================================= */
 
 function getNearestDeviceIndex(){
-
-  if(
-    !viewer.present
-  ){
-
+  if(!viewer.present){
     return 2;
-
   }
-
-
   return constrain(
-
-    Math.round(
-
-      viewer.x *
-      (
-        DEVICE_COUNT -
-        1
-      )
-
-    ),
-
+    Math.round(viewer.x * (DEVICE_COUNT - 1)),
     0,
     DEVICE_COUNT - 1
-
   );
-
 }
-
 
 /* =========================================================
    CAMERA
 ========================================================= */
 
 async function startCamera(){
-
   try{
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video:{
+        width:{ ideal:640 },
+        height:{ ideal:480 },
+        facingMode:"user"
+      },
+      audio:false
+    });
 
-    cameraStream =
-
-      await navigator
-      .mediaDevices
-      .getUserMedia({
-
-        video:{
-
-          width:{
-            ideal:640
-          },
-
-          height:{
-            ideal:480
-          },
-
-          facingMode:
-            "user"
-
-        },
-
-        audio:false
-
-      });
-
-
-    video.srcObject =
-      cameraStream;
-
-
+    video.srcObject = cameraStream;
     await video.play();
 
+    cameraReady = true;
+    previousCameraFrame = null;
 
-    cameraReady =
-      true;
-
-
-    previousCameraFrame =
-      null;
-
-
-    document
-    .getElementById(
-      "cameraState"
-    )
-    .textContent =
-      "已啟動";
-
-
-    document
-    .getElementById(
-      "cameraBtn"
-    )
-    .textContent =
-      "攝像頭已開啟";
-
+    document.getElementById("cameraState").textContent = "已啟動";
+    document.getElementById("cameraBtn").textContent = "攝像頭已開啟";
+  }catch(error){
+    cameraReady = false;
+    console.error(error);
+    document.getElementById("cameraState").textContent = "啟動失敗";
   }
-
-  catch(error){
-
-    cameraReady =
-      false;
-
-
-    console.error(
-      error
-    );
-
-
-    document
-    .getElementById(
-      "cameraState"
-    )
-    .textContent =
-      "啟動失敗";
-
-  }
-
 }
 
-
-document
-.getElementById(
-  "cameraBtn"
-)
-.addEventListener(
-  "click",
-  startCamera
-);
-
+document.getElementById("cameraBtn").addEventListener("click", startCamera);
 
 /* =========================================================
    CAMERA ANALYSIS
 ========================================================= */
 
 function analyzeCamera(){
-
-  if(
-    !cameraReady
-    ||
-    video.readyState < 2
-  ){
-
+  if(!cameraReady || video.readyState < 2){
     return;
-
   }
-
 
   analysisCtx.drawImage(
-
     video,
-
-    0,
-    0,
-
+    0, 0,
     analysisCanvas.width,
     analysisCanvas.height
-
   );
 
+  const frame = analysisCtx.getImageData(
+    0, 0,
+    analysisCanvas.width,
+    analysisCanvas.height
+  ).data;
 
-  const frame =
-    analysisCtx
-    .getImageData(
-
-      0,
-      0,
-
-      analysisCanvas.width,
-      analysisCanvas.height
-
-    )
-    .data;
-
-
-  if(
-    !previousCameraFrame
-  ){
-
-    previousCameraFrame =
-      new Uint8ClampedArray(
-        frame
-      );
-
+  if(!previousCameraFrame){
+    previousCameraFrame = new Uint8ClampedArray(frame);
     return;
-
   }
 
+  const width = analysisCanvas.width;
+  const height = analysisCanvas.height;
 
-  const width =
-    analysisCanvas.width;
-
-
-  const height =
-    analysisCanvas.height;
-
-
-  const threshold =
-    mapValue(
-
-      viewer.sensitivity,
-
-      5,
-      80,
-
-      88,
-      18
-
-    );
-
+  const threshold = mapValue(viewer.sensitivity, 5, 80, 88, 18);
 
   let changed = 0;
-
   let checked = 0;
-
   let xTotal = 0;
 
-
-  for(
-    let y = 0;
-    y < height;
-    y += 4
-  ){
-
-    for(
-      let x = 0;
-      x < width;
-      x += 4
-    ){
-
-      const i =
-        (
-          y *
-          width +
-          x
-        )
-        *
-        4;
-
+  for(let y = 0; y < height; y += 4){
+    for(let x = 0; x < width; x += 4){
+      const i = (y * width + x) * 4;
 
       const diff =
-
-        Math.abs(
-          frame[i] -
-          previousCameraFrame[i]
-        )
-
-        +
-
-        Math.abs(
-          frame[i+1] -
-          previousCameraFrame[i+1]
-        )
-
-        +
-
-        Math.abs(
-          frame[i+2] -
-          previousCameraFrame[i+2]
-        );
-
+        Math.abs(frame[i] - previousCameraFrame[i]) +
+        Math.abs(frame[i+1] - previousCameraFrame[i+1]) +
+        Math.abs(frame[i+2] - previousCameraFrame[i+2]);
 
       checked++;
 
-
-      if(
-        diff >
-        threshold
-      ){
-
+      if(diff > threshold){
         changed++;
-
-        xTotal +=
-          x;
-
+        xTotal += x;
       }
-
     }
-
   }
 
+  previousCameraFrame = new Uint8ClampedArray(frame);
 
-  previousCameraFrame =
-    new Uint8ClampedArray(
-      frame
+  const ratio = changed / Math.max(1, checked);
+
+  viewer.movement = lerp(
+    viewer.movement,
+    constrain(ratio * 3, 0, 1),
+    .3
+  );
+
+  if(changed > 0){
+    let averageX = xTotal / changed;
+
+    averageX = width - averageX;
+
+    viewer.x = lerp(
+      viewer.x,
+      constrain(averageX / width, 0, 1),
+      .32
     );
-
-
-  const ratio =
-    changed /
-    Math.max(
-      1,
-      checked
-    );
-
-
-  viewer.movement =
-    lerp(
-
-      viewer.movement,
-
-      constrain(
-        ratio *
-        3,
-        0,
-        1
-      ),
-
-      .3
-
-    );
-
-
-  if(
-    changed > 0
-  ){
-
-    let averageX =
-      xTotal /
-      changed;
-
-
-    /*
-      畫面是鏡像顯示。
-    */
-
-    averageX =
-      width -
-      averageX;
-
-
-    viewer.x =
-      lerp(
-
-        viewer.x,
-
-        constrain(
-          averageX /
-          width,
-          0,
-          1
-        ),
-
-        .32
-
-      );
-
   }
 
-
-  if(
-    ratio >
-    .005
-  ){
-
-    viewer.present =
-      true;
-
-
-    viewer.absentTime =
-      0;
-
-  }
-
-  else{
-
-    viewer.absentTime +=
-      100;
-
-
-    if(
-      viewer.absentTime >
-      6500
-    ){
-
-      viewer.present =
-        false;
-
+  if(ratio > .005){
+    viewer.present = true;
+    viewer.absentTime = 0;
+  }else{
+    viewer.absentTime += 100;
+    if(viewer.absentTime > 6500){
+      viewer.present = false;
     }
-
   }
 
+  if(mode === "IDLE" && viewer.present){
+    mode = "FOLLOW";
+  }
+
+  if(mode === "FOLLOW" && !viewer.present){
+    mode = "IDLE";
+  }
 }
-
 
 /* =========================================================
    MICROPHONE
 ========================================================= */
 
 async function startMicrophone(){
-
   try{
-
-    if(
-      micReady
-    ){
-
+    if(micReady){
       return;
-
     }
 
+    micStream = await navigator.mediaDevices.getUserMedia({
+      audio:{
+        echoCancellation:true,
+        noiseSuppression:false,
+        autoGainControl:false
+      },
+      video:false
+    });
 
-    micStream =
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    audioContext = new AudioCtx();
 
-      await navigator
-      .mediaDevices
-      .getUserMedia({
-
-        audio:{
-
-          echoCancellation:true,
-
-          noiseSuppression:false,
-
-          autoGainControl:false
-
-        },
-
-        video:false
-
-      });
-
-
-    const AudioCtx =
-      window.AudioContext
-      ||
-      window.webkitAudioContext;
-
-
-    audioContext =
-      new AudioCtx();
-
-
-    if(
-      audioContext.state ===
-      "suspended"
-    ){
-
+    if(audioContext.state === "suspended"){
       await audioContext.resume();
-
     }
 
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 1024;
+    analyser.smoothingTimeConstant = .25;
 
-    analyser =
-      audioContext
-      .createAnalyser();
+    micBuffer = new Uint8Array(analyser.fftSize);
 
+    micSource = audioContext.createMediaStreamSource(micStream);
+    micSource.connect(analyser);
 
-    analyser.fftSize =
-      1024;
+    micReady = true;
 
-
-    analyser.smoothingTimeConstant =
-      .25;
-
-
-    micBuffer =
-      new Uint8Array(
-        analyser.fftSize
-      );
-
-
-    micSource =
-      audioContext
-      .createMediaStreamSource(
-        micStream
-      );
-
-
-    micSource.connect(
-      analyser
-    );
-
-
-    micReady =
-      true;
-
-
-    document
-    .getElementById(
-      "micState"
-    )
-    .textContent =
-      "已啟動";
-
-
-    document
-    .getElementById(
-      "micBtn"
-    )
-    .textContent =
-      "麥克風已開啟";
-
+    document.getElementById("micState").textContent = "已啟動";
+    document.getElementById("micBtn").textContent = "麥克風已開啟";
+  }catch(error){
+    micReady = false;
+    console.error(error);
+    document.getElementById("micState").textContent = "啟動失敗";
   }
-
-  catch(error){
-
-    micReady =
-      false;
-
-
-    console.error(
-      error
-    );
-
-
-    document
-    .getElementById(
-      "micState"
-    )
-    .textContent =
-      "啟動失敗";
-
-  }
-
 }
-
 
 async function stopMicrophone(){
-
-  if(
-    micStream
-  ){
-
-    micStream
-    .getTracks()
-    .forEach(
-      track =>
-        track.stop()
-    );
-
+  if(micStream){
+    micStream.getTracks().forEach(track => track.stop());
   }
 
+  micStream = null;
 
-  micStream =
-    null;
-
-
-  if(
-    micSource
-  ){
-
-    try{
-      micSource.disconnect();
-    }
-    catch(error){}
-
+  if(micSource){
+    try{ micSource.disconnect(); }catch(error){}
   }
 
-
-  if(
-    audioContext
-  ){
-
-    try{
-      await audioContext.close();
-    }
-    catch(error){}
-
+  if(audioContext){
+    try{ await audioContext.close(); }catch(error){}
   }
 
+  micSource = null;
+  audioContext = null;
+  analyser = null;
+  micBuffer = null;
+  micReady = false;
+  voiceLevel = 0;
+  voiceHold = 0;
 
-  micSource =
-    null;
-
-  audioContext =
-    null;
-
-  analyser =
-    null;
-
-  micBuffer =
-    null;
-
-  micReady =
-    false;
-
-  voiceLevel =
-    0;
-
-  voiceHold =
-    0;
-
-
-  document
-  .getElementById(
-    "micState"
-  )
-  .textContent =
-    "未啟動";
-
-
-  document
-  .getElementById(
-    "micBtn"
-  )
-  .textContent =
-    "開啟麥克風";
-
+  document.getElementById("micState").textContent = "未啟動";
+  document.getElementById("micBtn").textContent = "開啟麥克風";
 }
 
-
-document
-.getElementById(
-  "micBtn"
-)
-.addEventListener(
-  "click",
-  startMicrophone
-);
-
-
-document
-.getElementById(
-  "micStopBtn"
-)
-.addEventListener(
-  "click",
-  stopMicrophone
-);
-
+document.getElementById("micBtn").addEventListener("click", startMicrophone);
+document.getElementById("micStopBtn").addEventListener("click", stopMicrophone);
 
 /* =========================================================
-   AUDIO
+   AUDIO UPDATE
 ========================================================= */
 
-function updateAudio(dt,now){
-
-  if(
-    !micReady
-    ||
-    !analyser
-    ||
-    !micBuffer
-  ){
-
-    voiceLevel =
-      lerp(
-        voiceLevel,
-        0,
-        .06
-      );
-
-
+function updateAudio(dt, now){
+  if(!micReady || !analyser || !micBuffer){
+    voiceLevel = lerp(voiceLevel, 0, .06);
     voiceHold = 0;
-
     return;
-
   }
 
-
-  analyser
-  .getByteTimeDomainData(
-    micBuffer
-  );
-
+  analyser.getByteTimeDomainData(micBuffer);
 
   let sum = 0;
-
   let count = 0;
 
-
-  for(
-    let i = 0;
-    i < micBuffer.length;
-    i += 4
-  ){
-
-    const value =
-      (
-        micBuffer[i] -
-        128
-      )
-      /
-      128;
-
-
-    sum +=
-      value *
-      value;
-
-
+  for(let i = 0; i < micBuffer.length; i += 4){
+    const value = (micBuffer[i] - 128) / 128;
+    sum += value * value;
     count++;
-
   }
 
+  const rms = Math.sqrt(sum / Math.max(1, count));
 
-  const rms =
-    Math.sqrt(
-      sum /
-      Math.max(
-        1,
-        count
-      )
-    );
+  const level = constrain((rms - .006) * 15, 0, 1);
 
+  voiceLevel = lerp(voiceLevel, level, .32);
 
-  const level =
-    constrain(
+  if(voiceLevel > voiceThreshold){
+    speakingUntil = now + 650;
 
-      (
-        rms -
-        .006
-      )
-      *
-      15,
-
-      0,
-      1
-
-    );
-
-
-  voiceLevel =
-    lerp(
-      voiceLevel,
-      level,
-      .32
-    );
-
-
-  /*
-    只要有超過門檻，
-    黃燈先亮起。
-  */
-
-  if(
-    voiceLevel >
-    voiceThreshold
-  ){
-
-    speakingUntil =
-      now +
-      600;
-
+    if(mode === "FOLLOW" || mode === "IDLE"){
+      mode = "LISTEN";
+    }
   }
 
-
-  /*
-    順從階段說話，
-    累積一小段時間後開始傳遞。
-  */
-
-  if(
-    mode ===
-    "FOLLOW"
-  ){
-
-    if(
-      voiceLevel >
-      voiceThreshold
-    ){
-
-      voiceHold +=
-        dt;
-
+  if(mode === "LISTEN" || mode === "FOLLOW"){
+    if(voiceLevel > voiceThreshold){
+      voiceHold += dt;
+    }else{
+      voiceHold = Math.max(0, voiceHold - dt * 1.7);
     }
 
-    else{
-
-      voiceHold =
-        Math.max(
-          0,
-          voiceHold -
-          dt *
-          1.8
-        );
-
+    if(voiceHold > 360){
+      activateChaosTransmission(now);
+      voiceHold = 0;
     }
-
-
-    if(
-      voiceHold >
-      360
-    ){
-
-      startInformationTransmission(
-        now
-      );
-
-
-      voiceHold =
-        0;
-
-    }
-
   }
 
+  if(mode === "LISTEN" && now > speakingUntil && chaos <= 0){
+    mode = viewer.present ? "FOLLOW" : "IDLE";
+  }
 }
 
-
 /* =========================================================
-   MANUAL VOICE TEST
+   MANUAL TEST
 ========================================================= */
 
-document
-.getElementById(
-  "simulateVoiceBtn"
-)
-.addEventListener(
-  "click",
-  () => {
-
-    if(
-      mode !==
-      "FOLLOW"
-    ){
-
-      return;
-
-    }
-
-
-    const now =
-      performance.now();
-
-
-    /*
-      先模擬黃燈。
-    */
-
-    speakingUntil =
-      now +
-      900;
-
-
-    /*
-      約 650ms 後正式開始紅色傳遞。
-    */
-
-    manualTransferAt =
-      now +
-      650;
-
+document.getElementById("simulateVoiceBtn").addEventListener("click", () => {
+  const now = performance.now();
+  speakingUntil = now + 900;
+  if(mode === "IDLE" || mode === "FOLLOW" || mode === "LISTEN"){
+    mode = "LISTEN";
+    manualActivationAt = now + 650;
   }
-);
-
+});
 
 /* =========================================================
-   START TRANSFER
+   ACTIVATE CHAOS TRANSMISSION
 ========================================================= */
 
-function startInformationTransmission(now){
-
-  if(
-    mode !==
-    "FOLLOW"
-  ){
-
+function activateChaosTransmission(now){
+  if(mode === "ACTIVE"){
+    const source = getNearestDeviceIndex();
+    sourceIndex = source;
+    boostDevice(source, 1.0, .6, .55);
+    chaos = constrain(chaos + .06, 0, 1);
     return;
-
   }
 
+  mode = "ACTIVE";
+  chaos = Math.max(chaos, .10);
 
-  mode =
-    "TRANSFER";
+  sourceIndex = getNearestDeviceIndex();
+  boostDevice(sourceIndex, 1.0, .7, .65);
 
-
-  chaos =
-    .06;
-
-
-  sourceIndex =
-    getNearestDeviceIndex();
-
-
-  visited =
-    new Set([
-      sourceIndex
-    ]);
-
-
-  devices[
-    sourceIndex
-  ].info =
-    1;
-
-
-  devices[
-    sourceIndex
-  ].flash =
-    1;
-
-
-  buildPendingEdges();
-
-
-  currentTransfer =
-    null;
-
-
-  scheduleNextTransfer(
-    now,
-    300
-  );
-
+  for(let i = 0; i < 2; i++){
+    const target = chooseTargetFor(sourceIndex);
+    if(target !== null){
+      addTransfer(sourceIndex, target);
+    }
+  }
 }
-
 
 /* =========================================================
-   TRANSFER PATH
+   TRANSMISSION SYSTEM
 ========================================================= */
 
-function buildPendingEdges(){
-
-  pendingEdges =
-    [];
-
-
-  for(
-    let i = sourceIndex;
-    i > 0;
-    i--
-  ){
-
-    pendingEdges.push({
-
-      from:i,
-
-      to:i-1
-
-    });
-
-  }
-
-
-  for(
-    let i = sourceIndex;
-    i <
-    DEVICE_COUNT -
-    1;
-    i++
-  ){
-
-    pendingEdges.push({
-
-      from:i,
-
-      to:i+1
-
-    });
-
-  }
-
+function deviceIsTransferring(index){
+  return activeTransfers.some(t => t.from === index || t.to === index);
 }
 
+function transferPairExists(a, b){
+  return activeTransfers.some(t => t.from === a && t.to === b);
+}
 
-function chooseEligibleEdge(){
+function chooseTargetFor(fromIndex){
+  const weights = [];
 
-  const possible =
-    pendingEdges.filter(
+  for(let i = 0; i < DEVICE_COUNT; i++){
+    if(i === fromIndex){
+      continue;
+    }
 
-      edge =>
+    const distance = Math.abs(i - fromIndex);
 
-        visited.has(
-          edge.from
-        )
+    let weight = 0;
 
-        &&
+    if(distance === 1){
+      weight = 1.8 + chaos * .5;
+    }else if(distance === 2){
+      weight = .15 + chaos * 1.05;
+    }else if(distance === 3){
+      weight = chaos * .55;
+    }else{
+      weight = chaos * .28;
+    }
 
-        !visited.has(
-          edge.to
-        )
+    if(transferPairExists(fromIndex, i)){
+      weight *= .18;
+    }
 
-    );
+    if(activeTransfers.length >= MAX_TRANSFERS){
+      weight *= .2;
+    }
 
+    weight += devices[i].localNoise * .15;
+    weight += random(0, .18);
 
-  if(
-    possible.length ===
-    0
-  ){
+    if(weight > 0){
+      weights.push({ index:i, weight });
+    }
+  }
 
+  if(weights.length === 0){
     return null;
-
   }
 
-
-  return possible[
-    Math.floor(
-      Math.random() *
-      possible.length
-    )
-  ];
-
+  return weightedPick(weights);
 }
 
+function addTransfer(from, to){
+  if(from === to){
+    return;
+  }
 
-function scheduleNextTransfer(
-  now,
-  wait
-){
+  if(activeTransfers.length >= MAX_TRANSFERS){
+    return;
+  }
 
-  currentTransfer = {
+  if(transferPairExists(from, to)){
+    return;
+  }
 
-    stage:
-      "WAIT_NEXT",
-
-    stageStart:
-      now,
-
-    waitDuration:
-      wait
-
-  };
-
+  activeTransfers.push({
+    from,
+    to,
+    progress:0,
+    duration: random(360, 860),
+    curvature: random(-1, 1),
+    pulse: random(0, Math.PI * 2)
+  });
 }
 
-
-function beginNextEdge(now){
-
-  const edge =
-    chooseEligibleEdge();
-
-
-  if(
-    !edge
-  ){
-
-    if(
-      visited.size >=
-      DEVICE_COUNT
-    ){
-
-      mode =
-        "CHAOS";
-
-
-      chaos =
-        Math.max(
-          chaos,
-          .55
-        );
-
-
-      currentTransfer =
-        null;
-
-    }
-
-
-    return;
-
-  }
-
-
-  currentTransfer = {
-
-    from:
-      edge.from,
-
-    to:
-      edge.to,
-
-    stage:
-      "APPROACH",
-
-    stageStart:
-      now,
-
-    approachAngle:
-      getMeetingAngle(
-        edge.from,
-        edge.to
-      )
-
-  };
-
+function boostDevice(index, infoBoost = .7, energyBoost = .4, noiseBoost = .3){
+  const d = devices[index];
+  d.info = constrain(Math.max(d.info, infoBoost), 0, 1);
+  d.particleEnergy = constrain(d.particleEnergy + energyBoost, 0, 1);
+  d.localNoise = constrain(d.localNoise + noiseBoost, 0, 1);
+  d.flash = 1;
+  d.receiveCount++;
 }
 
+function deliverTransfer(transfer){
+  const from = devices[transfer.from];
+  const to = devices[transfer.to];
 
-/* =========================================================
-   UPDATE TRANSFER
-========================================================= */
+  const mutation =
+    from.info * random(.64, .96) +
+    from.localNoise * random(.08, .18) +
+    chaos * random(.04, .09);
 
-function updateTransfer(now){
-
-  if(
-    mode !==
-    "TRANSFER"
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    !currentTransfer
-  ){
-
-    beginNextEdge(
-      now
-    );
-
-    return;
-
-  }
-
-
-  if(
-    currentTransfer.stage ===
-    "WAIT_NEXT"
-  ){
-
-    if(
-      now -
-      currentTransfer.stageStart
-      >=
-      currentTransfer.waitDuration
-    ){
-
-      beginNextEdge(
-        now
-      );
-
-    }
-
-
-    return;
-
-  }
-
-
-  const fromDevice =
-    devices[
-      currentTransfer.from
-    ];
-
-
-  const toDevice =
-    devices[
-      currentTransfer.to
-    ];
-
-
-  const elapsed =
-    now -
-    currentTransfer.stageStart;
-
-
-  const direction =
-    currentTransfer.from <
-    currentTransfer.to
-    ?
+  const mixedInfo = constrain(
+    to.info * random(.35, .65) + mutation * random(.55, .85),
+    0,
     1
-    :
-    -1;
-
-
-  /* =====================================
-     APPROACH
-  ===================================== */
-
-  if(
-    currentTransfer.stage ===
-    "APPROACH"
-  ){
-
-    const angle =
-      currentTransfer
-      .approachAngle;
-
-
-    fromDevice.targetAngle =
-      angle *
-      direction;
-
-
-    toDevice.targetAngle =
-      angle *
-      -direction;
-
-
-    fromDevice.angle =
-      lerp(
-        fromDevice.angle,
-        fromDevice.targetAngle,
-        .045
-      );
-
-
-    toDevice.angle =
-      lerp(
-        toDevice.angle,
-        toDevice.targetAngle,
-        .045
-      );
-
-
-    if(
-      elapsed >=
-      transferApproachTime
-    ){
-
-      currentTransfer.stage =
-        "CONTACT";
-
-
-      currentTransfer.stageStart =
-        now;
-
-
-      toDevice.info =
-        constrain(
-
-          Math.max(
-
-            toDevice.info,
-
-            fromDevice.info *
-            .82 +
-            .12
-
-          ),
-
-          0,
-          1
-
-        );
-
-
-      fromDevice.flash =
-        1;
-
-
-      toDevice.flash =
-        1;
-
-
-      visited.add(
-        currentTransfer.to
-      );
-
-
-      chaos =
-        constrain(
-          chaos +
-          .11,
-          0,
-          1
-        );
-
-    }
-
-
-    return;
-
-  }
-
-
-  /* =====================================
-     CONTACT
-  ===================================== */
-
-  if(
-    currentTransfer.stage ===
-    "CONTACT"
-  ){
-
-    const angle =
-      currentTransfer
-      .approachAngle;
-
-
-    fromDevice.angle =
-      lerp(
-        fromDevice.angle,
-        angle *
-        direction,
-        .10
-      );
-
-
-    toDevice.angle =
-      lerp(
-        toDevice.angle,
-        angle *
-        -direction,
-        .10
-      );
-
-
-    if(
-      elapsed >
-      450
-    ){
-
-      currentTransfer.stage =
-        "SEPARATE";
-
-
-      currentTransfer.stageStart =
-        now;
-
-    }
-
-
-    return;
-
-  }
-
-
-  /* =====================================
-     SEPARATE
-  ===================================== */
-
-  if(
-    currentTransfer.stage ===
-    "SEPARATE"
-  ){
-
-    const followAngle =
-
-      viewer.present
-      ?
-      (
-        viewer.x -
-        .5
-      )
-      *
-      2
-      *
-      followMaxAngle
-      :
-      0;
-
-
-    fromDevice.angle =
-      lerp(
-        fromDevice.angle,
-        followAngle,
-        .035
-      );
-
-
-    toDevice.angle =
-      lerp(
-        toDevice.angle,
-        followAngle,
-        .035
-      );
-
-
-    if(
-      elapsed >
-      650
-    ){
-
-      pendingEdges =
-        pendingEdges.filter(
-
-          edge =>
-
-            !(
-              edge.from ===
-              currentTransfer.from
-              &&
-              edge.to ===
-              currentTransfer.to
-            )
-
-        );
-
-
-      scheduleNextTransfer(
-
-        now,
-
-        random(
-          250,
-          800
-        )
-
-      );
-
-    }
-
-  }
-
-}
-
-
-/* =========================================================
-   MEETING ANGLE
-========================================================= */
-
-function getMeetingAngle(
-  aIndex,
-  bIndex
-){
-
-  const distance =
-    Math.abs(
-
-      getDeviceX(
-        aIndex
-      )
-
-      -
-
-      getDeviceX(
-        bIndex
-      )
-
-    );
-
-
-  const bodyHeight =
-    getBodyHeight();
-
-
-  const ratio =
-    constrain(
-
-      distance /
-      (
-        bodyHeight *
-        3
-      ),
-
-      .03,
-      .28
-
-    );
-
-
-  const radians =
-    Math.asin(
-      ratio
-    );
-
-
-  return constrain(
-
-    radians *
-    180 /
-    Math.PI *
-    .85,
-
-    5,
-    14
-
   );
 
+  to.info = Math.max(to.info, mixedInfo);
+  to.particleEnergy = constrain(
+    to.particleEnergy + .14 + from.particleEnergy * .18 + random(.02, .12),
+    0,
+    1
+  );
+
+  to.localNoise = constrain(
+    to.localNoise + .12 + from.localNoise * .22 + random(.02, .10),
+    0,
+    1
+  );
+
+  from.particleEnergy = constrain(
+    from.particleEnergy + .05,
+    0,
+    1
+  );
+
+  from.localNoise = constrain(
+    from.localNoise + .03,
+    0,
+    1
+  );
+
+  from.flash = 1;
+  to.flash = 1;
+  to.receiveCount++;
+
+  chaos = constrain(
+    chaos + .028 + to.localNoise * .03,
+    0,
+    1
+  );
 }
 
-
-/* =========================================================
-   CHAOS
-========================================================= */
-
-function updateChaos(dt){
-
-  if(
-    mode ===
-    "TRANSFER"
-  ){
-
-    chaos =
-      constrain(
-
-        chaos
-
-        +
-
-        dt *
-        .000006 *
-        chaosGrowthSpeed,
-
-        0,
-        .60
-
-      );
-
+function updateTransmissionNetwork(now, dt){
+  if(mode !== "ACTIVE"){
+    return;
   }
 
+  chaos = constrain(
+    chaos + dt * .000016 * chaosGrowthSpeed,
+    0,
+    1
+  );
 
-  if(
-    mode ===
-    "CHAOS"
-  ){
+  const chanceScale = dt / 16.67;
 
-    chaos =
-      constrain(
+  for(let i = 0; i < DEVICE_COUNT; i++){
+    const d = devices[i];
 
-        chaos
+    if(d.info < .08){
+      continue;
+    }
 
-        +
+    if(d.sendCooldown > 0){
+      continue;
+    }
 
-        dt *
-        .000018 *
-        chaosGrowthSpeed,
+    const sendChance =
+      (.010 + chaos * .022 + d.localNoise * .018) *
+      transmissionRate;
 
-        0,
-        1
+    if(Math.random() < sendChance * chanceScale){
+      const burstCount =
+        Math.random() < (.18 + chaos * .72)
+        ? 2
+        : 1;
 
+      for(let k = 0; k < burstCount; k++){
+        const target = chooseTargetFor(i);
+        if(target !== null){
+          addTransfer(i, target);
+        }
+      }
+
+      d.sendCooldown = random(
+        160,
+        780 - chaos * 320
       );
-
+    }
   }
 
+  for(let i = activeTransfers.length - 1; i >= 0; i--){
+    const t = activeTransfers[i];
+    t.progress += dt / t.duration;
+
+    if(t.progress >= 1){
+      deliverTransfer(t);
+      activeTransfers.splice(i, 1);
+    }
+  }
+
+  if(activeTransfers.length < Math.floor(2 + chaos * 4)){
+    if(Math.random() < (.02 + chaos * .03) * (dt / 16.67)){
+      const seed = Math.floor(Math.random() * DEVICE_COUNT);
+      if(devices[seed].info > .12){
+        const target = chooseTargetFor(seed);
+        if(target !== null){
+          addTransfer(seed, target);
+        }
+      }
+    }
+  }
 }
 
-
 /* =========================================================
-   TABLE
+   DRAW TABLE
 ========================================================= */
 
 function drawTable(){
+  const y = getBaseY() + 18;
 
-  const y =
-    getBaseY() +
-    18;
+  ctx.fillStyle = "#e4dfd6";
+  ctx.fillRect(W * .055, y, W * .89, H * .19);
 
-
-  ctx.fillStyle =
-    "#e4dfd6";
-
-
-  ctx.fillRect(
-
-    W * .055,
-
-    y,
-
-    W * .89,
-
-    H * .19
-
-  );
-
-
-  ctx.fillStyle =
-    "rgba(0,0,0,.07)";
-
-
-  ctx.fillRect(
-
-    W * .055,
-
-    y,
-
-    W * .89,
-
-    4
-
-  );
-
+  ctx.fillStyle = "rgba(0,0,0,.07)";
+  ctx.fillRect(W * .055, y, W * .89, 4);
 }
 
-
 /* =========================================================
-   DEVICE
+   DRAW DEVICE
 ========================================================= */
 
-function drawDevice(
-  device,
-  now
-){
-
-  const x =
-    getDeviceX(
-      device.index
-    );
-
-
-  const baseY =
-    getBaseY();
-
-
-  const bodyHeight =
-    getBodyHeight();
-
-
-  const bodyWidth =
-    getBodyWidth();
-
-
-  const angleRad =
-    device.angle *
-    Math.PI /
-    180;
-
+function drawDevice(device, now){
+  const x = getDeviceX(device.index);
+  const baseY = getBaseY();
+  const bodyHeight = getBodyHeight();
+  const bodyWidth = getBodyWidth();
+  const angleRad = device.angle * Math.PI / 180;
 
   ctx.save();
+  ctx.translate(x, baseY);
 
-
-  ctx.translate(
-    x,
-    baseY
-  );
-
-
-  /* SHADOW */
-
-  ctx.fillStyle =
-    "rgba(0,0,0,.09)";
-
-
+  ctx.fillStyle = "rgba(0,0,0,.09)";
   ctx.beginPath();
-
-
-  ctx.ellipse(
-
-    5,
-    12,
-
-    bodyWidth *
-    .68,
-
-    7,
-
-    0,
-    0,
-
-    Math.PI *
-    2
-
-  );
-
-
+  ctx.ellipse(5, 12, bodyWidth * .68, 7, 0, 0, Math.PI * 2);
   ctx.fill();
 
-
-  /* BASE */
-
-  ctx.fillStyle =
-    "#171817";
-
-
+  ctx.fillStyle = "#171817";
   ctx.beginPath();
-
-
-  ctx.roundRect(
-
-    -bodyWidth *
-    .63,
-
-    -5,
-
-    bodyWidth *
-    1.26,
-
-    18,
-
-    7
-
-  );
-
-
+  ctx.roundRect(-bodyWidth * .63, -5, bodyWidth * 1.26, 18, 7);
   ctx.fill();
 
-
-  /* PIVOT */
-
-  ctx.fillStyle =
-    "#353936";
-
-
+  ctx.fillStyle = "#353936";
   ctx.beginPath();
-
-
-  ctx.arc(
-
-    0,
-    0,
-
-    8,
-
-    0,
-
-    Math.PI *
-    2
-
-  );
-
-
+  ctx.arc(0, 0, 8, 0, Math.PI * 2);
   ctx.fill();
 
-
-  ctx.fillStyle =
-    "#101110";
-
-
+  ctx.fillStyle = "#101110";
   ctx.beginPath();
-
-
-  ctx.arc(
-
-    0,
-    0,
-
-    4,
-
-    0,
-
-    Math.PI *
-    2
-
-  );
-
-
+  ctx.arc(0, 0, 4, 0, Math.PI * 2);
   ctx.fill();
 
+  ctx.rotate(angleRad);
 
-  /*
-    整支裝置旋轉。
-  */
-
-  ctx.rotate(
-    angleRad
+  const bodyGradient = ctx.createLinearGradient(
+    -bodyWidth / 2, 0,
+    bodyWidth / 2, 0
   );
+  bodyGradient.addColorStop(0, "#050605");
+  bodyGradient.addColorStop(.45, "#2b2d2c");
+  bodyGradient.addColorStop(1, "#070807");
 
-
-  /* BODY */
-
-  const bodyGradient =
-    ctx.createLinearGradient(
-
-      -bodyWidth / 2,
-      0,
-
-      bodyWidth / 2,
-      0
-
-    );
-
-
-  bodyGradient.addColorStop(
-    0,
-    "#050605"
-  );
-
-
-  bodyGradient.addColorStop(
-    .45,
-    "#2b2d2c"
-  );
-
-
-  bodyGradient.addColorStop(
-    1,
-    "#070807"
-  );
-
-
-  ctx.fillStyle =
-    bodyGradient;
-
-
-  ctx.shadowBlur =
-    8;
-
-
-  ctx.shadowColor =
-    "rgba(0,0,0,.20)";
-
-
+  ctx.fillStyle = bodyGradient;
+  ctx.shadowBlur = 8;
+  ctx.shadowColor = "rgba(0,0,0,.20)";
   ctx.beginPath();
+  ctx.roundRect(-bodyWidth / 2, -bodyHeight, bodyWidth, bodyHeight, 7);
+  ctx.fill();
+  ctx.shadowBlur = 0;
 
+  drawLED(device, now, bodyWidth, bodyHeight);
 
-  ctx.roundRect(
+  const cameraY = -bodyHeight * .73;
 
-    -bodyWidth / 2,
-
-    -bodyHeight,
-
-    bodyWidth,
-
-    bodyHeight,
-
-    7
-
-  );
-
-
+  ctx.fillStyle = "#050706";
+  ctx.beginPath();
+  ctx.arc(0, cameraY, 9, 0, Math.PI * 2);
   ctx.fill();
 
-
-  ctx.shadowBlur =
-    0;
-
-
-  /* LED */
-
-  drawLED(
-
-    device,
-    now,
-
-    bodyWidth,
-    bodyHeight
-
-  );
-
-
-  /* CAMERA */
-
-  const cameraY =
-    -bodyHeight *
-    .73;
-
-
-  ctx.fillStyle =
-    "#050706";
-
-
+  ctx.strokeStyle = "#4a504d";
+  ctx.lineWidth = 1;
   ctx.beginPath();
-
-
-  ctx.arc(
-
-    0,
-    cameraY,
-
-    9,
-
-    0,
-    Math.PI *
-    2
-
-  );
-
-
-  ctx.fill();
-
-
-  ctx.strokeStyle =
-    "#4a504d";
-
-
-  ctx.lineWidth =
-    1;
-
-
-  ctx.beginPath();
-
-
-  ctx.arc(
-
-    0,
-    cameraY,
-
-    9,
-
-    0,
-    Math.PI *
-    2
-
-  );
-
-
+  ctx.arc(0, cameraY, 9, 0, Math.PI * 2);
   ctx.stroke();
 
-
-  ctx.fillStyle =
-    "#020607";
-
-
+  ctx.fillStyle = "#020607";
   ctx.beginPath();
-
-
-  ctx.arc(
-
-    0,
-    cameraY,
-
-    5.5,
-
-    0,
-    Math.PI *
-    2
-
-  );
-
-
+  ctx.arc(0, cameraY, 5.5, 0, Math.PI * 2);
   ctx.fill();
 
-
-  ctx.fillStyle =
-    "rgba(100,155,180,.48)";
-
-
+  ctx.fillStyle = "rgba(100,155,180,.48)";
   ctx.beginPath();
-
-
-  ctx.arc(
-
-    -1.5,
-
-    cameraY -
-    1.7,
-
-    1.7,
-
-    0,
-
-    Math.PI *
-    2
-
-  );
-
-
+  ctx.arc(-1.5, cameraY - 1.7, 1.7, 0, Math.PI * 2);
   ctx.fill();
 
+  const screenW = bodyWidth * .70;
+  const screenH = bodyHeight * .31;
+  const screenX = -screenW / 2;
+  const screenY = -bodyHeight * .56;
 
-  /* SCREEN */
-
-  const screenW =
-    bodyWidth *
-    .70;
-
-
-  const screenH =
-    bodyHeight *
-    .31;
-
-
-  const screenX =
-    -screenW /
-    2;
-
-
-  const screenY =
-    -bodyHeight *
-    .56;
-
-
-  ctx.fillStyle =
-    "#020405";
-
-
+  ctx.fillStyle = "#020405";
   ctx.beginPath();
-
-
-  ctx.roundRect(
-
-    screenX,
-    screenY,
-
-    screenW,
-    screenH,
-
-    3
-
-  );
-
-
+  ctx.roundRect(screenX, screenY, screenW, screenH, 3);
   ctx.fill();
 
-
-  ctx.strokeStyle =
-    "#303635";
-
-
-  ctx.lineWidth =
-    1;
-
-
+  ctx.strokeStyle = "#303635";
+  ctx.lineWidth = 1;
   ctx.stroke();
-
 
   ctx.save();
-
-
   ctx.beginPath();
-
-
-  ctx.roundRect(
-
-    screenX +
-    3,
-
-    screenY +
-    3,
-
-    screenW -
-    6,
-
-    screenH -
-    6,
-
-    2
-
-  );
-
-
+  ctx.roundRect(screenX + 3, screenY + 3, screenW - 6, screenH - 6, 2);
   ctx.clip();
 
-
   drawFluidScreen(
-
     device,
     now,
-
-    screenX +
-    3,
-
-    screenY +
-    3,
-
-    screenW -
-    6,
-
-    screenH -
-    6
-
+    screenX + 3,
+    screenY + 3,
+    screenW - 6,
+    screenH - 6
   );
 
-
   ctx.restore();
-
-
   ctx.restore();
-
 }
 
-
 /* =========================================================
-   LED STATE SYSTEM
+   LED
 ========================================================= */
 
-function drawLED(
-  device,
-  now,
-  width,
-  height
-){
-
-  /*
-    LED 規則：
-
-    待機       → 白
-    看到觀者   → 綠
-    開始說話   → 黃
-    傳遞資訊   → 紅
-
-    優先：
-    紅 > 黃 > 綠 > 白
-  */
-
-
-  const breath =
-
-    (
-      Math.sin(
-        now *
-        .0025 +
-        device.phase
-      )
-      +
-      1
-    )
-
-    /
-    2;
-
+function drawLED(device, now, width, height){
+  const breath = (Math.sin(now * .0025 + device.phase) + 1) / 2;
 
   let r = 190;
   let g = 210;
   let b = 215;
+  let brightness = .16 + breath * .08;
 
-  let brightness =
-    .16 +
-    breath *
-    .08;
-
-
-  /* =====================================
-     GREEN
-     拍到觀者
-  ===================================== */
-
-  if(
-    viewer.present
-  ){
-
+  if(viewer.present){
     r = 45;
     g = 255;
     b = 105;
-
-
-    brightness =
-      .55 +
-      breath *
-      .18;
-
+    brightness = .55 + breath * .18;
   }
 
-
-  /* =====================================
-     YELLOW
-     說話
-
-     只讓離觀者最近的那一支變黃。
-  ===================================== */
-
-  const speaking =
-    now <
-    speakingUntil;
-
-
-  const speakingDevice =
-    getNearestDeviceIndex();
-
+  const speaking = now < speakingUntil;
+  const speakingDevice = getNearestDeviceIndex();
 
   if(
-    speaking
-    &&
-    device.index ===
-    speakingDevice
-    &&
-    mode ===
-    "FOLLOW"
+    speaking &&
+    device.index === speakingDevice &&
+    (mode === "LISTEN" || mode === "FOLLOW" || mode === "IDLE")
   ){
-
     r = 255;
     g = 215;
     b = 35;
-
-
-    brightness =
-      constrain(
-
-        .72 +
-        voiceLevel *
-        .55,
-
-        .72,
-        1
-
-      );
-
+    brightness = constrain(.72 + voiceLevel * .55, .72, 1);
   }
 
-
-  /* =====================================
-     RED
-     傳資訊
-
-     只有正在交換的兩支紅。
-  ===================================== */
-
-  let transferring =
-    false;
-
-
-  if(
-    mode ===
-    "TRANSFER"
-
-    &&
-
-    currentTransfer
-
-    &&
-
-    currentTransfer.from !== undefined
-
-    &&
-
-    currentTransfer.to !== undefined
-
-    &&
-
-    currentTransfer.stage !==
-    "WAIT_NEXT"
-  ){
-
-    if(
-      device.index ===
-      currentTransfer.from
-
-      ||
-
-      device.index ===
-      currentTransfer.to
-    ){
-
-      transferring =
-        true;
-
-    }
-
-  }
-
-
-  if(
-    transferring
-  ){
-
+  if(deviceIsTransferring(device.index)){
     r = 255;
     g = 45;
     b = 40;
 
-
-    const pulse =
-
-      (
-        Math.sin(
-          now *
-          .013
-        )
-        +
-        1
-      )
-
-      /
-      2;
-
-
-    brightness =
-      .68 +
-      pulse *
-      .32;
-
+    const pulse = (Math.sin(now * .013 + device.phase) + 1) / 2;
+    brightness = .68 + pulse * .32;
   }
 
+  brightness += device.flash * .20;
+  brightness = constrain(brightness, .10, 1);
 
-  /*
-    碰到的一瞬間更亮。
-  */
+  ctx.fillStyle = "rgba(45,50,50,.35)";
+  ctx.fillRect(-width / 2 + 3, -height + 9, width - 6, 5);
 
-  brightness +=
-    device.flash *
-    .20;
-
-
-  brightness =
-    constrain(
-      brightness,
-      .10,
-      1
-    );
-
-
-  /* DARK BASE */
-
-  ctx.fillStyle =
-    "rgba(45,50,50,.35)";
-
-
-  ctx.fillRect(
-
-    -width /
-    2 +
-    3,
-
-    -height +
-    9,
-
-    width -
-    6,
-
-    5
-
-  );
-
-
-  /* GLOW */
-
-  ctx.shadowBlur =
-    5 +
-    brightness *
-    18;
-
-
-  ctx.shadowColor =
-
-    `rgba(
-      ${r},
-      ${g},
-      ${b},
-      ${brightness}
-    )`;
-
-
-  ctx.fillStyle =
-
-    `rgba(
-      ${r},
-      ${g},
-      ${b},
-      ${brightness}
-    )`;
-
-
-  ctx.fillRect(
-
-    -width /
-    2 +
-    3,
-
-    -height +
-    9,
-
-    width -
-    6,
-
-    4
-
-  );
-
-
-  ctx.shadowBlur =
-    0;
-
+  ctx.shadowBlur = 5 + brightness * 18;
+  ctx.shadowColor = `rgba(${r},${g},${b},${brightness})`;
+  ctx.fillStyle = `rgba(${r},${g},${b},${brightness})`;
+  ctx.fillRect(-width / 2 + 3, -height + 9, width - 6, 4);
+  ctx.shadowBlur = 0;
 }
 
-
 /* =========================================================
-   GRAVITY LIQUID
+   LIQUID SCREEN
 ========================================================= */
 
-function drawFluidScreen(
-  device,
-  now,
-  x,
-  y,
-  w,
-  h
-){
+function drawFluidScreen(device, now, x, y, w, h){
+  const bg = ctx.createLinearGradient(x, y, x, y + h);
+  bg.addColorStop(0, "#071653");
+  bg.addColorStop(.5, "#06144a");
+  bg.addColorStop(1, "#030c32");
 
-  /* BACKGROUND */
+  ctx.fillStyle = bg;
+  ctx.fillRect(x, y, w, h);
 
-  const bg =
-    ctx.createLinearGradient(
+  const info = constrain(device.info, 0, 1);
+  const motionStrength = constrain(Math.abs(device.angularVelocity) * 1.7, 0, 1);
 
-      x,
-      y,
-
-      x,
-      y +
-      h
-
-    );
-
-
-  bg.addColorStop(
+  const particleVariation = constrain(
+    device.particleEnergy * .85 +
+    device.localNoise * .75 +
+    chaos * .35,
     0,
-    "#071653"
+    1
   );
-
-
-  bg.addColorStop(
-    .5,
-    "#06144a"
-  );
-
-
-  bg.addColorStop(
-    1,
-    "#030c32"
-  );
-
-
-  ctx.fillStyle =
-    bg;
-
-
-  ctx.fillRect(
-    x,
-    y,
-    w,
-    h
-  );
-
-
-  const info =
-    constrain(
-      device.info,
-      0,
-      1
-    );
-
-
-  const motionStrength =
-    constrain(
-
-      Math.abs(
-        device.angularVelocity
-      )
-
-      *
-      1.7,
-
-      0,
-      1
-
-    );
-
 
   const turbulence =
-
-    mode ===
-    "FOLLOW"
-
-    ?
-
-    .015
-
-    :
-
-    chaos *
-    (
-      .10 +
-      info *
-      .42
-    );
-
-
-  /* =====================================
-     WORLD GRAVITY
-  ===================================== */
-
-  const angleRad =
-    device.angle *
-    Math.PI /
-    180;
-
-
-  /*
-    裝置直立：
-    液體往螢幕下方。
-
-    裝置轉向：
-    重力方向會相對改變。
-  */
-
-  let gravityX =
-    Math.sin(
-      angleRad
-    );
-
-
-  let gravityY =
-    Math.cos(
-      angleRad
-    );
-
-
-  /*
-    旋轉慣性。
-  */
-
-  gravityX +=
-
-    -device.angularVelocity *
-    .11;
-
-
-  gravityX +=
-
-    device.fluidOffset *
-    .10;
-
-
-  const gravityLength =
-    Math.sqrt(
-
-      gravityX *
-      gravityX
-
-      +
-
-      gravityY *
-      gravityY
-
-    )
-    ||
-    1;
-
-
-  gravityX /=
-    gravityLength;
-
-
-  gravityY /=
-    gravityLength;
-
-
-  /*
-    液面的切線。
-  */
-
-  const tangentX =
-    gravityY;
-
-
-  const tangentY =
-    -gravityX;
-
-
-  /* =====================================
-     LIQUID VOLUME
-  ===================================== */
-
-  const fillAmount =
-    constrain(
-
-      .34 +
-      info *
-      .24,
-
-      .26,
-      .65
-
-    );
-
-
-  const threshold =
-    lerp(
-
-      .52,
-
-      -.30,
-
-      fillAmount
-
-    );
-
-
-  const cellSize =
-    2;
-
-
-  const time =
-    now *
-    .001;
-
-
-  /* =====================================
-     MAIN LIQUID
-  ===================================== */
-
-  for(
-    let py = 0;
-    py < h;
-    py += cellSize
-  ){
-
-    for(
-      let px = 0;
-      px < w;
-      px += cellSize
-    ){
-
-      const nx =
-        (
-          px /
-          w
-        )
-        *
-        2
-        -
-        1;
-
-
-      const ny =
-        (
-          py /
-          h
-        )
-        *
-        2
-        -
-        1;
-
-
-      const gravityDepth =
-
-        nx *
-        gravityX
-
-        +
-
-        ny *
-        gravityY;
-
-
-      const tangentPosition =
-
-        nx *
-        tangentX
-
-        +
-
-        ny *
-        tangentY;
-
-
-      /*
-        表面小波浪。
-      */
+    .01 +
+    chaos * .035 +
+    particleVariation * .09 +
+    motionStrength * .04;
+
+  const angleRad = device.angle * Math.PI / 180;
+
+  let gravityX = Math.sin(angleRad);
+  let gravityY = Math.cos(angleRad);
+
+  gravityX += -device.angularVelocity * .11;
+  gravityX += device.fluidOffset * .10;
+
+  const gravityLength = Math.sqrt(gravityX * gravityX + gravityY * gravityY) || 1;
+  gravityX /= gravityLength;
+  gravityY /= gravityLength;
+
+  const tangentX = gravityY;
+  const tangentY = -gravityX;
+
+  const fillAmount = constrain(
+    .30 + info * .22 + device.particleEnergy * .10,
+    .22,
+    .72
+  );
+
+  const threshold = lerp(.58, -.35, fillAmount);
+  const cellSize = 2;
+  const time = now * .001;
+
+  for(let py = 0; py < h; py += cellSize){
+    for(let px = 0; px < w; px += cellSize){
+      const nx = (px / w) * 2 - 1;
+      const ny = (py / h) * 2 - 1;
+
+      const gravityDepth = nx * gravityX + ny * gravityY;
+      const tangentPosition = nx * tangentX + ny * tangentY;
 
       let surfaceWave =
-
-        Math.sin(
-
-          tangentPosition *
-          7
-
-          +
-
-          time *
-          2
-
-          +
-
-          device.phase
-
-        )
-
-        *
-        (
-          .018
-
-          +
-
-          turbulence *
-          .028
-        );
-
-
-      /*
-        裝置移動越快，
-        液面晃越明顯。
-      */
+        Math.sin(tangentPosition * (6 + particleVariation * 4) + time * 2.0 + device.phase) *
+        (.015 + turbulence * .028);
 
       surfaceWave +=
+        Math.sin(tangentPosition * 14 - time * (3.2 + particleVariation * 2)) *
+        (.008 + particleVariation * .035);
 
-        Math.sin(
+      surfaceWave +=
+        Math.sin((nx + ny) * 10 + time * 5 + device.phase * 1.7) *
+        (particleVariation * .015);
 
-          tangentPosition *
-          15
-
-          -
-
-          time *
-          4.2
-
-        )
-
-        *
-        motionStrength
-
-        *
+      surfaceWave +=
+        motionStrength *
+        Math.sin(tangentPosition * 18 - time * 4.2) *
         .025;
 
+      const insideLiquid = gravityDepth > threshold + surfaceWave;
 
-      const insideLiquid =
-
-        gravityDepth
-
-        >
-
-        threshold
-
-        +
-
-        surfaceWave;
-
-
-      if(
-        !insideLiquid
-      ){
-
+      if(!insideLiquid){
         continue;
-
       }
 
-
-      const depth =
-        constrain(
-
-          (
-            gravityDepth
-
-            -
-
-            threshold
-
-            -
-
-            surfaceWave
-          )
-
-          *
-          2.1,
-
-          0,
-          1
-
-        );
-
-
-      const alpha =
-        .62 +
-        depth *
-        .32;
-
-
-      const green =
-        Math.round(
-          220 +
-          depth *
-          28
-        );
-
-
-      const blue =
-        Math.round(
-          252 -
-          depth *
-          20
-        );
-
-
-      ctx.fillStyle =
-
-        `rgba(
-          35,
-          ${green},
-          ${blue},
-          ${alpha}
-        )`;
-
-
-      ctx.fillRect(
-
-        x +
-        px,
-
-        y +
-        py,
-
-        cellSize,
-        cellSize
-
+      const depth = constrain(
+        (gravityDepth - threshold - surfaceWave) * 2.1,
+        0,
+        1
       );
 
+      const alpha = .58 + depth * .28 + particleVariation * .12;
 
-      /*
-        微小電子粒子。
-      */
+      const green = Math.round(210 + depth * 30 + particleVariation * 12);
+      const blue = Math.round(245 - depth * 18 + particleVariation * 5);
 
-      const sparkle =
-        pseudoLiquidNoise(
+      ctx.fillStyle = `rgba(35,${green},${blue},${alpha})`;
+      ctx.fillRect(x + px, y + py, cellSize, cellSize);
 
-          px,
-          py,
+      const sparkle = pseudoLiquidNoise(
+        px,
+        py,
+        device.index,
+        Math.floor(now / 90)
+      );
 
-          device.index,
-
-          Math.floor(
-            now /
-            100
-          )
-
-        );
-
-
-      if(
-        sparkle >
-        .925
-      ){
-
-        ctx.fillStyle =
-
-          `rgba(
-            175,
-            255,
-            255,
-            ${.12 + depth*.32}
-          )`;
-
-
-        ctx.fillRect(
-
-          x +
-          px,
-
-          y +
-          py,
-
-          1,
-          1
-
-        );
-
+      if(sparkle > (0.94 - particleVariation * .09)){
+        ctx.fillStyle = `rgba(185,255,255,${.08 + depth * .24 + particleVariation * .25})`;
+        ctx.fillRect(x + px, y + py, 1, 1);
       }
-
     }
-
   }
 
+  const surfaceParticleCount = Math.floor(
+    18 + info * 18 + particleVariation * 34 + motionStrength * 14
+  );
 
-  /* =====================================
-     SURFACE PARTICLES
-  ===================================== */
+  for(let i = 0; i < surfaceParticleCount; i++){
+    const t = (i / Math.max(1, surfaceParticleCount - 1)) * 2 - 1;
 
-  const surfaceParticleCount =
-    Math.floor(
-
-      20
-
-      +
-
-      info *
-      25
-
-      +
-
-      motionStrength *
-      14
-
-    );
-
-
-  for(
-    let i = 0;
-    i < surfaceParticleCount;
-    i++
-  ){
-
-    const t =
-      (
-        i /
-        Math.max(
-          1,
-          surfaceParticleCount -
-          1
-        )
-      )
-      *
-      2
-      -
-      1;
-
-
-    let localX =
-
-      tangentX *
-      t
-
-      +
-
-      gravityX *
-      threshold;
-
-
-    let localY =
-
-      tangentY *
-      t
-
-      +
-
-      gravityY *
-      threshold;
-
+    let localX = tangentX * t + gravityX * threshold;
+    let localY = tangentY * t + gravityY * threshold;
 
     const wave =
-
       Math.sin(
-
-        t *
-        8
-
-        +
-
-        time *
-        2.1
-
-        +
-
+        t * (8 + particleVariation * 5) +
+        time * (2.1 + particleVariation * 1.6) +
         device.phase
+      ) *
+      (.02 + motionStrength * .02 + particleVariation * .03);
 
-      )
-
-      *
-      (
-        .025
-
-        +
-
-        motionStrength *
-        .025
-      );
-
-
-    localX +=
-
-      gravityX *
-      wave;
-
-
-    localY +=
-
-      gravityY *
-      wave;
-
+    localX += gravityX * wave;
+    localY += gravityY * wave;
 
     const randomDepth =
       Math.abs(
+        Math.sin(i * (19.73 + particleVariation * 8) + device.phase)
+      ) *
+      (.10 + particleVariation * .10);
 
-        Math.sin(
+    localX += gravityX * randomDepth;
+    localY += gravityY * randomDepth;
 
-          i *
-          19.73
-
-          +
-
-          device.phase
-
-        )
-
-      )
-      *
-      .10;
-
-
-    localX +=
-
-      gravityX *
-      randomDepth;
-
-
-    localY +=
-
-      gravityY *
-      randomDepth;
-
-
-    const screenX =
-
-      x
-
-      +
-
-      (
-        localX +
-        1
-      )
-
-      *
-      .5
-
-      *
-      w;
-
-
-    const screenY =
-
-      y
-
-      +
-
-      (
-        localY +
-        1
-      )
-
-      *
-      .5
-
-      *
-      h;
-
+    const screenX = x + (localX + 1) * .5 * w;
+    const screenY = y + (localY + 1) * .5 * h;
 
     if(
-      screenX <
-      x
-
-      ||
-
-      screenX >
-      x + w
-
-      ||
-
-      screenY <
-      y
-
-      ||
-
-      screenY >
-      y + h
-    ){
-
-      continue;
-
-    }
-
-
-    const size =
-      i %
-      4 ===
-      0
-      ?
-      2
-      :
-      1;
-
-
-    ctx.fillStyle =
-
-      `rgba(
-        165,
-        255,
-        255,
-        ${.30 + info*.30}
-      )`;
-
-
-    ctx.fillRect(
-
-      screenX,
-      screenY,
-
-      size,
-      size
-
-    );
-
-  }
-
-
-  /* =====================================
-     INERTIA PARTICLES
-  ===================================== */
-
-  const inertialCount =
-    Math.floor(
-      motionStrength *
-      18
-    );
-
-
-  for(
-    let i = 0;
-    i < inertialCount;
-    i++
-  ){
-
-    const seed =
-      device
-      .fluidSeeds[
-        i %
-        device.fluidSeeds.length
-      ];
-
-
-    const tangentPosition =
-      seed.offset;
-
-
-    const depth =
-      .10
-      +
-      Math.abs(
-        Math.sin(
-          seed.phase
-        )
-      )
-      *
-      .40;
-
-
-    let localX =
-
-      tangentX *
-      tangentPosition
-
-      +
-
-      gravityX *
-      (
-        threshold +
-        depth
-      );
-
-
-    let localY =
-
-      tangentY *
-      tangentPosition
-
-      +
-
-      gravityY *
-      (
-        threshold +
-        depth
-      );
-
-
-    localX +=
-
-      -Math.sign(
-        device.angularVelocity
-      )
-
-      *
-      motionStrength
-
-      *
-      .07;
-
-
-    const screenX =
-
-      x
-
-      +
-
-      (
-        localX +
-        1
-      )
-
-      *
-      .5
-
-      *
-      w;
-
-
-    const screenY =
-
-      y
-
-      +
-
-      (
-        localY +
-        1
-      )
-
-      *
-      .5
-
-      *
-      h;
-
-
-    if(
-      screenX < x
-      ||
-      screenX > x + w
-      ||
-      screenY < y
-      ||
+      screenX < x ||
+      screenX > x + w ||
+      screenY < y ||
       screenY > y + h
     ){
-
       continue;
-
     }
 
+    const size =
+      i % Math.max(2, 5 - Math.floor(particleVariation * 2)) === 0
+      ? 2
+      : 1;
 
-    ctx.fillStyle =
+    ctx.fillStyle = `rgba(165,255,255,${.22 + info * .18 + particleVariation * .38})`;
+    ctx.fillRect(screenX, screenY, size, size);
+  }
 
-      `rgba(
-        190,
-        255,
-        255,
-        ${.15 + motionStrength*.30}
-      )`;
+  const floatingCount = Math.floor(8 + particleVariation * 30 + info * 10);
 
+  for(let i = 0; i < floatingCount; i++){
+    const seed = device.fluidSeeds[i % device.fluidSeeds.length];
 
-    ctx.fillRect(
+    const t = fract(now * .00012 * seed.speed + seed.phase);
+    const drift = Math.sin(now * .0025 + seed.phase) * (.02 + particleVariation * .08);
 
+    const localX =
+      tangentX * (seed.offset * (.65 + particleVariation * .35)) +
+      gravityX * (threshold + .18 + t * .55) +
+      drift;
+
+    const localY =
+      tangentY * (seed.offset * (.65 + particleVariation * .35)) +
+      gravityY * (threshold + .18 + t * .55);
+
+    const screenX = x + (localX + 1) * .5 * w;
+    const screenY = y + (localY + 1) * .5 * h;
+
+    if(
+      screenX < x ||
+      screenX > x + w ||
+      screenY < y ||
+      screenY > y + h
+    ){
+      continue;
+    }
+
+    ctx.fillStyle = `rgba(195,255,255,${.08 + particleVariation * .25})`;
+    ctx.beginPath();
+    ctx.arc(
       screenX,
       screenY,
-
-      2 +
-      motionStrength *
-      3,
-
-      1
-
+      .6 + seed.size * .32 + particleVariation * .28,
+      0,
+      Math.PI * 2
     );
-
+    ctx.fill();
   }
 
-
-  /*
-    接觸瞬間螢幕亮一下。
-  */
-
-  if(
-    device.flash >
-    0
-  ){
-
-    ctx.fillStyle =
-
-      `rgba(
-        170,
-        255,
-        255,
-        ${device.flash*.14}
-      )`;
-
-
-    ctx.fillRect(
-      x,
-      y,
-      w,
-      h
-    );
-
+  if(device.flash > 0){
+    ctx.fillStyle = `rgba(170,255,255,${device.flash * .14})`;
+    ctx.fillRect(x, y, w, h);
   }
-
 }
-
 
 /* =========================================================
-   CONTACT VISUAL
+   TRANSFER VISUAL
 ========================================================= */
 
-function drawTransferContact(now){
-
-  if(
-    !currentTransfer
-
-    ||
-
-    currentTransfer.stage !==
-    "CONTACT"
-  ){
-
-    return;
-
+function drawAllTransferContacts(now){
+  for(const t of activeTransfers){
+    drawTransferBridge(t, now);
   }
-
-
-  const pointA =
-    getTopPoint(
-      currentTransfer.from
-    );
-
-
-  const pointB =
-    getTopPoint(
-      currentTransfer.to
-    );
-
-
-  const midX =
-    (
-      pointA.x +
-      pointB.x
-    )
-    /
-    2;
-
-
-  const midY =
-    (
-      pointA.y +
-      pointB.y
-    )
-    /
-    2;
-
-
-  const pulse =
-    (
-      Math.sin(
-        now *
-        .025
-      )
-      +
-      1
-    )
-    /
-    2;
-
-
-  ctx.shadowBlur =
-    12 +
-    pulse *
-    8;
-
-
-  ctx.shadowColor =
-    "rgba(255,70,60,.65)";
-
-
-  ctx.fillStyle =
-
-    `rgba(
-      255,
-      90,
-      70,
-      ${.35 + pulse*.40}
-    )`;
-
-
-  ctx.beginPath();
-
-
-  ctx.arc(
-
-    midX,
-    midY,
-
-    3 +
-    pulse *
-    3,
-
-    0,
-    Math.PI *
-    2
-
-  );
-
-
-  ctx.fill();
-
-
-  ctx.shadowBlur =
-    0;
-
-
-  /*
-    紅色資訊粒子。
-  */
-
-  for(
-    let i = 0;
-    i < 10;
-    i++
-  ){
-
-    const t =
-      fract(
-
-        i /
-        10
-
-        +
-
-        now *
-        .0012
-
-      );
-
-
-    const px =
-      lerp(
-        pointA.x,
-        pointB.x,
-        t
-      );
-
-
-    const py =
-      lerp(
-        pointA.y,
-        pointB.y,
-        t
-      )
-      +
-      Math.sin(
-        t *
-        Math.PI *
-        3
-      )
-      *
-      3;
-
-
-    ctx.fillStyle =
-      "rgba(255,75,65,.65)";
-
-
-    ctx.fillRect(
-      px,
-      py,
-      2,
-      2
-    );
-
-  }
-
 }
 
+function drawTransferBridge(transfer, now){
+  const pointA = getTopPoint(transfer.from);
+  const pointB = getTopPoint(transfer.to);
+
+  const midX = (pointA.x + pointB.x) / 2;
+  const midY = (pointA.y + pointB.y) / 2;
+
+  const dx = pointB.x - pointA.x;
+  const dy = pointB.y - pointA.y;
+  const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+
+  const nx = -dy / distance;
+  const ny = dx / distance;
+
+  const bend = 14 + Math.abs(transfer.curvature) * 16;
+  const controlX = midX + nx * bend * transfer.curvature;
+  const controlY = midY + ny * bend * transfer.curvature;
+
+  ctx.strokeStyle = "rgba(255,80,70,.18)";
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(pointA.x, pointA.y);
+  ctx.quadraticCurveTo(controlX, controlY, pointB.x, pointB.y);
+  ctx.stroke();
+
+  const particleCount = 8 + Math.floor(chaos * 10);
+
+  for(let i = 0; i < particleCount; i++){
+    const offset = i / particleCount;
+    const p = fract(transfer.progress + offset + now * .00025);
+
+    const pos = getQuadraticPoint(
+      pointA.x, pointA.y,
+      controlX, controlY,
+      pointB.x, pointB.y,
+      p
+    );
+
+    ctx.fillStyle = `rgba(255,85,70,${.22 + (1 - p) * .45})`;
+    ctx.fillRect(pos.x, pos.y, 2, 2);
+  }
+
+  const pulse = (Math.sin(now * .025 + transfer.pulse) + 1) / 2;
+
+  const highlight = getQuadraticPoint(
+    pointA.x, pointA.y,
+    controlX, controlY,
+    pointB.x, pointB.y,
+    transfer.progress
+  );
+
+  ctx.shadowBlur = 10 + pulse * 8;
+  ctx.shadowColor = "rgba(255,90,70,.65)";
+  ctx.fillStyle = `rgba(255,100,80,${.38 + pulse * .35})`;
+  ctx.beginPath();
+  ctx.arc(highlight.x, highlight.y, 2 + pulse * 2.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.shadowBlur = 0;
+}
+
+function getQuadraticPoint(x1, y1, cx, cy, x2, y2, t){
+  const mt = 1 - t;
+  return {
+    x: mt * mt * x1 + 2 * mt * t * cx + t * t * x2,
+    y: mt * mt * y1 + 2 * mt * t * cy + t * t * y2
+  };
+}
 
 /* =========================================================
    TOP POINT
 ========================================================= */
 
 function getTopPoint(index){
+  const device = devices[index];
+  const angle = device.angle * Math.PI / 180;
+  const height = getBodyHeight();
 
-  const device =
-    devices[index];
-
-
-  const angle =
-    device.angle *
-    Math.PI /
-    180;
-
-
-  const height =
-    getBodyHeight();
-
-
-  return{
-
-    x:
-
-      getDeviceX(
-        index
-      )
-
-      +
-
-      Math.sin(
-        angle
-      )
-
-      *
-      height,
-
-
-    y:
-
-      getBaseY()
-
-      -
-
-      Math.cos(
-        angle
-      )
-
-      *
-      height
-
+  return {
+    x: getDeviceX(index) + Math.sin(angle) * height,
+    y: getBaseY() - Math.cos(angle) * height
   };
-
 }
-
 
 /* =========================================================
    UI
 ========================================================= */
 
 function updateUI(now){
+  let viewerText = "—";
 
-  let viewerText =
-    "—";
-
-
-  if(
-    viewer.present
-  ){
-
-    if(
-      viewer.x <
-      .32
-    ){
-
-      viewerText =
-        "左側";
-
+  if(viewer.present){
+    if(viewer.x < .32){
+      viewerText = "左側";
+    }else if(viewer.x > .68){
+      viewerText = "右側";
+    }else{
+      viewerText = "中央";
     }
-
-    else if(
-      viewer.x >
-      .68
-    ){
-
-      viewerText =
-        "右側";
-
-    }
-
-    else{
-
-      viewerText =
-        "中央";
-
-    }
-
   }
 
+  document.getElementById("viewerPosition").textContent = viewerText;
 
-  document
-  .getElementById(
-    "viewerPosition"
-  )
-  .textContent =
-    viewerText;
+  const cameraPercent = Math.round(
+    constrain(viewer.movement * 4, 0, 1) * 100
+  );
+  document.getElementById("cameraPercent").textContent = cameraPercent;
+  document.getElementById("cameraMeter").style.width = cameraPercent + "%";
 
+  const voicePercent = Math.round(voiceLevel * 100);
+  document.getElementById("voicePercent").textContent = voicePercent;
+  document.getElementById("voiceMeter").style.width = voicePercent + "%";
 
-  const cameraPercent =
-    Math.round(
+  const chaosPercent = Math.round(chaos * 100);
+  document.getElementById("chaosPercent").textContent = chaosPercent;
+  document.getElementById("chaosMeter").style.width = chaosPercent + "%";
 
-      constrain(
-        viewer.movement *
-        4,
-        0,
-        1
-      )
+  document.getElementById("transferCount").textContent = activeTransfers.length;
 
-      *
-      100
+  const avgInfo =
+    devices.reduce((sum, d) => sum + d.info, 0) / DEVICE_COUNT;
 
-    );
+  document.getElementById("averageInfo").textContent =
+    Math.round(avgInfo * 100);
 
+  document.getElementById("sourceText").textContent =
+    sourceIndex >= 0 ? `第 ${sourceIndex + 1} 支` : "—";
 
-  document
-  .getElementById(
-    "cameraPercent"
-  )
-  .textContent =
-    cameraPercent;
+  let modeText = "待機";
+  let description = "裝置正在等待觀者。";
 
-
-  document
-  .getElementById(
-    "cameraMeter"
-  )
-  .style.width =
-    cameraPercent +
-    "%";
-
-
-  const voicePercent =
-    Math.round(
-      voiceLevel *
-      100
-    );
-
-
-  document
-  .getElementById(
-    "voicePercent"
-  )
-  .textContent =
-    voicePercent;
-
-
-  document
-  .getElementById(
-    "voiceMeter"
-  )
-  .style.width =
-    voicePercent +
-    "%";
-
-
-  const chaosPercent =
-    Math.round(
-      chaos *
-      100
-    );
-
-
-  document
-  .getElementById(
-    "chaosPercent"
-  )
-  .textContent =
-    chaosPercent;
-
-
-  document
-  .getElementById(
-    "chaosMeter"
-  )
-  .style.width =
-    chaosPercent +
-    "%";
-
-
-  document
-  .getElementById(
-    "infectedCount"
-  )
-  .textContent =
-    visited.size;
-
-
-  document
-  .getElementById(
-    "sourceText"
-  )
-  .textContent =
-
-    sourceIndex >= 0
-    ?
-    `第 ${sourceIndex + 1} 支`
-    :
-    "—";
-
-
-  let modeText =
-    "順從";
-
-
-  let description =
-    "裝置正在等待觀者。";
-
-
-  if(
-    mode ===
-    "FOLLOW"
-    &&
-    viewer.present
-  ){
-
-    description =
-      "裝置已偵測到觀者，LED 變成綠色並開始跟隨。";
-
+  if(mode === "FOLLOW"){
+    modeText = "順從";
+    description = "裝置已拍到觀者，LED 變成綠色並跟隨觀者。";
   }
 
-
-  if(
-    mode ===
-    "FOLLOW"
-    &&
-    now <
-    speakingUntil
-  ){
-
-    modeText =
-      "接收聲音";
-
-
-    description =
-      "觀者正在說話，最近的裝置變成黃色。";
-
+  if(mode === "LISTEN"){
+    modeText = "接收聲音";
+    description = "最近的裝置正在接收你的聲音，LED 變成黃色。";
   }
 
-
-  if(
-    mode ===
-    "TRANSFER"
-  ){
-
-    modeText =
-      "資訊傳遞";
-
-
-    description =
-      "正在交換資訊的裝置變成紅色。";
-
+  if(mode === "ACTIVE"){
+    modeText = "混亂傳遞";
+    description = "資訊正在多點、反覆、交叉傳遞，粒子與燈光同步擾動。";
   }
 
-
-  if(
-    mode ===
-    "CHAOS"
-  ){
-
-    modeText =
-      "群體偏差";
-
-
-    description =
-      "資訊已擴散到群體，裝置開始產生不同反應。";
-
-  }
-
-
-  document
-  .getElementById(
-    "modeText"
-  )
-  .textContent =
-    modeText;
-
-
-  document
-  .getElementById(
-    "phaseName"
-  )
-  .textContent =
-    modeText;
-
-
-  document
-  .getElementById(
-    "phaseDescription"
-  )
-  .textContent =
-    description;
-
+  document.getElementById("modeText").textContent = modeText;
+  document.getElementById("phaseName").textContent = modeText;
+  document.getElementById("phaseDescription").textContent = description;
 }
-
 
 /* =========================================================
    SLIDERS
 ========================================================= */
 
-document
-.getElementById(
-  "sensitivitySlider"
-)
-.addEventListener(
-  "input",
-  e => {
+document.getElementById("sensitivitySlider").addEventListener("input", e => {
+  viewer.sensitivity = Number(e.target.value);
+  document.getElementById("sensitivityValue").textContent = e.target.value;
+});
 
-    viewer.sensitivity =
-      Number(
-        e.target.value
-      );
+document.getElementById("followAngleSlider").addEventListener("input", e => {
+  followMaxAngle = Number(e.target.value);
+  document.getElementById("followAngleValue").textContent = e.target.value;
+});
 
+document.getElementById("chaosAngleSlider").addEventListener("input", e => {
+  chaosMaxAngle = Number(e.target.value);
+  document.getElementById("chaosAngleValue").textContent = e.target.value;
+});
 
-    document
-    .getElementById(
-      "sensitivityValue"
-    )
-    .textContent =
-      e.target.value;
+document.getElementById("voiceThresholdSlider").addEventListener("input", e => {
+  voiceThreshold = Number(e.target.value) / 100;
+  document.getElementById("voiceThresholdValue").textContent = e.target.value;
+});
 
-  }
-);
+document.getElementById("transmissionRateSlider").addEventListener("input", e => {
+  transmissionRate = Number(e.target.value) / 100;
+  document.getElementById("transmissionRateValue").textContent = e.target.value;
+});
 
+document.getElementById("chaosSpeedSlider").addEventListener("input", e => {
+  chaosGrowthSpeed = Number(e.target.value) / 100;
+  document.getElementById("chaosSpeedValue").textContent = e.target.value;
+});
 
-document
-.getElementById(
-  "followAngleSlider"
-)
-.addEventListener(
-  "input",
-  e => {
-
-    followMaxAngle =
-      Number(
-        e.target.value
-      );
-
-
-    document
-    .getElementById(
-      "followAngleValue"
-    )
-    .textContent =
-      e.target.value;
-
-  }
-);
-
-
-document
-.getElementById(
-  "chaosAngleSlider"
-)
-.addEventListener(
-  "input",
-  e => {
-
-    chaosMaxAngle =
-      Number(
-        e.target.value
-      );
-
-
-    document
-    .getElementById(
-      "chaosAngleValue"
-    )
-    .textContent =
-      e.target.value;
-
-  }
-);
-
-
-document
-.getElementById(
-  "voiceThresholdSlider"
-)
-.addEventListener(
-  "input",
-  e => {
-
-    voiceThreshold =
-      Number(
-        e.target.value
-      )
-      /
-      100;
-
-
-    document
-    .getElementById(
-      "voiceThresholdValue"
-    )
-    .textContent =
-      e.target.value;
-
-  }
-);
-
-
-document
-.getElementById(
-  "transferTimeSlider"
-)
-.addEventListener(
-  "input",
-  e => {
-
-    transferApproachTime =
-      Number(
-        e.target.value
-      );
-
-
-    document
-    .getElementById(
-      "transferTimeValue"
-    )
-    .textContent =
-      e.target.value;
-
-  }
-);
-
-
-document
-.getElementById(
-  "chaosSpeedSlider"
-)
-.addEventListener(
-  "input",
-  e => {
-
-    chaosGrowthSpeed =
-      Number(
-        e.target.value
-      )
-      /
-      100;
-
-
-    document
-    .getElementById(
-      "chaosSpeedValue"
-    )
-    .textContent =
-      e.target.value;
-
-  }
-);
-
-
-document
-.getElementById(
-  "resetBtn"
-)
-.addEventListener(
-  "click",
-  resetSystem
-);
-
+document.getElementById("resetBtn").addEventListener("click", resetSystem);
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function random(
-  min,
-  max
-){
-
-  if(
-    max === undefined
-  ){
-
-    max =
-      min;
-
-    min =
-      0;
-
+function random(min, max){
+  if(max === undefined){
+    max = min;
+    min = 0;
   }
-
-
-  return(
-    Math.random() *
-    (
-      max -
-      min
-    )
-    +
-    min
-  );
-
+  return Math.random() * (max - min) + min;
 }
 
-
-function lerp(
-  a,
-  b,
-  t
-){
-
-  return(
-    a +
-    (
-      b -
-      a
-    )
-    *
-    t
-  );
-
+function lerp(a, b, t){
+  return a + (b - a) * t;
 }
 
-
-function constrain(
-  value,
-  min,
-  max
-){
-
-  return Math.max(
-    min,
-    Math.min(
-      max,
-      value
-    )
-  );
-
+function constrain(value, min, max){
+  return Math.max(min, Math.min(max, value));
 }
 
-
-function mapValue(
-  value,
-  inMin,
-  inMax,
-  outMin,
-  outMax
-){
-
-  return(
-    (
-      value -
-      inMin
-    )
-    /
-    (
-      inMax -
-      inMin
-    )
-    *
-    (
-      outMax -
-      outMin
-    )
-    +
-    outMin
+function mapValue(value, inMin, inMax, outMin, outMax){
+  return (
+    (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin
   );
-
 }
-
 
 function fract(value){
-
-  return(
-    value -
-    Math.floor(
-      value
-    )
-  );
-
+  return value - Math.floor(value);
 }
 
-
-function pseudoLiquidNoise(
-  x,
-  y,
-  deviceIndex,
-  frame
-){
-
+function pseudoLiquidNoise(x, y, deviceIndex, frame){
   const value =
-
     Math.sin(
+      x * 12.9898 +
+      y * 78.233 +
+      deviceIndex * 37.719 +
+      frame * .137
+    ) * 43758.5453;
 
-      x *
-      12.9898
-
-      +
-
-      y *
-      78.233
-
-      +
-
-      deviceIndex *
-      37.719
-
-      +
-
-      frame *
-      .137
-
-    )
-
-    *
-    43758.5453;
-
-
-  return(
-    value -
-    Math.floor(
-      value
-    )
-  );
-
+  return value - Math.floor(value);
 }
 
+function weightedPick(items){
+  let total = 0;
+  for(const item of items){
+    total += item.weight;
+  }
+
+  if(total <= 0){
+    return items[0].index;
+  }
+
+  let r = Math.random() * total;
+
+  for(const item of items){
+    r -= item.weight;
+    if(r <= 0){
+      return item.index;
+    }
+  }
+
+  return items[items.length - 1].index;
+}
 
 /* =========================================================
    LOOP
 ========================================================= */
 
-let previousTime =
-  performance.now();
-
-
-let lastCameraAnalysis =
-  0;
-
+let previousTime = performance.now();
+let lastCameraAnalysis = 0;
 
 function animate(now){
-
-  const dt =
-    Math.min(
-      50,
-      now -
-      previousTime
-    );
-
-
-  previousTime =
-    now;
-
-
-  /* =====================================
-     MANUAL VOICE
-  ===================================== */
+  const dt = Math.min(50, now - previousTime);
+  previousTime = now;
 
   if(
-    manualTransferAt >
-    0
-
-    &&
-
-    now >=
-    manualTransferAt
-
-    &&
-
-    mode ===
-    "FOLLOW"
+    manualActivationAt > 0 &&
+    now >= manualActivationAt &&
+    mode !== "ACTIVE"
   ){
-
-    manualTransferAt =
-      0;
-
-
-    startInformationTransmission(
-      now
-    );
-
+    manualActivationAt = 0;
+    activateChaosTransmission(now);
   }
 
-
-  /* CAMERA */
-
-  if(
-    now -
-    lastCameraAnalysis >
-    100
-  ){
-
+  if(now - lastCameraAnalysis > 100){
     analyzeCamera();
-
-
-    lastCameraAnalysis =
-      now;
-
+    lastCameraAnalysis = now;
   }
 
+  updateAudio(dt, now);
 
-  /* AUDIO */
+  if(mode === "ACTIVE"){
+    updateTransmissionNetwork(now, dt);
+  }
 
-  updateAudio(
-    dt,
-    now
-  );
+  devices.forEach(device => {
+    device.update(now, dt);
+    device.updateFluidPhysics(dt);
+  });
 
-
-  /* TRANSFER */
-
-  updateTransfer(
-    now
-  );
-
-
-  /* CHAOS */
-
-  updateChaos(
-    dt
-  );
-
-
-  /* DEVICE + LIQUID */
-
-  devices.forEach(
-    device => {
-
-      device.update(
-        now,
-        dt
-      );
-
-
-      device.updateFluidPhysics(
-        dt
-      );
-
-    }
-  );
-
-
-  /* DRAW */
-
-  ctx.clearRect(
-    0,
-    0,
-    W,
-    H
-  );
-
+  ctx.clearRect(0, 0, W, H);
 
   drawTable();
 
+  devices.forEach(device => {
+    drawDevice(device, now);
+  });
 
-  devices.forEach(
-    device => {
+  drawAllTransferContacts(now);
 
-      drawDevice(
-        device,
-        now
-      );
+  updateUI(now);
 
-    }
-  );
-
-
-  drawTransferContact(
-    now
-  );
-
-
-  updateUI(
-    now
-  );
-
-
-  requestAnimationFrame(
-    animate
-  );
-
+  requestAnimationFrame(animate);
 }
 
-
-requestAnimationFrame(
-  animate
-);
-
+requestAnimationFrame(animate);
 </script>
 
 </body>
