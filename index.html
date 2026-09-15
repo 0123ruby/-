@@ -7,11 +7,13 @@
 <title>誤會機器｜順從 → 傳遞 → 混亂</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   width:100%;
   height:100%;
 }
@@ -19,16 +21,25 @@ html,body{
 body{
   margin:0;
   overflow:hidden;
+
   background:#ece9e2;
   color:#303532;
-  font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
+
+  font-family:
+  "Microsoft JhengHei",
+  "Noto Sans TC",
+  sans-serif;
 }
 
 #app{
   width:100%;
   height:100vh;
+
   display:grid;
-  grid-template-columns:minmax(0,1fr) 360px;
+
+  grid-template-columns:
+  minmax(0,1fr)
+  360px;
 }
 
 #stageWrap{
@@ -36,48 +47,59 @@ body{
   overflow:hidden;
 
   background:
-    radial-gradient(
-      circle at 50% 42%,
-      #faf9f5 0%,
-      #eeebe4 58%,
-      #ded9cf 100%
-    );
+  radial-gradient(
+    circle at 50% 42%,
+    #faf9f5 0%,
+    #eeebe4 58%,
+    #ded9cf 100%
+  );
 }
 
 #stage{
   display:block;
+
   width:100%;
   height:100%;
+
   cursor:pointer;
 }
 
 #title{
   position:absolute;
+
   left:28px;
   top:24px;
+
   pointer-events:none;
 }
 
 #title h1{
   margin:0;
+
   font-size:28px;
 }
 
 #title p{
   margin:7px 0 0;
+
   font-size:13px;
+
   color:#6c736f;
 }
 
 #phaseBox{
   position:absolute;
+
   left:28px;
   bottom:25px;
 
   padding:11px 15px;
 
-  background:rgba(255,255,255,.90);
-  border:1px solid rgba(0,0,0,.05);
+  background:rgba(255,255,255,.9);
+
+  border:
+  1px solid rgba(0,0,0,.05);
+
   border-radius:10px;
 
   font-size:13px;
@@ -92,10 +114,13 @@ body{
 
 #panel{
   padding:20px;
+
   overflow-y:auto;
 
   background:#faf9f6;
-  border-left:1px solid #ddd8ce;
+
+  border-left:
+  1px solid #ddd8ce;
 }
 
 .section{
@@ -104,39 +129,47 @@ body{
 
 .sectionTitle{
   margin-bottom:10px;
+
   font-size:13px;
   font-weight:700;
 }
 
 video{
   display:block;
+
   width:100%;
+
   min-height:145px;
 
   object-fit:cover;
+
   background:#111;
 
   border-radius:8px;
 
-  transform:scaleX(-1);
+  transform:
+  scaleX(-1);
 }
 
 button{
   width:100%;
 
   margin:0 0 8px;
+
   padding:11px;
 
   border:0;
+
   border-radius:9px;
 
   font-weight:700;
+
   cursor:pointer;
 }
 
 button.dark{
   background:#222;
-  color:white;
+  color:#fff;
 }
 
 button.light{
@@ -151,14 +184,17 @@ button.gray{
 
 button.test{
   background:#4b514e;
-  color:white;
+  color:#fff;
 }
 
 .status{
   padding:11px;
 
   background:#fff;
-  border:1px solid #dedad1;
+
+  border:
+  1px solid #dedad1;
+
   border-radius:8px;
 
   font-size:12px;
@@ -167,7 +203,9 @@ button.test{
 
 label{
   display:block;
+
   margin:12px 0 5px;
+
   font-size:12px;
 }
 
@@ -177,11 +215,13 @@ input[type="range"]{
 
 .meter{
   height:8px;
+
   margin-top:7px;
 
   overflow:hidden;
 
   background:#e1ddd5;
+
   border-radius:999px;
 }
 
@@ -193,15 +233,19 @@ input[type="range"]{
 
   background:#373d3a;
 
-  transition:width .07s linear;
+  transition:
+  width .07s linear;
 }
 
 .small{
   margin-top:8px;
+
   color:#777;
+
   font-size:11px;
   line-height:1.6;
 }
+
 </style>
 </head>
 
@@ -209,29 +253,50 @@ input[type="range"]{
 
 <div id="app">
 
+  <!-- 左側模擬畫面 -->
+
   <div id="stageWrap">
 
     <canvas id="stage"></canvas>
 
     <div id="title">
-      <h1>《誤會機器》</h1>
-      <p>順從 → 說話 → 傳遞 → 群體混亂</p>
+
+      <h1>
+        《誤會機器》
+      </h1>
+
+      <p>
+        順從 → 說話 → 資訊傳遞 → 群體偏差
+      </p>
+
     </div>
 
     <div id="phaseBox">
+
       目前狀態：
-      <span id="phaseName">順從</span><br>
+
+      <span id="phaseName">
+        順從
+      </span>
+
+      <br>
+
       <span id="phaseDescription">
         裝置正在跟隨觀者的位置。
       </span>
+
     </div>
 
   </div>
 
 
+  <!-- 右側控制 -->
+
   <aside id="panel">
 
-    <!-- CAMERA -->
+
+    <!-- 攝像頭 -->
+
     <div class="section">
 
       <div class="sectionTitle">
@@ -256,22 +321,33 @@ input[type="range"]{
       <div class="status">
 
         攝像頭：
-        <b id="cameraState">未啟動</b>
+
+        <b id="cameraState">
+          未啟動
+        </b>
 
         <br>
 
         觀者位置：
-        <b id="viewerPosition">—</b>
+
+        <b id="viewerPosition">
+          —
+        </b>
 
         <br>
 
         動作量：
+
         <b>
-          <span id="cameraPercent">0</span>%
+          <span id="cameraPercent">
+            0
+          </span>%
         </b>
 
         <div class="meter">
+
           <div id="cameraMeter"></div>
+
         </div>
 
       </div>
@@ -279,7 +355,8 @@ input[type="range"]{
     </div>
 
 
-    <!-- MICROPHONE -->
+    <!-- 麥克風 -->
+
     <div class="section">
 
       <div class="sectionTitle">
@@ -307,30 +384,41 @@ input[type="range"]{
       <div class="status">
 
         麥克風：
-        <b id="micState">未啟動</b>
+
+        <b id="micState">
+          未啟動
+        </b>
 
         <br>
 
         聲音強度：
+
         <b>
-          <span id="voicePercent">0</span>%
+          <span id="voicePercent">
+            0
+          </span>%
         </b>
 
         <div class="meter">
+
           <div id="voiceMeter"></div>
+
         </div>
 
       </div>
 
       <div class="small">
-        真正使用時，只有在「順從」階段說話才會啟動資訊傳遞。
-        「模擬說話」可以不用麥克風直接測試後半段。
+
+        順從階段中，說話超過門檻後，
+        距離觀者最近的裝置會成為資訊起點。
+
       </div>
 
     </div>
 
 
-    <!-- CHAOS -->
+    <!-- 群體狀態 -->
+
     <div class="section">
 
       <div class="sectionTitle">
@@ -340,29 +428,47 @@ input[type="range"]{
       <div class="status">
 
         階段：
-        <b id="modeText">順從</b>
+
+        <b id="modeText">
+          順從
+        </b>
 
         <br>
 
         資訊起點：
-        <b id="sourceText">—</b>
+
+        <b id="sourceText">
+          —
+        </b>
 
         <br>
 
         混亂程度：
+
         <b>
-          <span id="chaosPercent">0</span>%
+          <span id="chaosPercent">
+            0
+          </span>%
         </b>
 
         <div class="meter">
+
           <div id="chaosMeter"></div>
+
         </div>
 
         <br>
 
         已接收資訊：
+
         <b>
-          <span id="infectedCount">0</span> / 5
+
+          <span id="infectedCount">
+            0
+          </span>
+
+          / 5
+
         </b>
 
       </div>
@@ -370,16 +476,23 @@ input[type="range"]{
     </div>
 
 
-    <!-- SETTINGS -->
+    <!-- 參數 -->
+
     <div class="section">
 
       <div class="sectionTitle">
-        互動設定
+        動作設定
       </div>
 
+
       <label>
+
         攝像頭敏感度：
-        <span id="sensitivityValue">40</span>
+
+        <span id="sensitivityValue">
+          40
+        </span>
+
       </label>
 
       <input
@@ -392,36 +505,51 @@ input[type="range"]{
 
 
       <label>
+
         順從時最大偏角：
-        <span id="followAngleValue">18</span>°
+
+        <span id="followAngleValue">
+          10
+        </span>°
+
       </label>
 
       <input
         id="followAngleSlider"
         type="range"
-        min="5"
-        max="35"
-        value="18"
+        min="3"
+        max="20"
+        value="10"
       >
 
 
       <label>
+
         混亂時最大偏角：
-        <span id="chaosAngleValue">75</span>°
+
+        <span id="chaosAngleValue">
+          28
+        </span>°
+
       </label>
 
       <input
         id="chaosAngleSlider"
         type="range"
-        min="30"
-        max="90"
-        value="75"
+        min="10"
+        max="45"
+        value="28"
       >
 
 
       <label>
+
         說話觸發門檻：
-        <span id="voiceThresholdValue">16</span>%
+
+        <span id="voiceThresholdValue">
+          16
+        </span>%
+
       </label>
 
       <input
@@ -434,23 +562,33 @@ input[type="range"]{
 
 
       <label>
-        兩支靠近時間：
-        <span id="transferTimeValue">1100</span> ms
+
+        靠近速度：
+
+        <span id="transferTimeValue">
+          1200
+        </span> ms
+
       </label>
 
       <input
         id="transferTimeSlider"
         type="range"
         min="500"
-        max="2200"
+        max="2500"
         step="100"
-        value="1100"
+        value="1200"
       >
 
 
       <label>
+
         混亂成長速度：
-        <span id="chaosSpeedValue">45</span>%
+
+        <span id="chaosSpeedValue">
+          40
+        </span>%
+
       </label>
 
       <input
@@ -458,7 +596,7 @@ input[type="range"]{
         type="range"
         min="10"
         max="100"
-        value="45"
+        value="40"
       >
 
     </div>
@@ -474,6 +612,8 @@ input[type="range"]{
 
 </div>
 
+
+<!-- 攝像頭分析畫布 -->
 
 <canvas
   id="cameraAnalysis"
@@ -499,12 +639,16 @@ const video =
   document.getElementById("video");
 
 const analysisCanvas =
-  document.getElementById("cameraAnalysis");
+  document.getElementById(
+    "cameraAnalysis"
+  );
 
 const analysisCtx =
   analysisCanvas.getContext(
     "2d",
-    {willReadFrequently:true}
+    {
+      willReadFrequently:true
+    }
   );
 
 
@@ -519,21 +663,23 @@ let H = 0;
 
 const devices = [];
 
-let mode = "FOLLOW";
 
 /*
+  三個主要狀態：
+
   FOLLOW
   TRANSFER
   CHAOS
 */
 
-let chaos = 0;
+let mode = "FOLLOW";
 
-let chaosStartedAt = 0;
+let chaos = 0;
 
 let sourceIndex = -1;
 
-let visited = new Set();
+let visited =
+  new Set();
 
 let pendingEdges = [];
 
@@ -544,15 +690,15 @@ let currentTransfer = null;
    SETTINGS
 ========================================================= */
 
-let followMaxAngle = 18;
+let followMaxAngle = 10;
 
-let chaosMaxAngle = 75;
+let chaosMaxAngle = 28;
 
 let voiceThreshold = .16;
 
-let transferApproachTime = 1100;
+let transferApproachTime = 1200;
 
-let chaosGrowthSpeed = .45;
+let chaosGrowthSpeed = .40;
 
 
 /* =========================================================
@@ -565,12 +711,19 @@ let cameraReady = false;
 
 let previousCameraFrame = null;
 
+
 const viewer = {
+
   present:false,
+
   x:.5,
+
   movement:0,
+
   absentTime:0,
+
   sensitivity:40
+
 };
 
 
@@ -609,47 +762,96 @@ class Device{
 
     this.targetAngle = 0;
 
+    /*
+      info：
+
+      0 = 沒資訊
+      1 = 已經收到大量資訊
+    */
+
     this.info = 0;
+
+    /*
+      接觸時 LED / 螢幕閃一下。
+    */
 
     this.flash = 0;
 
+
     this.phase =
-      Math.random() *
-      Math.PI *
+
+      Math.random()
+
+      *
+
+      Math.PI
+
+      *
+
       2;
 
+
+    /*
+      每支只有非常小的個體差異。
+    */
+
     this.followWeight =
-      random(.96,1.04);
+
+      random(
+        .97,
+        1.03
+      );
+
+
+    /*
+      混亂期自己的目標。
+    */
 
     this.chaosTarget = 0;
 
+
     this.nextChaosShift = 0;
 
-    this.particleSeeds = [];
+
+    /*
+      流體內部粒子。
+    */
+
+    this.fluidSeeds = [];
+
 
     for(
       let i = 0;
-      i < 52;
+      i < 80;
       i++
     ){
 
-      this.particleSeeds.push({
-
-        u:Math.random(),
+      this.fluidSeeds.push({
 
         phase:
-          Math.random() *
-          Math.PI *
+          Math.random()
+          *
+          Math.PI
+          *
           2,
 
-        size:
-          random(.6,1.8),
-
         speed:
-          random(.7,1.4),
+          random(
+            .65,
+            1.4
+          ),
+
+        size:
+          random(
+            .5,
+            1.7
+          ),
 
         offset:
-          random(-1,1)
+          random(
+            -1,
+            1
+          )
 
       });
 
@@ -658,48 +860,71 @@ class Device{
   }
 
 
+
   update(now,dt){
+
+    /*
+      flash 慢慢衰退。
+    */
 
     this.flash =
 
       Math.max(
+
         0,
-        this.flash -
-        dt / 500
+
+        this.flash
+
+        -
+
+        dt /
+        520
+
       );
 
 
-    /*
-      --------------------------------
-      順從
-      --------------------------------
-    */
+    /* =====================================
+       FOLLOW
+    ===================================== */
 
     if(
       mode === "FOLLOW"
     ){
 
-      const target =
+      const observerAngle =
 
         viewer.present
+
         ?
+
         (
           viewer.x -
           .5
         )
+
         *
         2
+
         *
         followMaxAngle
+
         :
+
         0;
 
 
       this.targetAngle =
 
-        target *
+        observerAngle
+
+        *
         this.followWeight;
 
+
+      /*
+        動作偏慢，
+        不會像直接控制 Servo。
+      */
 
       this.angle =
 
@@ -709,7 +934,7 @@ class Device{
 
           this.targetAngle,
 
-          .065
+          .055
 
         );
 
@@ -717,9 +942,13 @@ class Device{
       this.info =
 
         lerp(
+
           this.info,
+
           0,
-          .04
+
+          .035
+
         );
 
 
@@ -728,28 +957,31 @@ class Device{
     }
 
 
-    /*
-      --------------------------------
-      傳遞
-      --------------------------------
-    */
+
+    /* =====================================
+       TRANSFER
+    ===================================== */
 
     if(
       mode === "TRANSFER"
     ){
 
       /*
-        正在互相靠近的兩支，
-        角度由 transfer 系統接管。
+        正在交換資訊的兩支
+        由 updateTransfer() 控制。
       */
 
       if(
         currentTransfer
+
         &&
+
         (
           this.index ===
           currentTransfer.from
+
           ||
+
           this.index ===
           currentTransfer.to
         )
@@ -761,10 +993,8 @@ class Device{
 
 
       /*
-        其他支仍然保留一些
-        對觀者的順從，
-
-        但開始出現偏差。
+        其他支仍然保留一些順從，
+        但開始產生輕微偏差。
       */
 
       if(
@@ -774,18 +1004,24 @@ class Device{
 
         this.nextChaosShift =
 
-          now +
+          now
+
+          +
+
           random(
-            700,
-            1800
+            900,
+            2100
           );
 
 
         this.chaosTarget =
 
           random(
+
             -chaosMaxAngle,
+
             chaosMaxAngle
+
           );
 
       }
@@ -794,36 +1030,56 @@ class Device{
       const followAngle =
 
         viewer.present
+
         ?
+
         (
           viewer.x -
           .5
         )
+
         *
         2
+
         *
         followMaxAngle
+
         :
+
         0;
 
 
+      /*
+        Chaos 越高，
+        越不服從人。
+      */
+
       const obedience =
 
-        1 -
+        1
+
+        -
+
         chaos *
-        .75;
+        .55;
 
 
       this.targetAngle =
 
-        followAngle *
+        followAngle
+
+        *
         obedience
 
         +
 
-        this.chaosTarget *
-        chaos *
-        .42;
+        this.chaosTarget
+
+        *
+        chaos
+
+        *
+        .22;
 
 
       this.targetAngle =
@@ -833,6 +1089,7 @@ class Device{
           this.targetAngle,
 
           -chaosMaxAngle,
+
           chaosMaxAngle
 
         );
@@ -846,8 +1103,10 @@ class Device{
 
           this.targetAngle,
 
-          .04 +
-          chaos * .025
+          .035
+          +
+          chaos *
+          .018
 
         );
 
@@ -857,15 +1116,19 @@ class Device{
     }
 
 
-    /*
-      --------------------------------
-      混亂
-      --------------------------------
-    */
+
+    /* =====================================
+       CHAOS
+    ===================================== */
 
     if(
       mode === "CHAOS"
     ){
+
+      /*
+        每隔一段時間，
+        每支產生新的個體偏差。
+      */
 
       if(
         now >
@@ -874,22 +1137,32 @@ class Device{
 
         this.nextChaosShift =
 
-          now +
+          now
+
+          +
+
           random(
-            500,
-            1700
+            900,
+            2400
           );
 
 
         this.chaosTarget =
 
           random(
+
             -chaosMaxAngle,
+
             chaosMaxAngle
+
           );
 
       }
 
+
+      /*
+        鄰居平均。
+      */
 
       let neighborAverage = 0;
 
@@ -901,9 +1174,11 @@ class Device{
       ){
 
         neighborAverage +=
+
           devices[
             this.index - 1
           ].angle;
+
 
         neighborCount++;
 
@@ -916,9 +1191,11 @@ class Device{
       ){
 
         neighborAverage +=
+
           devices[
             this.index + 1
           ].angle;
+
 
         neighborCount++;
 
@@ -930,60 +1207,87 @@ class Device{
       ){
 
         neighborAverage /=
+
           neighborCount;
 
       }
 
 
+      /*
+        觀者仍然存在，
+        但控制力越來越弱。
+      */
+
       const followAngle =
 
         viewer.present
+
         ?
+
         (
           viewer.x -
           .5
         )
+
         *
         2
+
         *
         followMaxAngle
+
         :
+
         0;
 
 
       const obedience =
 
         Math.max(
-          .06,
-          1 - chaos
+
+          .15,
+
+          1 -
+          chaos
+
         );
 
 
       /*
-        混亂並非純亂數。
+        不是純亂數。
 
-        還包含：
-        - 一點觀者影響
-        - 鄰居影響
-        - 個體自己的偏差
+        由三件事共同決定：
+
+        1. 觀者
+        2. 自己
+        3. 鄰居
       */
 
       this.targetAngle =
 
-        followAngle *
+        followAngle
+
+        *
         obedience
 
         +
 
-        this.chaosTarget *
-        chaos *
-        .83
+        this.chaosTarget
+
+        *
+        chaos
+
+        *
+        .38
 
         +
 
-        neighborAverage *
-        chaos *
-        .15;
+        neighborAverage
+
+        *
+        chaos
+
+        *
+        .10;
 
 
       this.targetAngle =
@@ -993,10 +1297,16 @@ class Device{
           this.targetAngle,
 
           -chaosMaxAngle,
+
           chaosMaxAngle
 
         );
 
+
+      /*
+        平滑移動，
+        不抽搐。
+      */
 
       this.angle =
 
@@ -1006,8 +1316,10 @@ class Device{
 
           this.targetAngle,
 
-          .025 +
-          chaos * .035
+          .024
+          +
+          chaos *
+          .018
 
         );
 
@@ -1019,30 +1331,35 @@ class Device{
 
 
 /* =========================================================
-   INIT
+   RESET
 ========================================================= */
 
 function resetSystem(){
 
-  mode = "FOLLOW";
+  mode =
+    "FOLLOW";
 
-  chaos = 0;
+  chaos =
+    0;
 
-  chaosStartedAt = 0;
-
-  sourceIndex = -1;
+  sourceIndex =
+    -1;
 
   visited =
     new Set();
 
-  pendingEdges = [];
+  pendingEdges =
+    [];
 
-  currentTransfer = null;
+  currentTransfer =
+    null;
 
-  voiceHold = 0;
+  voiceHold =
+    0;
 
 
-  devices.length = 0;
+  devices.length =
+    0;
 
 
   for(
@@ -1052,7 +1369,9 @@ function resetSystem(){
   ){
 
     devices.push(
+
       new Device(i)
+
     );
 
   }
@@ -1064,7 +1383,7 @@ resetSystem();
 
 
 /* =========================================================
-   SIZE
+   CANVAS SIZE
 ========================================================= */
 
 function resizeCanvas(){
@@ -1086,21 +1405,26 @@ function resizeCanvas(){
   canvas.width =
 
     Math.round(
+
       W *
       devicePixelRatio
+
     );
 
 
   canvas.height =
 
     Math.round(
+
       H *
       devicePixelRatio
+
     );
 
 
   canvas.style.width =
     W + "px";
+
 
   canvas.style.height =
     H + "px";
@@ -1124,13 +1448,16 @@ resizeCanvas();
 
 
 window.addEventListener(
+
   "resize",
+
   resizeCanvas
+
 );
 
 
 /* =========================================================
-   DEVICE LAYOUT
+   LAYOUT
 ========================================================= */
 
 function getBaseY(){
@@ -1143,8 +1470,11 @@ function getBaseY(){
 function getBodyHeight(){
 
   return Math.min(
+
     245,
+
     H * .34
+
   );
 
 }
@@ -1153,8 +1483,11 @@ function getBodyHeight(){
 function getBodyWidth(){
 
   return Math.min(
+
     65,
+
     W * .055
+
   );
 
 }
@@ -1178,7 +1511,7 @@ function getDeviceX(index){
 
 
 /* =========================================================
-   CAMERA
+   CAMERA START
 ========================================================= */
 
 async function startCamera(){
@@ -1192,9 +1525,18 @@ async function startCamera(){
       .getUserMedia({
 
         video:{
-          width:{ideal:640},
-          height:{ideal:480},
-          facingMode:"user"
+
+          width:{
+            ideal:640
+          },
+
+          height:{
+            ideal:480
+          },
+
+          facingMode:
+            "user"
+
         },
 
         audio:false
@@ -1209,9 +1551,12 @@ async function startCamera(){
     await video.play();
 
 
-    cameraReady = true;
+    cameraReady =
+      true;
 
-    previousCameraFrame = null;
+
+    previousCameraFrame =
+      null;
 
 
     document
@@ -1230,11 +1575,16 @@ async function startCamera(){
       "攝像頭已開啟";
 
   }
+
   catch(error){
 
-    cameraReady = false;
+    cameraReady =
+      false;
 
-    console.error(error);
+
+    console.error(
+      error
+    );
 
 
     document
@@ -1267,8 +1617,11 @@ function analyzeCamera(){
 
   if(
     !cameraReady
+
     ||
-    video.readyState < 2
+
+    video.readyState <
+    2
   ){
 
     return;
@@ -1322,6 +1675,7 @@ function analyzeCamera(){
   const width =
     analysisCanvas.width;
 
+
   const height =
     analysisCanvas.height;
 
@@ -1363,9 +1717,11 @@ function analyzeCamera(){
       const i =
 
         (
-          y * width +
+          y * width
+          +
           x
         )
+
         *
         4;
 
@@ -1373,22 +1729,37 @@ function analyzeCamera(){
       const diff =
 
         Math.abs(
-          frame[i] -
+
+          frame[i]
+
+          -
+
           previousCameraFrame[i]
+
         )
 
         +
 
         Math.abs(
-          frame[i+1] -
+
+          frame[i+1]
+
+          -
+
           previousCameraFrame[i+1]
+
         )
 
         +
 
         Math.abs(
-          frame[i+2] -
+
+          frame[i+2]
+
+          -
+
           previousCameraFrame[i+2]
+
         );
 
 
@@ -1402,7 +1773,8 @@ function analyzeCamera(){
 
         changed++;
 
-        xTotal += x;
+        xTotal +=
+          x;
 
       }
 
@@ -1423,6 +1795,7 @@ function analyzeCamera(){
     changed
 
     /
+
     Math.max(
       1,
       checked
@@ -1436,9 +1809,12 @@ function analyzeCamera(){
       viewer.movement,
 
       constrain(
+
         ratio * 3,
+
         0,
         1
+
       ),
 
       .3
@@ -1446,24 +1822,34 @@ function analyzeCamera(){
     );
 
 
+  /*
+    主要移動位置。
+  */
+
   if(
     changed > 0
   ){
 
     let averageX =
 
-      xTotal /
+      xTotal
+
+      /
+
       changed;
 
 
     /*
-      Video 為鏡像顯示，
-      所以反轉一次。
+      Video 是鏡像顯示，
+      所以反轉。
     */
 
     averageX =
 
-      width -
+      width
+
+      -
+
       averageX;
 
 
@@ -1474,10 +1860,13 @@ function analyzeCamera(){
         viewer.x,
 
         constrain(
+
           averageX /
           width,
+
           0,
           1
+
         ),
 
         .32
@@ -1487,28 +1876,40 @@ function analyzeCamera(){
   }
 
 
+  /*
+    判斷觀者存在。
+  */
+
   if(
     ratio >
     .005
   ){
 
-    viewer.present = true;
+    viewer.present =
+      true;
 
-    viewer.absentTime = 0;
+    viewer.absentTime =
+      0;
 
   }
+
   else{
 
     viewer.absentTime +=
       100;
 
 
+    /*
+      停下來不會立即消失。
+    */
+
     if(
       viewer.absentTime >
-      6000
+      6500
     ){
 
-      viewer.present = false;
+      viewer.present =
+        false;
 
     }
 
@@ -1518,15 +1919,19 @@ function analyzeCamera(){
 
 
 /* =========================================================
-   MICROPHONE
+   MICROPHONE START
 ========================================================= */
 
 async function startMicrophone(){
 
   try{
 
-    if(micReady){
+    if(
+      micReady
+    ){
+
       return;
+
     }
 
 
@@ -1537,9 +1942,13 @@ async function startMicrophone(){
       .getUserMedia({
 
         audio:{
+
           echoCancellation:true,
+
           noiseSuppression:false,
+
           autoGainControl:false
+
         },
 
         video:false
@@ -1550,11 +1959,14 @@ async function startMicrophone(){
     const AudioCtx =
 
       window.AudioContext
+
       ||
+
       window.webkitAudioContext;
 
 
     audioContext =
+
       new AudioCtx();
 
 
@@ -1569,6 +1981,7 @@ async function startMicrophone(){
 
 
     analyser =
+
       audioContext
       .createAnalyser();
 
@@ -1601,7 +2014,8 @@ async function startMicrophone(){
     );
 
 
-    micReady = true;
+    micReady =
+      true;
 
 
     document
@@ -1620,11 +2034,16 @@ async function startMicrophone(){
       "麥克風已開啟";
 
   }
+
   catch(error){
 
-    micReady = false;
+    micReady =
+      false;
 
-    console.error(error);
+
+    console.error(
+      error
+    );
 
 
     document
@@ -1640,59 +2059,81 @@ async function startMicrophone(){
 
 
 /* =========================================================
-   STOP MIC
+   STOP MICROPHONE
 ========================================================= */
 
 async function stopMicrophone(){
 
-  if(micStream){
+  if(
+    micStream
+  ){
 
     micStream
     .getTracks()
     .forEach(
+
       track =>
         track.stop()
+
     );
 
   }
 
 
-  micStream = null;
+  micStream =
+    null;
 
 
-  if(micSource){
+  if(
+    micSource
+  ){
 
     try{
+
       micSource.disconnect();
+
     }
-    catch(e){}
+
+    catch(error){}
 
   }
 
 
-  if(audioContext){
+  if(
+    audioContext
+  ){
 
     try{
+
       await audioContext.close();
+
     }
-    catch(e){}
+
+    catch(error){}
 
   }
 
 
-  micSource = null;
+  micSource =
+    null;
 
-  audioContext = null;
+  audioContext =
+    null;
 
-  analyser = null;
+  analyser =
+    null;
 
-  micBuffer = null;
+  micBuffer =
+    null;
 
-  micReady = false;
+  micReady =
+    false;
 
-  voiceLevel = 0;
+  voiceLevel =
+    0;
 
-  voiceHold = 0;
+  voiceHold =
+    0;
 
 
   document
@@ -1734,28 +2175,39 @@ document
 
 
 /* =========================================================
-   READ AUDIO LEVEL
+   AUDIO LEVEL
 ========================================================= */
 
 function updateAudio(dt,now){
 
   if(
     !micReady
+
     ||
+
     !analyser
+
     ||
+
     !micBuffer
   ){
 
     voiceLevel =
 
       lerp(
+
         voiceLevel,
+
         0,
+
         .06
+
       );
 
-    voiceHold = 0;
+
+    voiceHold =
+      0;
+
 
     return;
 
@@ -1770,6 +2222,8 @@ function updateAudio(dt,now){
 
   let sum = 0;
 
+  let count = 0;
+
 
   for(
     let i = 0;
@@ -1780,34 +2234,43 @@ function updateAudio(dt,now){
     const value =
 
       (
-        micBuffer[i] -
+        micBuffer[i]
+
+        -
+
         128
       )
+
       /
       128;
 
 
     sum +=
 
-      value *
+      value
+
+      *
       value;
 
+
+    count++;
+
   }
-
-
-  const count =
-
-    Math.ceil(
-      micBuffer.length /
-      4
-    );
 
 
   const rms =
 
     Math.sqrt(
-      sum /
-      count
+
+      sum
+
+      /
+
+      Math.max(
+        1,
+        count
+      )
+
     );
 
 
@@ -1832,19 +2295,24 @@ function updateAudio(dt,now){
   voiceLevel =
 
     lerp(
+
       voiceLevel,
+
       level,
+
       .32
+
     );
 
 
   /*
-    只有順從狀態才可以
-    由說話啟動資訊傳遞。
+    只有順從期說話
+    才會啟動後續系統。
   */
 
   if(
-    mode === "FOLLOW"
+    mode ===
+    "FOLLOW"
   ){
 
     if(
@@ -1852,17 +2320,25 @@ function updateAudio(dt,now){
       voiceThreshold
     ){
 
-      voiceHold += dt;
+      voiceHold +=
+        dt;
 
     }
+
     else{
 
       voiceHold =
 
         Math.max(
+
           0,
-          voiceHold -
+
+          voiceHold
+
+          -
+
           dt * 1.8
+
         );
 
     }
@@ -1870,14 +2346,16 @@ function updateAudio(dt,now){
 
     if(
       voiceHold >
-      260
+      280
     ){
 
       startInformationTransmission(
         now
       );
 
-      voiceHold = 0;
+
+      voiceHold =
+        0;
 
     }
 
@@ -1887,7 +2365,7 @@ function updateAudio(dt,now){
 
 
 /* =========================================================
-   MANUAL TEST
+   TEST BUTTON
 ========================================================= */
 
 document
@@ -1899,7 +2377,8 @@ document
   () => {
 
     if(
-      mode === "FOLLOW"
+      mode ===
+      "FOLLOW"
     ){
 
       startInformationTransmission(
@@ -1918,13 +2397,18 @@ document
 
 function startInformationTransmission(now){
 
-  mode = "TRANSFER";
+  mode =
+    "TRANSFER";
 
-  chaos = .08;
+
+  chaos =
+    .06;
+
 
   /*
-    說話時離觀者最近的
-    那一支是資訊起點。
+    說話時，
+    離觀者最近的裝置
+    變成資訊起點。
   */
 
   if(
@@ -1940,21 +2424,27 @@ function startInformationTransmission(now){
           viewer.x
 
           *
+
           (
-            DEVICE_COUNT - 1
+            DEVICE_COUNT -
+            1
           )
 
         ),
 
         0,
-        DEVICE_COUNT - 1
+
+        DEVICE_COUNT -
+        1
 
       );
 
   }
+
   else{
 
-    sourceIndex = 2;
+    sourceIndex =
+      2;
 
   }
 
@@ -1968,26 +2458,33 @@ function startInformationTransmission(now){
 
   devices[
     sourceIndex
-  ].info = 1;
+  ].info =
+    1;
 
 
   devices[
     sourceIndex
-  ].flash = 1;
+  ].flash =
+    1;
 
 
   buildPendingEdges();
 
 
-  startNextTransfer(
-    now + 350
+  currentTransfer =
+    null;
+
+
+  scheduleNextTransfer(
+    now,
+    450
   );
 
 }
 
 
 /* =========================================================
-   BUILD TRANSFER PATHS
+   TRANSFER PATH
 ========================================================= */
 
 function buildPendingEdges(){
@@ -1996,7 +2493,7 @@ function buildPendingEdges(){
 
 
   /*
-    往左傳。
+    往左。
   */
 
   for(
@@ -2017,7 +2514,7 @@ function buildPendingEdges(){
 
 
   /*
-    往右傳。
+    往右。
   */
 
   for(
@@ -2041,27 +2538,32 @@ function buildPendingEdges(){
 
 
 /* =========================================================
-   NEXT EDGE
+   ELIGIBLE EDGE
 ========================================================= */
 
 function chooseEligibleEdge(){
 
-  const candidates =
+  const possible =
 
     pendingEdges.filter(
+
       edge =>
+
         visited.has(
           edge.from
         )
+
         &&
+
         !visited.has(
           edge.to
         )
+
     );
 
 
   if(
-    candidates.length === 0
+    possible.length === 0
   ){
 
     return null;
@@ -2069,47 +2571,81 @@ function chooseEligibleEdge(){
   }
 
 
-  return candidates[
+  return possible[
+
     Math.floor(
-      Math.random() *
-      candidates.length
+
+      Math.random()
+
+      *
+
+      possible.length
+
     )
+
   ];
 
 }
 
 
 /* =========================================================
-   START TRANSFER
+   SCHEDULE NEXT
 ========================================================= */
 
-function startNextTransfer(now){
+function scheduleNextTransfer(
+  now,
+  wait
+){
+
+  currentTransfer = {
+
+    stage:"WAIT_NEXT",
+
+    stageStart:now,
+
+    waitDuration:wait
+
+  };
+
+}
+
+
+/* =========================================================
+   BEGIN NEXT EDGE
+========================================================= */
+
+function beginNextEdge(now){
 
   const edge =
     chooseEligibleEdge();
 
 
-  if(!edge){
+  if(
+    !edge
+  ){
 
     if(
       visited.size >=
       DEVICE_COUNT
     ){
 
-      mode = "CHAOS";
+      mode =
+        "CHAOS";
+
 
       chaos =
 
         Math.max(
           chaos,
-          .68
+          .55
         );
 
 
-      chaosStartedAt =
-        now;
+      currentTransfer =
+        null;
 
     }
+
 
     return;
 
@@ -2122,11 +2658,15 @@ function startNextTransfer(now){
 
     to:edge.to,
 
-    stage:"WAIT",
+    stage:"APPROACH",
 
     stageStart:now,
 
-    approachAngle:0
+    approachAngle:
+      getMeetingAngle(
+        edge.from,
+        edge.to
+      )
 
   };
 
@@ -2140,9 +2680,8 @@ function startNextTransfer(now){
 function updateTransfer(now){
 
   if(
-    mode !== "TRANSFER"
-    ||
-    !currentTransfer
+    mode !==
+    "TRANSFER"
   ){
 
     return;
@@ -2150,14 +2689,55 @@ function updateTransfer(now){
   }
 
 
-  const from =
+  if(
+    !currentTransfer
+  ){
+
+    beginNextEdge(
+      now
+    );
+
+    return;
+
+  }
+
+
+  /*
+    等待下一次傳遞。
+  */
+
+  if(
+    currentTransfer.stage ===
+    "WAIT_NEXT"
+  ){
+
+    if(
+      now -
+      currentTransfer.stageStart
+      >=
+      currentTransfer.waitDuration
+    ){
+
+      beginNextEdge(
+        now
+      );
+
+    }
+
+
+    return;
+
+  }
+
+
+  const fromDevice =
 
     devices[
       currentTransfer.from
     ];
 
 
-  const to =
+  const toDevice =
 
     devices[
       currentTransfer.to
@@ -2166,44 +2746,33 @@ function updateTransfer(now){
 
   const elapsed =
 
-    now -
+    now
+
+    -
+
     currentTransfer.stageStart;
 
 
-  /*
-    ----------------------------
-    WAIT
-    ----------------------------
-  */
+  const direction =
 
-  if(
-    currentTransfer.stage ===
-    "WAIT"
-  ){
+    currentTransfer.from
 
-    if(
-      elapsed >
-      350
-    ){
+    <
 
-      currentTransfer.stage =
-        "APPROACH";
+    currentTransfer.to
 
-      currentTransfer.stageStart =
-        now;
+    ?
 
-    }
+    1
 
-    return;
+    :
 
-  }
+    -1;
 
 
-  /*
-    ----------------------------
-    APPROACH
-    ----------------------------
-  */
+  /* =====================================
+     APPROACH
+  ===================================== */
 
   if(
     currentTransfer.stage ===
@@ -2212,99 +2781,103 @@ function updateTransfer(now){
 
     const angle =
 
-      getMeetingAngle(
-
-        currentTransfer.from,
-
-        currentTransfer.to
-
-      );
+      currentTransfer
+      .approachAngle;
 
 
-    currentTransfer.approachAngle =
-      angle;
+    fromDevice.targetAngle =
 
+      angle
 
-    const direction =
-
-      currentTransfer.from <
-      currentTransfer.to
-
-      ?
-      1
-
-      :
-      -1;
-
-
-    from.targetAngle =
-
-      angle *
+      *
       direction;
 
 
-    to.targetAngle =
+    toDevice.targetAngle =
 
-      angle *
+      angle
+
+      *
       -direction;
 
 
-    from.angle =
+    fromDevice.angle =
 
       lerp(
-        from.angle,
-        from.targetAngle,
-        .07
+
+        fromDevice.angle,
+
+        fromDevice.targetAngle,
+
+        .045
+
       );
 
 
-    to.angle =
+    toDevice.angle =
 
       lerp(
-        to.angle,
-        to.targetAngle,
-        .07
+
+        toDevice.angle,
+
+        toDevice.targetAngle,
+
+        .045
+
       );
 
 
     if(
-      elapsed >
+      elapsed >=
       transferApproachTime
     ){
 
       currentTransfer.stage =
         "CONTACT";
 
+
       currentTransfer.stageStart =
         now;
 
 
       /*
-        資訊真正被傳過去。
+        資訊真的被傳入。
       */
 
-      to.info =
+      toDevice.info =
 
-        Math.max(
+        constrain(
 
-          to.info,
+          Math.max(
 
-          from.info *
-          .82
+            toDevice.info,
 
-          +
-          .16
+            fromDevice.info *
+            .82
+
+            +
+            .12
+
+          ),
+
+          0,
+          1
 
         );
 
 
-      from.flash = 1;
+      fromDevice.flash =
+        1;
 
-      to.flash = 1;
+
+      toDevice.flash =
+        1;
 
 
       visited.add(
+
         currentTransfer.to
+
       );
 
 
@@ -2313,7 +2886,7 @@ function updateTransfer(now){
         constrain(
 
           chaos +
-          .14,
+          .11,
 
           0,
           1
@@ -2322,16 +2895,15 @@ function updateTransfer(now){
 
     }
 
+
     return;
 
   }
 
 
-  /*
-    ----------------------------
-    CONTACT
-    ----------------------------
-  */
+  /* =====================================
+     CONTACT
+  ===================================== */
 
   if(
     currentTransfer.stage ===
@@ -2344,59 +2916,57 @@ function updateTransfer(now){
       .approachAngle;
 
 
-    const direction =
-
-      currentTransfer.from <
-      currentTransfer.to
-
-      ?
-      1
-
-      :
-      -1;
-
-
-    from.angle =
+    fromDevice.angle =
 
       lerp(
-        from.angle,
-        angle * direction,
-        .18
+
+        fromDevice.angle,
+
+        angle *
+        direction,
+
+        .10
+
       );
 
 
-    to.angle =
+    toDevice.angle =
 
       lerp(
-        to.angle,
-        angle * -direction,
-        .18
+
+        toDevice.angle,
+
+        angle *
+        -direction,
+
+        .10
+
       );
 
 
     if(
       elapsed >
-      420
+      450
     ){
 
       currentTransfer.stage =
         "SEPARATE";
+
 
       currentTransfer.stageStart =
         now;
 
     }
 
+
     return;
 
   }
 
 
-  /*
-    ----------------------------
-    SEPARATE
-    ----------------------------
-  */
+  /* =====================================
+     SEPARATE
+  ===================================== */
 
   if(
     currentTransfer.stage ===
@@ -2416,6 +2986,7 @@ function updateTransfer(now){
 
       *
       2
+
       *
       followMaxAngle
 
@@ -2424,29 +2995,29 @@ function updateTransfer(now){
       0;
 
 
-    from.targetAngle =
-      followAngle;
-
-
-    to.targetAngle =
-      followAngle;
-
-
-    from.angle =
+    fromDevice.angle =
 
       lerp(
-        from.angle,
+
+        fromDevice.angle,
+
         followAngle,
-        .05
+
+        .035
+
       );
 
 
-    to.angle =
+    toDevice.angle =
 
       lerp(
-        to.angle,
+
+        toDevice.angle,
+
         followAngle,
-        .05
+
+        .035
+
       );
 
 
@@ -2455,15 +3026,12 @@ function updateTransfer(now){
       650
     ){
 
-      /*
-        把已完成的 edge 移除。
-      */
-
       pendingEdges =
 
         pendingEdges.filter(
 
           edge =>
+
             !(
               edge.from ===
               currentTransfer.from
@@ -2477,19 +3045,15 @@ function updateTransfer(now){
         );
 
 
-      currentTransfer = null;
+      scheduleNextTransfer(
 
+        now,
 
-      /*
-        下一段傳遞。
-      */
-
-      startNextTransfer(
-        now +
         random(
-          120,
-          600
+          250,
+          800
         )
+
       );
 
     }
@@ -2500,17 +3064,13 @@ function updateTransfer(now){
 
 
 /* =========================================================
-   MEETING ANGLE
+   SMALL MEETING ANGLE
 ========================================================= */
 
 function getMeetingAngle(
   aIndex,
   bIndex
 ){
-
-  const bodyHeight =
-    getBodyHeight();
-
 
   const distance =
 
@@ -2529,14 +3089,15 @@ function getMeetingAngle(
     );
 
 
-  /*
-    讓兩支上半部靠近。
+  const bodyHeight =
+    getBodyHeight();
 
-    asin(
-      水平距離 / 2
-      ÷
-      棒長
-    )
+
+  /*
+    不真的要求棒頂碰在一起。
+
+    視覺上只做「接近」，
+    避免傾斜太大。
   */
 
   const ratio =
@@ -2546,13 +3107,14 @@ function getMeetingAngle(
       distance
 
       /
+
       (
         bodyHeight *
-        2
+        3
       ),
 
-      .05,
-      .88
+      .03,
+      .28
 
     );
 
@@ -2575,10 +3137,10 @@ function getMeetingAngle(
     Math.PI
 
     *
-    1.08,
+    .85,
 
-    12,
-    38
+    5,
+    14
 
   );
 
@@ -2586,13 +3148,14 @@ function getMeetingAngle(
 
 
 /* =========================================================
-   CHAOS
+   CHAOS LEVEL
 ========================================================= */
 
 function updateChaos(dt){
 
   if(
-    mode === "TRANSFER"
+    mode ===
+    "TRANSFER"
   ){
 
     chaos =
@@ -2602,12 +3165,15 @@ function updateChaos(dt){
         chaos
 
         +
-        dt *
-        .000008 *
+
+        dt
+        *
+        .000006
+        *
         chaosGrowthSpeed,
 
         0,
-        .72
+        .60
 
       );
 
@@ -2615,7 +3181,8 @@ function updateChaos(dt){
 
 
   if(
-    mode === "CHAOS"
+    mode ===
+    "CHAOS"
   ){
 
     chaos =
@@ -2625,8 +3192,11 @@ function updateChaos(dt){
         chaos
 
         +
-        dt *
-        .000025 *
+
+        dt
+        *
+        .000018
+        *
         chaosGrowthSpeed,
 
         0,
@@ -2640,13 +3210,16 @@ function updateChaos(dt){
 
 
 /* =========================================================
-   DRAW TABLE
+   TABLE
 ========================================================= */
 
 function drawTable(){
 
   const y =
-    getBaseY() +
+
+    getBaseY()
+
+    +
     18;
 
 
@@ -2696,6 +3269,7 @@ function drawDevice(
 ){
 
   const x =
+
     getDeviceX(
       device.index
     );
@@ -2724,12 +3298,6 @@ function drawDevice(
     180;
 
 
-  /*
-    ---------------------------------
-    BASE
-    ---------------------------------
-  */
-
   ctx.save();
 
 
@@ -2739,30 +3307,40 @@ function drawDevice(
   );
 
 
+  /* =====================================
+     SHADOW
+  ===================================== */
+
   ctx.fillStyle =
-    "rgba(0,0,0,.11)";
+    "rgba(0,0,0,.09)";
 
 
   ctx.beginPath();
+
 
   ctx.ellipse(
 
     5,
     12,
 
-    bodyWidth *
-    .68,
+    bodyWidth * .68,
 
     7,
 
     0,
     0,
+
     Math.PI * 2
 
   );
 
+
   ctx.fill();
 
+
+  /* =====================================
+     BASE
+  ===================================== */
 
   ctx.fillStyle =
     "#171817";
@@ -2770,13 +3348,14 @@ function drawDevice(
 
   ctx.beginPath();
 
+
   ctx.roundRect(
 
-    -bodyWidth*.62,
+    -bodyWidth * .63,
 
     -5,
 
-    bodyWidth*1.24,
+    bodyWidth * 1.26,
 
     18,
 
@@ -2784,104 +3363,118 @@ function drawDevice(
 
   );
 
+
   ctx.fill();
 
 
-  /*
-    pivot
-  */
+  /* =====================================
+     PIVOT
+  ===================================== */
 
   ctx.fillStyle =
-    "#333735";
+    "#353936";
 
 
   ctx.beginPath();
 
+
   ctx.arc(
+
     0,
     0,
+
     8,
+
     0,
-    Math.PI*2
+    Math.PI * 2
+
   );
+
 
   ctx.fill();
 
 
   ctx.fillStyle =
-    "#111";
+    "#101110";
 
 
   ctx.beginPath();
 
+
   ctx.arc(
+
     0,
     0,
+
     4,
+
     0,
-    Math.PI*2
+    Math.PI * 2
+
   );
+
 
   ctx.fill();
 
 
-  /*
-    ---------------------------------
-    ROTATING BODY
-    ---------------------------------
-  */
+  /* =====================================
+     BODY ROTATION
+  ===================================== */
 
   ctx.rotate(
     angleRad
   );
 
 
-  const gradient =
+  const bodyGradient =
 
     ctx.createLinearGradient(
 
-      -bodyWidth/2,
+      -bodyWidth / 2,
       0,
 
-      bodyWidth/2,
+      bodyWidth / 2,
       0
 
     );
 
 
-  gradient.addColorStop(
+  bodyGradient.addColorStop(
     0,
-    "#060706"
+    "#050605"
   );
 
-  gradient.addColorStop(
+
+  bodyGradient.addColorStop(
     .45,
-    "#292b2a"
+    "#2b2d2c"
   );
 
-  gradient.addColorStop(
+
+  bodyGradient.addColorStop(
     1,
-    "#080908"
+    "#070807"
   );
 
 
   ctx.fillStyle =
-    gradient;
+    bodyGradient;
 
 
   ctx.shadowBlur =
-    9;
+    8;
 
 
   ctx.shadowColor =
-    "rgba(0,0,0,.22)";
+    "rgba(0,0,0,.20)";
 
 
   ctx.beginPath();
 
+
   ctx.roundRect(
 
-    -bodyWidth/2,
+    -bodyWidth / 2,
 
     -bodyHeight,
 
@@ -2889,166 +3482,223 @@ function drawDevice(
 
     bodyHeight,
 
-    8
+    7
 
   );
+
 
   ctx.fill();
 
 
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur =
+    0;
 
 
-  /*
-    ---------------------------------
-    LED
-    ---------------------------------
-  */
+  /* =====================================
+     LED
+  ===================================== */
 
   drawLED(
+
     device,
+
     now,
+
     bodyWidth,
+
     bodyHeight
+
   );
 
 
-  /*
-    ---------------------------------
-    CAMERA
-    ---------------------------------
-  */
+  /* =====================================
+     CAMERA
+  ===================================== */
 
   const cameraY =
-    -bodyHeight * .72;
+
+    -bodyHeight *
+    .73;
 
 
   ctx.fillStyle =
-    "#060807";
+    "#050706";
 
 
   ctx.beginPath();
 
+
   ctx.arc(
+
     0,
+
     cameraY,
+
     9,
+
     0,
-    Math.PI*2
+
+    Math.PI * 2
+
   );
+
 
   ctx.fill();
 
 
   ctx.strokeStyle =
-    "#474c49";
+    "#4a504d";
 
-  ctx.lineWidth = 1;
+
+  ctx.lineWidth =
+    1;
 
 
   ctx.beginPath();
 
+
   ctx.arc(
+
     0,
+
     cameraY,
+
     9,
+
     0,
-    Math.PI*2
+
+    Math.PI * 2
+
   );
+
 
   ctx.stroke();
 
 
   ctx.fillStyle =
-    "#030708";
+    "#020607";
 
 
   ctx.beginPath();
 
+
   ctx.arc(
+
     0,
+
     cameraY,
+
     5.5,
+
     0,
-    Math.PI*2
+
+    Math.PI * 2
+
   );
+
 
   ctx.fill();
 
 
   ctx.fillStyle =
-    "rgba(120,165,185,.46)";
+    "rgba(100,155,180,.48)";
 
 
   ctx.beginPath();
 
+
   ctx.arc(
+
     -1.5,
-    cameraY-1.7,
+
+    cameraY -
     1.7,
+
+    1.7,
+
     0,
-    Math.PI*2
+
+    Math.PI * 2
+
   );
+
 
   ctx.fill();
 
 
-  /*
-    ---------------------------------
-    SCREEN
-    ---------------------------------
-  */
+  /* =====================================
+     SCREEN
+  ===================================== */
 
   const screenW =
-    bodyWidth * .68;
+
+    bodyWidth *
+    .70;
 
 
   const screenH =
-    bodyHeight * .28;
+
+    bodyHeight *
+    .31;
 
 
   const screenX =
-    -screenW / 2;
+
+    -screenW /
+    2;
 
 
   const screenY =
-    -bodyHeight * .55;
+
+    -bodyHeight *
+    .56;
 
 
   ctx.fillStyle =
-    "#020404";
+    "#020405";
 
 
   ctx.beginPath();
+
 
   ctx.roundRect(
 
     screenX,
+
     screenY,
 
     screenW,
+
     screenH,
 
     3
 
   );
 
+
   ctx.fill();
 
 
   ctx.strokeStyle =
-    "#303533";
+    "#303635";
 
-  ctx.lineWidth = 1;
+
+  ctx.lineWidth =
+    1;
 
 
   ctx.stroke();
 
 
+  /*
+    只在螢幕範圍內畫。
+  */
+
   ctx.save();
 
 
   ctx.beginPath();
+
 
   ctx.roundRect(
 
@@ -3064,10 +3714,11 @@ function drawDevice(
 
   );
 
+
   ctx.clip();
 
 
-  drawParticleScreen(
+  drawFluidScreen(
 
     device,
 
@@ -3103,80 +3754,91 @@ function drawLED(
   height
 ){
 
+  /*
+    初始階段：
+    五支呼吸接近同步。
+  */
+
+  let phase = 0;
+
+
+  if(
+    mode !==
+    "FOLLOW"
+  ){
+
+    phase =
+
+      device.phase
+
+      *
+      chaos;
+
+  }
+
+
   const breath =
 
     (
       Math.sin(
-        now * .002 +
-        device.phase
+
+        now * .002
+
+        +
+
+        phase
+
       )
+
       +
       1
     )
+
     /
     2;
 
 
   let brightness =
 
-    .16 +
-    breath * .08;
+    .18
+
+    +
+
+    breath *
+    .09;
 
 
   /*
-    順從：
-    LED 節奏幾乎一致。
-  */
-
-  if(
-    mode === "FOLLOW"
-  ){
-
-    brightness =
-
-      .25
-
-      +
-
-      (
-        Math.sin(
-          now * .002
-        )
-        +
-        1
-      )
-      *
-      .07;
-
-  }
-
-
-  /*
-    資訊量。
+    收到資訊之後更亮。
   */
 
   brightness +=
 
-    device.info *
-    .35;
+    device.info
+
+    *
+    .30;
 
 
   /*
-    接觸瞬間閃亮。
+    接觸瞬間脈衝。
   */
 
   brightness +=
 
-    device.flash *
+    device.flash
+
+    *
     .55;
 
 
   /*
-    混亂時每支開始不同步。
+    混亂後每支開始略微不同步。
   */
 
   if(
-    mode !== "FOLLOW"
+    mode !==
+    "FOLLOW"
   ){
 
     brightness +=
@@ -3184,22 +3846,34 @@ function drawLED(
       chaos
 
       *
+
       (
         Math.sin(
-          now *
+
+          now
+
+          *
           (
-            .004 +
+            .0033
+
+            +
+
             device.index *
-            .0007
+            .00045
           )
+
           +
+
           device.phase
+
         )
+
         +
         1
       )
+
       *
-      .12;
+      .07;
 
   }
 
@@ -3207,24 +3881,56 @@ function drawLED(
   brightness =
 
     constrain(
+
       brightness,
+
       .08,
       1
+
     );
 
 
+  /*
+    LED 暗底。
+  */
+
+  ctx.fillStyle =
+    "rgba(70,85,88,.18)";
+
+
+  ctx.fillRect(
+
+    -width / 2 + 3,
+
+    -height + 9,
+
+    width - 6,
+
+    5
+
+  );
+
+
+  /*
+    LED 主光。
+  */
+
   ctx.shadowBlur =
 
-    5 +
-    brightness * 15;
+    5
+
+    +
+
+    brightness *
+    15;
 
 
   ctx.shadowColor =
 
     `rgba(
-      190,
-      225,
-      240,
+      100,
+      235,
+      255,
       ${brightness}
     )`;
 
@@ -3232,18 +3938,18 @@ function drawLED(
   ctx.fillStyle =
 
     `rgba(
-      210,
-      238,
-      248,
+      155,
+      245,
+      255,
       ${brightness}
     )`;
 
 
   ctx.fillRect(
 
-    -width/2 + 3,
+    -width / 2 + 3,
 
-    -height + 10,
+    -height + 9,
 
     width - 6,
 
@@ -3252,16 +3958,18 @@ function drawLED(
   );
 
 
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur =
+    0;
 
 }
 
 
 /* =========================================================
-   PARTICLES
+   FLUID SCREEN
+   參考：深藍底＋青色流體＋像素粒子
 ========================================================= */
 
-function drawParticleScreen(
+function drawFluidScreen(
   device,
   now,
   x,
@@ -3270,8 +3978,45 @@ function drawParticleScreen(
   h
 ){
 
+  /*
+    --------------------------------
+    BACKGROUND
+    --------------------------------
+  */
+
+  const bg =
+
+    ctx.createLinearGradient(
+
+      x,
+      y,
+
+      x,
+      y + h
+
+    );
+
+
+  bg.addColorStop(
+    0,
+    "#071653"
+  );
+
+
+  bg.addColorStop(
+    .52,
+    "#06144a"
+  );
+
+
+  bg.addColorStop(
+    1,
+    "#030d35"
+  );
+
+
   ctx.fillStyle =
-    "#020505";
+    bg;
 
 
   ctx.fillRect(
@@ -3282,14 +4027,27 @@ function drawParticleScreen(
   );
 
 
-  const information =
+  /*
+    資訊量。
+  */
+
+  const info =
 
     constrain(
+
       device.info,
+
       0,
       1
+
     );
 
+
+  /*
+    混亂量。
+
+    順從時非常低。
+  */
 
   const turbulence =
 
@@ -3301,251 +4059,841 @@ function drawParticleScreen(
 
     :
 
-    chaos *
-    (
-      .25 +
-      information * .85
-    );
-
-
-  const speed =
-
-    .00007
+    chaos
 
     *
     (
-      1 +
-      information * 3
+      .18
+
+      +
+
+      info *
+      .65
     );
 
 
-  const visibleParticles =
+  const flowTime =
+
+    now
+
+    *
+    (
+      .0010
+
+      +
+
+      info *
+      .0012
+
+      +
+
+      chaos *
+      .00055
+    )
+
+    +
+
+    device.phase;
+
+
+  /*
+    參考圖：
+    上方邊界偏右，
+    下方邊界偏左。
+
+    流體存在右側。
+  */
+
+  for(
+    let yy = 0;
+    yy < h;
+    yy += 2
+  ){
+
+    const ny =
+
+      yy /
+      h;
+
+
+    /*
+      基本斜向曲線。
+    */
+
+    let frontRatio =
+
+      .91
+
+      -
+
+      .76
+
+      *
+      Math.pow(
+        ny,
+        .72
+      );
+
+
+    /*
+      收到的資訊越多，
+      流體範圍往左擴張。
+    */
+
+    frontRatio -=
+
+      info *
+      .11;
+
+
+    /*
+      波動。
+    */
+
+    frontRatio +=
+
+      Math.sin(
+
+        ny * 5.2
+
+        +
+
+        flowTime * 1.25
+
+      )
+
+      *
+      (
+        .020
+
+        +
+
+        turbulence *
+        .035
+      );
+
+
+    frontRatio +=
+
+      Math.sin(
+
+        ny * 14
+
+        -
+
+        flowTime * .65
+
+        +
+
+        device.phase
+
+      )
+
+      *
+      turbulence
+
+      *
+      .018;
+
+
+    frontRatio =
+
+      constrain(
+
+        frontRatio,
+
+        .05,
+
+        .96
+
+      );
+
+
+    /*
+      階梯感 / 像素邊緣。
+    */
+
+    let frontX =
+
+      x
+
+      +
+
+      frontRatio *
+      w;
+
+
+    frontX =
+
+      Math.round(
+        frontX / 2
+      )
+
+      *
+      2;
+
+
+    const liquidWidth =
+
+      Math.max(
+
+        0,
+
+        x + w -
+        frontX
+
+      );
+
+
+    /*
+      主體青藍。
+    */
+
+    const liquidGradient =
+
+      ctx.createLinearGradient(
+
+        frontX,
+        0,
+
+        x + w,
+        0
+
+      );
+
+
+    liquidGradient.addColorStop(
+
+      0,
+
+      `rgba(
+        70,
+        245,
+        255,
+        ${.78 + info*.12}
+      )`
+
+    );
+
+
+    liquidGradient.addColorStop(
+
+      .45,
+
+      `rgba(
+        35,
+        220,
+        255,
+        ${.80 + info*.10}
+      )`
+
+    );
+
+
+    liquidGradient.addColorStop(
+
+      1,
+
+      `rgba(
+        20,
+        175,
+        250,
+        ${.82}
+      )`
+
+    );
+
+
+    ctx.fillStyle =
+      liquidGradient;
+
+
+    ctx.fillRect(
+
+      frontX,
+
+      y + yy,
+
+      liquidWidth,
+
+      2
+
+    );
+
+
+    /*
+      邊界亮線。
+    */
+
+    ctx.fillStyle =
+
+      `rgba(
+        160,
+        255,
+        255,
+        ${.45 + info*.35}
+      )`;
+
+
+    ctx.fillRect(
+
+      frontX - 1,
+
+      y + yy,
+
+      2,
+
+      2
+
+    );
+
+
+    /*
+      流體中的微小亮線。
+    */
+
+    if(
+      yy % 6 === 0
+    ){
+
+      ctx.fillStyle =
+
+        `rgba(
+          190,
+          255,
+          255,
+          ${.06 + info*.09}
+        )`;
+
+
+      ctx.fillRect(
+
+        frontX + 3,
+
+        y + yy,
+
+        Math.max(
+
+          0,
+
+          liquidWidth -
+          7
+
+        ),
+
+        1
+
+      );
+
+    }
+
+  }
+
+
+  /*
+    --------------------------------
+    PARTICLES NEAR FRONT
+    --------------------------------
+  */
+
+  const edgeParticleCount =
 
     Math.floor(
 
-      25
+      22
 
       +
-      information *
-      27
+
+      info * 35
+
+      +
+
+      chaos * 20
 
     );
 
 
   for(
     let i = 0;
-    i < visibleParticles;
+    i < edgeParticleCount;
     i++
   ){
 
     const seed =
 
       device
-      .particleSeeds[i];
+      .fluidSeeds[
+        i %
+        device.fluidSeeds.length
+      ];
 
 
-    let t =
+    const pyNorm =
 
-      (
-        seed.u
+      fract(
+
+        i * .137
 
         +
 
         now *
-        speed *
+        .00012 *
         seed.speed
-      )
-
-      %
-      1;
-
-
-    /*
-      規律時向上流動。
-    */
-
-    let px =
-
-      .5
-
-      +
-
-      Math.sin(
-
-        t *
-        Math.PI *
-        2
 
         +
 
         seed.phase
+
+      );
+
+
+    const yy =
+
+      pyNorm *
+      h;
+
+
+    const ny =
+
+      yy /
+      h;
+
+
+    let frontRatio =
+
+      .91
+
+      -
+
+      .76
+
+      *
+      Math.pow(
+        ny,
+        .72
+      );
+
+
+    frontRatio -=
+
+      info *
+      .11;
+
+
+    frontRatio +=
+
+      Math.sin(
+
+        ny * 5.2
+
+        +
+
+        flowTime * 1.25
 
       )
 
       *
       (
-        .12 +
-        information * .08
+        .02
+
+        +
+
+        turbulence *
+        .035
       );
 
 
-    let py =
-
-      1 -
-      t;
-
-
-    /*
-      資訊越多，
-      粒子開始旋轉、分裂。
-    */
-
-    px +=
+    frontRatio +=
 
       Math.sin(
 
-        now * .0025
+        ny * 14
+
+        -
+
+        flowTime * .65
 
         +
 
-        seed.phase * 2
-
-        +
-
-        py * 8
+        device.phase
 
       )
 
       *
-      turbulence *
-      .24;
-
-
-    py +=
-
-      Math.cos(
-
-        now * .002
-
-        +
-
-        seed.phase
-
-        +
-
-        px * 9
-
-      )
+      turbulence
 
       *
-      turbulence *
-      .18;
+      .018;
+
+
+    frontRatio =
+
+      constrain(
+
+        frontRatio,
+
+        .05,
+        .96
+
+      );
+
+
+    const edgeX =
+
+      x
+
+      +
+
+      frontRatio *
+      w;
 
 
     /*
-      混亂最後再加入個體偏差。
+      粒子主要存在於
+      流體邊界右側。
     */
 
-    px +=
+    const offset =
 
-      seed.offset
+      Math.abs(
+        seed.offset
+      )
 
       *
-      turbulence *
-      .08;
+      (
+        3
+
+        +
+
+        info * 8
+
+        +
+
+        chaos * 5
+      );
 
 
-    const drawX =
+    const px =
 
-      x +
-      px * w;
+      edgeX
+
+      +
+
+      offset;
 
 
-    const drawY =
+    const py =
 
-      y +
-      py * h;
+      y
+
+      +
+
+      yy;
 
 
     const alpha =
 
-      constrain(
+      .22
 
-        .28
+      +
 
-        +
-        information * .55
+      info *
+      .35
 
-        +
-        device.flash * .2,
+      +
 
-        .15,
-        1
-
-      );
+      chaos *
+      .12;
 
 
     ctx.fillStyle =
 
       `rgba(
-        205,
-        235,
-        246,
+        110,
+        250,
+        255,
         ${alpha}
       )`;
 
 
-    ctx.shadowBlur =
+    /*
+      保留參考圖的像素感，
+      多數是方形，不全是圓點。
+    */
 
-      information >
-      .2
+    if(
+      i % 3 === 0
+    ){
 
-      ?
+      ctx.fillRect(
+
+        px,
+
+        py,
+
+        Math.max(
+          1,
+          seed.size
+        ),
+
+        Math.max(
+          1,
+          seed.size
+        )
+
+      );
+
+    }
+
+    else{
+
+      ctx.beginPath();
+
+
+      ctx.arc(
+
+        px,
+        py,
+
+        seed.size *
+        .65,
+
+        0,
+        Math.PI * 2
+
+      );
+
+
+      ctx.fill();
+
+    }
+
+  }
+
+
+  /*
+    --------------------------------
+    FLOATING PARTICLES
+    --------------------------------
+  */
+
+  const floatingCount =
+
+    Math.floor(
+
+      6
+
+      +
+
+      info * 14
+
+      +
+
+      chaos * 5
+
+    );
+
+
+  for(
+    let i = 0;
+    i < floatingCount;
+    i++
+  ){
+
+    const seed =
+
+      device
+      .fluidSeeds[
+        (
+          i + 40
+        )
+        %
+        device.fluidSeeds.length
+      ];
+
+
+    const t =
+
+      fract(
+
+        now *
+        .00016 *
+        seed.speed
+
+        +
+
+        seed.phase
+
+      );
+
+
+    const py =
+
+      y
+
+      +
+
+      h
+
+      -
+
+      t *
+      h;
+
+
+    const ny =
+
+      (
+        py - y
+      )
+
+      /
+      h;
+
+
+    let frontRatio =
+
+      .91
+
+      -
+
+      .76
+
+      *
+      Math.pow(
+        ny,
+        .72
+      );
+
+
+    frontRatio -=
+
+      info *
+      .11;
+
+
+    frontRatio +=
+
+      Math.sin(
+
+        ny * 5.2
+
+        +
+
+        flowTime * 1.25
+
+      )
+
+      *
+      .025;
+
+
+    const px =
+
+      x
+
+      +
+
+      frontRatio *
+      w
+
+      +
 
       4
 
-      :
+      +
 
-      1;
+      Math.abs(
+        seed.offset
+      )
+
+      *
+      w *
+      .17;
 
 
-    ctx.shadowColor =
-      "rgba(160,215,235,.55)";
+    ctx.fillStyle =
+
+      `rgba(
+        190,
+        255,
+        255,
+        ${.12 + info*.25}
+      )`;
 
 
     ctx.beginPath();
 
+
     ctx.arc(
 
-      drawX,
-      drawY,
+      px,
 
-      seed.size,
+      py,
+
+      1
+
+      +
+
+      seed.size *
+      .2,
 
       0,
-      Math.PI*2
+
+      Math.PI * 2
 
     );
+
 
     ctx.fill();
 
   }
 
 
-  ctx.shadowBlur = 0;
+  /*
+    --------------------------------
+    CONTACT FLASH
+    --------------------------------
+  */
+
+  if(
+    device.flash >
+    0
+  ){
+
+    ctx.fillStyle =
+
+      `rgba(
+        155,
+        255,
+        255,
+        ${device.flash*.14}
+      )`;
+
+
+    ctx.fillRect(
+      x,
+      y,
+      w,
+      h
+    );
+
+  }
 
 }
 
 
 /* =========================================================
-   CONTACT / TRANSFER VISUAL
+   TRANSFER CONTACT VISUAL
 ========================================================= */
 
 function drawTransferContact(now){
 
   if(
     !currentTransfer
+
     ||
+
     currentTransfer.stage !==
     "CONTACT"
   ){
@@ -3556,9 +4904,12 @@ function drawTransferContact(now){
 
 
   const a =
+
     currentTransfer.from;
 
+
   const b =
+
     currentTransfer.to;
 
 
@@ -3576,6 +4927,7 @@ function drawTransferContact(now){
       pointA.x +
       pointB.x
     )
+
     /
     2;
 
@@ -3586,6 +4938,7 @@ function drawTransferContact(now){
       pointA.y +
       pointB.y
     )
+
     /
     2;
 
@@ -3594,120 +4947,150 @@ function drawTransferContact(now){
 
     (
       Math.sin(
-        now * .03
+        now * .025
       )
+
       +
       1
     )
+
     /
     2;
 
 
+  /*
+    接觸亮點。
+  */
+
   ctx.shadowBlur =
-    18;
+
+    12
+
+    +
+
+    pulse * 8;
 
 
   ctx.shadowColor =
-    "rgba(200,235,245,.8)";
+
+    "rgba(140,240,255,.8)";
 
 
   ctx.fillStyle =
 
     `rgba(
-      220,
-      245,
+      185,
       250,
-      ${.35 + pulse*.45}
+      255,
+      ${.35 + pulse*.40}
     )`;
 
 
   ctx.beginPath();
 
+
   ctx.arc(
 
     midX,
+
     midY,
 
-    5 +
-    pulse * 4,
+    3
+
+    +
+
+    pulse * 3,
 
     0,
-    Math.PI*2
+
+    Math.PI * 2
 
   );
+
 
   ctx.fill();
 
 
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur =
+    0;
 
 
   /*
-    很淡的資訊粒子橋。
-    只是模擬資訊交換。
+    資訊粒子橋。
   */
 
   for(
     let i = 0;
-    i < 12;
+    i < 10;
     i++
   ){
 
     const t =
 
-      (
-        i / 12
+      fract(
+
+        i / 10
 
         +
-        now * .0015
-      )
-      %
-      1;
+
+        now * .0012
+
+      );
 
 
     const px =
 
       lerp(
+
         pointA.x,
+
         pointB.x,
+
         t
+
       );
 
 
     const py =
 
       lerp(
+
         pointA.y,
+
         pointB.y,
+
         t
+
       )
 
       +
 
       Math.sin(
+
         t *
         Math.PI *
         3
+
       )
+
       *
-      4;
+      3;
 
 
     ctx.fillStyle =
-      "rgba(200,235,245,.65)";
+
+      "rgba(150,245,255,.58)";
 
 
-    ctx.beginPath();
+    ctx.fillRect(
 
-    ctx.arc(
       px,
       py,
-      1.5,
-      0,
-      Math.PI*2
-    );
 
-    ctx.fill();
+      2,
+      2
+
+    );
 
   }
 
@@ -3735,7 +5118,7 @@ function getTopPoint(index){
     180;
 
 
-  const h =
+  const height =
     getBodyHeight();
 
 
@@ -3748,8 +5131,10 @@ function getTopPoint(index){
       +
 
       Math.sin(angle)
+
       *
-      h,
+      height,
+
 
     y:
 
@@ -3758,8 +5143,9 @@ function getTopPoint(index){
       -
 
       Math.cos(angle)
+
       *
-      h
+      height
 
   };
 
@@ -3772,7 +5158,7 @@ function getTopPoint(index){
 
 function updateUI(){
 
-  let positionText =
+  let viewerText =
     "—";
 
 
@@ -3785,22 +5171,24 @@ function updateUI(){
       .32
     ){
 
-      positionText =
+      viewerText =
         "左側";
 
     }
+
     else if(
       viewer.x >
       .68
     ){
 
-      positionText =
+      viewerText =
         "右側";
 
     }
+
     else{
 
-      positionText =
+      viewerText =
         "中央";
 
     }
@@ -3813,7 +5201,7 @@ function updateUI(){
     "viewerPosition"
   )
   .textContent =
-    positionText;
+    viewerText;
 
 
   const cameraPercent =
@@ -3821,9 +5209,13 @@ function updateUI(){
     Math.round(
 
       constrain(
-        viewer.movement * 4,
+
+        viewer.movement *
+        4,
+
         0,
         1
+
       )
 
       *
@@ -3851,7 +5243,10 @@ function updateUI(){
   const voicePercent =
 
     Math.round(
-      voiceLevel * 100
+
+      voiceLevel *
+      100
+
     );
 
 
@@ -3874,7 +5269,10 @@ function updateUI(){
   const chaosPercent =
 
     Math.round(
-      chaos * 100
+
+      chaos *
+      100
+
     );
 
 
@@ -3919,40 +5317,43 @@ function updateUI(){
     "—";
 
 
-  let modeText;
+  let modeText =
+    "順從";
 
-  let description;
+
+  let description =
+
+    "五個裝置正在跟隨觀者的位置。";
 
 
   if(
-    mode === "FOLLOW"
-  ){
-
-    modeText =
-      "順從";
-
-    description =
-      "五個裝置正在跟隨觀者的位置。";
-
-  }
-  else if(
-    mode === "TRANSFER"
+    mode ===
+    "TRANSFER"
   ){
 
     modeText =
       "資訊傳遞";
 
+
     description =
-      "裝置開始彼此靠近，接觸後交換資訊。";
+
+      "裝置開始彼此靠近，資訊逐漸進入其他個體。";
 
   }
-  else{
+
+
+  if(
+    mode ===
+    "CHAOS"
+  ){
 
     modeText =
-      "群體混亂";
+      "群體偏差";
+
 
     description =
-      "裝置逐漸脫離觀者控制，形成自己的群體行為。";
+
+      "裝置開始受自身與鄰居影響，不再完全服從觀者。";
 
   }
 
@@ -3996,6 +5397,7 @@ document
   e => {
 
     viewer.sensitivity =
+
       Number(
         e.target.value
       );
@@ -4021,6 +5423,7 @@ document
   e => {
 
     followMaxAngle =
+
       Number(
         e.target.value
       );
@@ -4046,6 +5449,7 @@ document
   e => {
 
     chaosMaxAngle =
+
       Number(
         e.target.value
       );
@@ -4071,9 +5475,11 @@ document
   e => {
 
     voiceThreshold =
+
       Number(
         e.target.value
       )
+
       /
       100;
 
@@ -4098,6 +5504,7 @@ document
   e => {
 
     transferApproachTime =
+
       Number(
         e.target.value
       );
@@ -4123,9 +5530,11 @@ document
   e => {
 
     chaosGrowthSpeed =
+
       Number(
         e.target.value
       )
+
       /
       100;
 
@@ -4161,11 +5570,15 @@ function random(
 ){
 
   if(
-    max === undefined
+    max ===
+    undefined
   ){
 
-    max = min;
-    min = 0;
+    max =
+      min;
+
+    min =
+      0;
 
   }
 
@@ -4175,11 +5588,14 @@ function random(
     Math.random()
 
     *
+
     (
-      max - min
+      max -
+      min
     )
 
     +
+
     min
 
   );
@@ -4198,8 +5614,10 @@ function lerp(
     a
 
     +
+
     (
-      b - a
+      b -
+      a
     )
 
     *
@@ -4221,8 +5639,11 @@ function constrain(
     min,
 
     Math.min(
+
       max,
+
       value
+
     )
 
   );
@@ -4246,18 +5667,21 @@ function mapValue(
     )
 
     /
+
     (
       inMax -
       inMin
     )
 
     *
+
     (
       outMax -
       outMin
     )
 
     +
+
     outMin
 
   );
@@ -4265,14 +5689,33 @@ function mapValue(
 }
 
 
+function fract(value){
+
+  return(
+
+    value
+
+    -
+
+    Math.floor(
+      value
+    )
+
+  );
+
+}
+
+
 /* =========================================================
-   LOOP
+   MAIN LOOP
 ========================================================= */
 
 let previousTime =
   performance.now();
 
-let lastCameraAnalysis = 0;
+
+let lastCameraAnalysis =
+  0;
 
 
 function animate(now){
@@ -4294,7 +5737,7 @@ function animate(now){
 
 
   /*
-    Camera
+    CAMERA
   */
 
   if(
@@ -4305,6 +5748,7 @@ function animate(now){
 
     analyzeCamera();
 
+
     lastCameraAnalysis =
       now;
 
@@ -4312,7 +5756,7 @@ function animate(now){
 
 
   /*
-    Microphone
+    MICROPHONE
   */
 
   updateAudio(
@@ -4322,7 +5766,7 @@ function animate(now){
 
 
   /*
-    Transmission
+    TRANSFER
   */
 
   updateTransfer(
@@ -4331,7 +5775,7 @@ function animate(now){
 
 
   /*
-    Chaos
+    CHAOS
   */
 
   updateChaos(
@@ -4340,27 +5784,32 @@ function animate(now){
 
 
   /*
-    Devices
+    DEVICE
   */
 
   devices.forEach(
+
     device =>
+
       device.update(
         now,
         dt
       )
+
   );
 
 
   /*
-    Draw
+    DRAW
   */
 
   ctx.clearRect(
+
     0,
     0,
     W,
     H
+
   );
 
 
@@ -4368,11 +5817,14 @@ function animate(now){
 
 
   devices.forEach(
+
     device =>
+
       drawDevice(
         device,
         now
       )
+
   );
 
 
