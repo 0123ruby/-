@@ -1,0 +1,5072 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>誤會機器｜關係擴散版</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+  background:#ece9e2;
+  color:#303532;
+  font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
+}
+
+#app{
+  width:100%;
+  height:100vh;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 360px;
+}
+
+#stageWrap{
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      #faf9f5 0%,
+      #eeebe4 58%,
+      #ded9cf 100%
+    );
+}
+
+#stage{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+#title{
+  position:absolute;
+  left:28px;
+  top:24px;
+  pointer-events:none;
+}
+
+#title h1{
+  margin:0;
+  font-size:28px;
+}
+
+#title p{
+  margin:7px 0 0;
+  font-size:13px;
+  color:#6c736f;
+}
+
+#phaseBox{
+  position:absolute;
+  left:28px;
+  bottom:25px;
+  padding:11px 15px;
+
+  background:rgba(255,255,255,.92);
+
+  border:1px solid rgba(0,0,0,.05);
+  border-radius:10px;
+
+  font-size:13px;
+  line-height:1.65;
+
+  pointer-events:none;
+}
+
+#phaseName{
+  font-weight:700;
+}
+
+#panel{
+  padding:20px;
+  overflow-y:auto;
+
+  background:#faf9f6;
+
+  border-left:1px solid #ddd8ce;
+}
+
+.section{
+  margin-bottom:22px;
+}
+
+.sectionTitle{
+  margin-bottom:10px;
+  font-size:13px;
+  font-weight:700;
+}
+
+video{
+  display:block;
+  width:100%;
+  min-height:145px;
+
+  object-fit:cover;
+
+  background:#111;
+
+  border-radius:8px;
+
+  transform:scaleX(-1);
+}
+
+button{
+  width:100%;
+  margin:0 0 8px;
+  padding:11px;
+
+  border:0;
+  border-radius:9px;
+
+  font-weight:700;
+  cursor:pointer;
+}
+
+button.dark{
+  background:#222;
+  color:#fff;
+}
+
+button.light{
+  background:#e5e1da;
+  color:#333;
+}
+
+button.gray{
+  background:#d2cec5;
+  color:#333;
+}
+
+button.test{
+  background:#4b514e;
+  color:#fff;
+}
+
+.status,
+.legend{
+  padding:11px;
+
+  background:#fff;
+
+  border:1px solid #dedad1;
+  border-radius:8px;
+
+  font-size:12px;
+  line-height:1.8;
+}
+
+.legend{
+  margin-top:10px;
+}
+
+label{
+  display:block;
+  margin:12px 0 5px;
+  font-size:12px;
+}
+
+input[type="range"]{
+  width:100%;
+}
+
+.meter{
+  height:8px;
+  margin-top:7px;
+
+  overflow:hidden;
+
+  background:#e1ddd5;
+
+  border-radius:999px;
+}
+
+#cameraMeter,
+#voiceMeter,
+#energyMeter,
+#mutationMeter{
+  width:0%;
+  height:100%;
+
+  background:#373d3a;
+
+  transition:width .08s linear;
+}
+
+.dot{
+  display:inline-block;
+
+  width:9px;
+  height:9px;
+
+  margin-right:6px;
+
+  border-radius:50%;
+}
+
+.dot.white{ background:#ccd5d5; }
+.dot.green{ background:#35ff73; }
+.dot.yellow{ background:#ffd52d; }
+.dot.red{ background:#ff3c34; }
+</style>
+</head>
+
+
+<body>
+
+<div id="app">
+
+  <div id="stageWrap">
+
+    <canvas id="stage"></canvas>
+
+    <div id="title">
+      <h1>《誤會機器》</h1>
+      <p>你影響它，它再影響另一個它</p>
+    </div>
+
+    <div id="phaseBox">
+      目前狀態：
+      <span id="phaseName">待機</span>
+      <br>
+      <span id="phaseDescription">
+        裝置正在等待觀者。
+      </span>
+    </div>
+
+  </div>
+
+
+  <aside id="panel">
+
+    <!-- CAMERA -->
+
+    <div class="section">
+
+      <div class="sectionTitle">
+        觀者位置
+      </div>
+
+      <video
+        id="video"
+        autoplay
+        muted
+        playsinline>
+      </video>
+
+      <br>
+
+      <button
+        id="cameraBtn"
+        class="dark">
+        開啟攝像頭
+      </button>
+
+      <div class="status">
+
+        攝像頭：
+        <b id="cameraState">
+          未啟動
+        </b>
+
+        <br>
+
+        觀者位置：
+        <b id="viewerPosition">
+          —
+        </b>
+
+        <br>
+
+        動作量：
+        <b>
+          <span id="cameraPercent">0</span>%
+        </b>
+
+        <div class="meter">
+          <div id="cameraMeter"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- MICROPHONE -->
+
+    <div class="section">
+
+      <div class="sectionTitle">
+        聲音
+      </div>
+
+      <button
+        id="micBtn"
+        class="dark">
+        開啟麥克風
+      </button>
+
+      <button
+        id="micStopBtn"
+        class="light">
+        停止麥克風
+      </button>
+
+      <button
+        id="simulateVoiceBtn"
+        class="test">
+        模擬對裝置說話
+      </button>
+
+      <div class="status">
+
+        麥克風：
+        <b id="micState">
+          未啟動
+        </b>
+
+        <br>
+
+        聲音強度：
+        <b>
+          <span id="voicePercent">0</span>%
+        </b>
+
+        <div class="meter">
+          <div id="voiceMeter"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- GROUP -->
+
+    <div class="section">
+
+      <div class="sectionTitle">
+        群體狀態
+      </div>
+
+      <div class="status">
+
+        階段：
+        <b id="modeText">
+          待機
+        </b>
+
+        <br>
+
+        聲音起點：
+        <b id="sourceText">
+          —
+        </b>
+
+        <br>
+
+        正在接觸：
+        <b>
+          <span id="contactCount">0</span>
+        </b>
+        組
+
+        <br>
+
+        目前最高資訊能量：
+        <b>
+          <span id="energyPercent">0</span>%
+        </b>
+
+        <div class="meter">
+          <div id="energyMeter"></div>
+        </div>
+
+        <br>
+
+        群體資訊變形：
+        <b>
+          <span id="mutationPercent">0</span>%
+        </b>
+
+        <div class="meter">
+          <div id="mutationMeter"></div>
+        </div>
+
+      </div>
+
+
+      <div class="legend">
+
+        <span class="dot white"></span>
+        待機
+
+        <br>
+
+        <span class="dot green"></span>
+        發現觀者
+
+        <br>
+
+        <span class="dot yellow"></span>
+        接收觀者聲音
+
+        <br>
+
+        <span class="dot red"></span>
+        裝置彼此交換資訊
+
+      </div>
+
+    </div>
+
+
+    <!-- SETTINGS -->
+
+    <div class="section">
+
+      <div class="sectionTitle">
+        測試設定
+      </div>
+
+
+      <label>
+        攝像頭敏感度：
+        <span id="sensitivityValue">40</span>
+      </label>
+
+      <input
+        id="sensitivitySlider"
+        type="range"
+        min="5"
+        max="80"
+        value="40"
+      >
+
+
+      <label>
+        跟隨最大偏角：
+        <span id="followAngleValue">10</span>°
+      </label>
+
+      <input
+        id="followAngleSlider"
+        type="range"
+        min="3"
+        max="20"
+        value="10"
+      >
+
+
+      <label>
+        說話觸發門檻：
+        <span id="voiceThresholdValue">16</span>%
+      </label>
+
+      <input
+        id="voiceThresholdSlider"
+        type="range"
+        min="5"
+        max="50"
+        value="16"
+      >
+
+
+      <label>
+        最低可傳遞能量：
+        <span id="energyThresholdValue">18</span>%
+      </label>
+
+      <input
+        id="energyThresholdSlider"
+        type="range"
+        min="8"
+        max="35"
+        value="18"
+      >
+
+
+      <label>
+        資訊衰減速度：
+        <span id="decaySpeedValue">45</span>%
+      </label>
+
+      <input
+        id="decaySpeedSlider"
+        type="range"
+        min="10"
+        max="100"
+        value="45"
+      >
+
+    </div>
+
+
+    <button
+      id="resetBtn"
+      class="gray">
+      回到初始狀態
+    </button>
+
+  </aside>
+
+</div>
+
+
+<canvas
+  id="cameraAnalysis"
+  width="160"
+  height="120"
+  style="display:none">
+</canvas>
+
+
+<script>
+
+/* =========================================================
+   DOM
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+const canvas = $("stage");
+const ctx = canvas.getContext("2d");
+
+const video = $("video");
+
+const analysisCanvas = $("cameraAnalysis");
+const analysisCtx = analysisCanvas.getContext(
+  "2d",
+  {
+    willReadFrequently:true
+  }
+);
+
+
+/* =========================================================
+   SYSTEM
+========================================================= */
+
+const DEVICE_COUNT = 5;
+
+/*
+  最多允許兩組裝置同時互動。
+
+  這樣會比五支一起發瘋自然，
+  但仍會有群體傳播感。
+*/
+
+const MAX_SIMULTANEOUS_CONTACTS = 2;
+
+let W = 0;
+let H = 0;
+
+
+/*
+  IDLE
+  FOLLOW
+  LISTEN
+  PROPAGATE
+*/
+
+let mode = "IDLE";
+
+let sourceIndex = -1;
+
+let speakingUntil = 0;
+let speechSourceIndex = -1;
+
+let manualSpeechAt = 0;
+
+const devices = [];
+
+let activeTransfers = [];
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+let followMaxAngle = 10;
+
+let voiceThreshold = .16;
+
+/*
+  低於這個數值，
+  裝置就不會再主動把資訊傳出去。
+*/
+
+let energyThreshold = .18;
+
+/*
+  越高，資訊消失越快。
+*/
+
+let decaySpeed = .45;
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+let cameraStream = null;
+let cameraReady = false;
+
+let previousCameraFrame = null;
+
+const viewer = {
+
+  present:false,
+
+  x:.5,
+
+  movement:0,
+
+  absentTime:0,
+
+  sensitivity:40
+
+};
+
+
+/* =========================================================
+   MICROPHONE
+========================================================= */
+
+let micStream = null;
+
+let audioContext = null;
+let analyser = null;
+let micSource = null;
+let micBuffer = null;
+
+let micReady = false;
+
+let voiceLevel = 0;
+let voiceHold = 0;
+
+let speechBurstActive = false;
+
+
+/* =========================================================
+   DEVICE
+========================================================= */
+
+class Device{
+
+  constructor(index){
+
+    this.index = index;
+
+    /* -----------------------------
+       機械
+    ------------------------------ */
+
+    this.angle = 0;
+    this.targetAngle = 0;
+
+    this.followWeight =
+      random(.97,1.03);
+
+
+    /* -----------------------------
+       資訊
+    ------------------------------ */
+
+    this.signalEnergy = 0;
+
+    this.receiveCount = 0;
+
+    /*
+      0 = 接近原始訊息
+      1 = 已被高度改變
+    */
+
+    this.mutation = 0;
+
+    /*
+      每個裝置對資訊的不同理解，
+      會留下微小方向偏差。
+    */
+
+    this.interpretationBias = 0;
+
+    /*
+      資訊在螢幕裡的相位。
+      每次傳遞會變。
+    */
+
+    this.infoPhase =
+      random(
+        0,
+        Math.PI * 2
+      );
+
+
+    /*
+      下一次允許主動尋找鄰居的時間。
+    */
+
+    this.nextShareAt =
+      Infinity;
+
+
+    /* -----------------------------
+       SCREEN
+    ------------------------------ */
+
+    this.flash = 0;
+
+    /*
+      資訊核心。
+
+      剛聽到人說話時會最大，
+      傳遞後逐漸碎裂。
+    */
+
+    this.coreStrength = 0;
+
+    this.particleEnergy = 0;
+
+
+    /* -----------------------------
+       LIQUID
+    ------------------------------ */
+
+    this.lastAngle = 0;
+
+    this.angularVelocity = 0;
+
+    this.fluidOffset = 0;
+
+    this.fluidVelocity = 0;
+
+
+    this.phase =
+      random(
+        0,
+        Math.PI * 2
+      );
+
+
+    this.fluidSeeds = [];
+
+
+    for(
+      let i = 0;
+      i < 100;
+      i++
+    ){
+
+      this.fluidSeeds.push({
+
+        phase:
+          random(
+            0,
+            Math.PI * 2
+          ),
+
+        speed:
+          random(
+            .6,
+            1.5
+          ),
+
+        size:
+          random(
+            .5,
+            1.7
+          ),
+
+        offset:
+          random(
+            -1,
+            1
+          )
+
+      });
+
+    }
+
+  }
+
+
+
+  /* =======================================================
+     UPDATE
+  ======================================================= */
+
+  update(now,dt){
+
+    this.flash =
+      Math.max(
+        0,
+        this.flash -
+        dt / 500
+      );
+
+
+    /*
+      資訊能量會持續自然衰減。
+
+      所以不用固定 8 秒，
+      最後自己會停。
+    */
+
+    const energyDecay =
+      .000055 *
+      decaySpeed;
+
+
+    this.signalEnergy =
+      Math.max(
+        0,
+        this.signalEnergy -
+        dt * energyDecay
+      );
+
+
+    /*
+      核心逐漸碎裂／變弱。
+    */
+
+    this.coreStrength =
+      Math.max(
+        0,
+        this.coreStrength -
+        dt * .00010
+      );
+
+
+    this.particleEnergy =
+      Math.max(
+        0,
+        this.particleEnergy -
+        dt * .00007
+      );
+
+
+    /*
+      誤差不會馬上消失，
+      但會非常慢地恢復。
+    */
+
+    this.mutation =
+      Math.max(
+        0,
+        this.mutation -
+        dt * .000005
+      );
+
+
+    /*
+      裝置停止資訊交換後，
+      原本留下的偏差也慢慢回去。
+    */
+
+    if(
+      mode !== "PROPAGATE"
+    ){
+
+      this.interpretationBias =
+        lerp(
+          this.interpretationBias,
+          0,
+          .008
+        );
+
+    }
+
+
+    /* =====================================
+       FOLLOW / LISTEN
+    ===================================== */
+
+    const viewerAngle =
+      viewer.present
+      ?
+      (
+        viewer.x - .5
+      )
+      *
+      2
+      *
+      followMaxAngle
+      :
+      0;
+
+
+    if(
+      mode === "IDLE"
+      ||
+      mode === "FOLLOW"
+      ||
+      mode === "LISTEN"
+    ){
+
+      this.targetAngle =
+        viewerAngle *
+        this.followWeight;
+
+
+      this.angle =
+        lerp(
+          this.angle,
+          this.targetAngle,
+          .055
+        );
+
+
+      return;
+
+    }
+
+
+    /* =====================================
+       PROPAGATE
+    ===================================== */
+
+    if(
+      mode === "PROPAGATE"
+    ){
+
+      /*
+        有資訊之後，
+        不再百分之百服從觀者。
+      */
+
+      const influence =
+        constrain(
+          this.signalEnergy * .65
+          +
+          this.mutation * .30,
+          0,
+          .85
+        );
+
+
+      const transferLean =
+        getTransferLeanForDevice(
+          this.index,
+          now
+        );
+
+
+      this.targetAngle =
+        viewerAngle
+        *
+        (
+          1 -
+          influence * .55
+        )
+
+        +
+
+        this.interpretationBias
+        *
+        influence
+
+        +
+
+        transferLean;
+
+
+      this.targetAngle =
+        constrain(
+          this.targetAngle,
+          -22,
+          22
+        );
+
+
+      this.angle =
+        lerp(
+          this.angle,
+          this.targetAngle,
+          .045
+        );
+
+    }
+
+  }
+
+
+
+  /* =======================================================
+     LIQUID
+  ======================================================= */
+
+  updateFluidPhysics(dt){
+
+    const safeDt =
+      Math.max(
+        1,
+        dt
+      );
+
+
+    const newAngularVelocity =
+      (
+        this.angle -
+        this.lastAngle
+      )
+      /
+      (
+        safeDt /
+        16.67
+      );
+
+
+    this.angularVelocity =
+      lerp(
+        this.angularVelocity,
+        newAngularVelocity,
+        .22
+      );
+
+
+    this.lastAngle =
+      this.angle;
+
+
+    /*
+      裝置突然往右，
+      液體會短暫往反方向拖。
+    */
+
+    const targetOffset =
+      constrain(
+        -this.angularVelocity * .18,
+        -.7,
+        .7
+      );
+
+
+    this.fluidVelocity +=
+      (
+        targetOffset -
+        this.fluidOffset
+      )
+      *
+      .075;
+
+
+    this.fluidVelocity *=
+      .86;
+
+
+    this.fluidOffset +=
+      this.fluidVelocity;
+
+  }
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetSystem(){
+
+  mode = "IDLE";
+
+  sourceIndex = -1;
+
+  speechSourceIndex = -1;
+
+  speakingUntil = 0;
+
+  manualSpeechAt = 0;
+
+  voiceHold = 0;
+
+  speechBurstActive = false;
+
+  activeTransfers = [];
+
+  devices.length = 0;
+
+
+  for(
+    let i = 0;
+    i < DEVICE_COUNT;
+    i++
+  ){
+
+    devices.push(
+      new Device(i)
+    );
+
+  }
+
+}
+
+
+resetSystem();
+
+
+/* =========================================================
+   CANVAS
+========================================================= */
+
+function resizeCanvas(){
+
+  const rect =
+    canvas
+    .parentElement
+    .getBoundingClientRect();
+
+
+  W = rect.width;
+  H = rect.height;
+
+
+  const dpr =
+    window.devicePixelRatio || 1;
+
+
+  canvas.width =
+    Math.round(
+      W * dpr
+    );
+
+
+  canvas.height =
+    Math.round(
+      H * dpr
+    );
+
+
+  canvas.style.width =
+    W + "px";
+
+
+  canvas.style.height =
+    H + "px";
+
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+}
+
+
+resizeCanvas();
+
+
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+function getBaseY(){
+
+  return H * .73;
+
+}
+
+
+function getBodyHeight(){
+
+  return Math.min(
+    245,
+    H * .34
+  );
+
+}
+
+
+function getBodyWidth(){
+
+  return Math.min(
+    65,
+    W * .055
+  );
+
+}
+
+
+function getDeviceX(index){
+
+  return mapValue(
+    index,
+    0,
+    DEVICE_COUNT - 1,
+    W * .16,
+    W * .84
+  );
+
+}
+
+
+function getNearestDeviceIndex(){
+
+  if(
+    !viewer.present
+  ){
+
+    return 2;
+
+  }
+
+
+  return constrain(
+    Math.round(
+      viewer.x *
+      (
+        DEVICE_COUNT - 1
+      )
+    ),
+    0,
+    DEVICE_COUNT - 1
+  );
+
+}
+
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+async function startCamera(){
+
+  try{
+
+    cameraStream =
+      await navigator
+      .mediaDevices
+      .getUserMedia({
+
+        video:{
+
+          width:{
+            ideal:640
+          },
+
+          height:{
+            ideal:480
+          },
+
+          facingMode:
+            "user"
+
+        },
+
+        audio:false
+
+      });
+
+
+    video.srcObject =
+      cameraStream;
+
+
+    await video.play();
+
+
+    cameraReady = true;
+
+    previousCameraFrame = null;
+
+
+    $("cameraState")
+    .textContent =
+      "已啟動";
+
+
+    $("cameraBtn")
+    .textContent =
+      "攝像頭已開啟";
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    cameraReady = false;
+
+
+    $("cameraState")
+    .textContent =
+      "啟動失敗";
+
+  }
+
+}
+
+
+$("cameraBtn")
+.addEventListener(
+  "click",
+  startCamera
+);
+
+
+/* =========================================================
+   CAMERA ANALYSIS
+========================================================= */
+
+function analyzeCamera(){
+
+  if(
+    !cameraReady
+    ||
+    video.readyState < 2
+  ){
+
+    return;
+
+  }
+
+
+  analysisCtx.drawImage(
+    video,
+    0,
+    0,
+    analysisCanvas.width,
+    analysisCanvas.height
+  );
+
+
+  const frame =
+    analysisCtx
+    .getImageData(
+      0,
+      0,
+      analysisCanvas.width,
+      analysisCanvas.height
+    )
+    .data;
+
+
+  if(
+    !previousCameraFrame
+  ){
+
+    previousCameraFrame =
+      new Uint8ClampedArray(
+        frame
+      );
+
+
+    return;
+
+  }
+
+
+  const width =
+    analysisCanvas.width;
+
+
+  const height =
+    analysisCanvas.height;
+
+
+  const threshold =
+    mapValue(
+      viewer.sensitivity,
+      5,
+      80,
+      88,
+      18
+    );
+
+
+  let changed = 0;
+
+  let checked = 0;
+
+  let xTotal = 0;
+
+
+  for(
+    let y = 0;
+    y < height;
+    y += 4
+  ){
+
+    for(
+      let x = 0;
+      x < width;
+      x += 4
+    ){
+
+      const i =
+        (
+          y * width +
+          x
+        )
+        *
+        4;
+
+
+      const diff =
+        Math.abs(
+          frame[i] -
+          previousCameraFrame[i]
+        )
+
+        +
+
+        Math.abs(
+          frame[i + 1] -
+          previousCameraFrame[i + 1]
+        )
+
+        +
+
+        Math.abs(
+          frame[i + 2] -
+          previousCameraFrame[i + 2]
+        );
+
+
+      checked++;
+
+
+      if(
+        diff >
+        threshold
+      ){
+
+        changed++;
+
+        xTotal += x;
+
+      }
+
+    }
+
+  }
+
+
+  previousCameraFrame =
+    new Uint8ClampedArray(
+      frame
+    );
+
+
+  const ratio =
+    changed /
+    Math.max(
+      1,
+      checked
+    );
+
+
+  viewer.movement =
+    lerp(
+      viewer.movement,
+      constrain(
+        ratio * 3,
+        0,
+        1
+      ),
+      .30
+    );
+
+
+  if(
+    changed > 0
+  ){
+
+    let averageX =
+      xTotal /
+      changed;
+
+
+    /*
+      因為 video 顯示是鏡像。
+    */
+
+    averageX =
+      width -
+      averageX;
+
+
+    viewer.x =
+      lerp(
+        viewer.x,
+        constrain(
+          averageX / width,
+          0,
+          1
+        ),
+        .32
+      );
+
+  }
+
+
+  if(
+    ratio > .005
+  ){
+
+    viewer.present = true;
+
+    viewer.absentTime = 0;
+
+  }
+
+  else{
+
+    viewer.absentTime += 100;
+
+
+    if(
+      viewer.absentTime > 6500
+    ){
+
+      viewer.present = false;
+
+    }
+
+  }
+
+
+  if(
+    mode === "IDLE"
+    &&
+    viewer.present
+  ){
+
+    mode = "FOLLOW";
+
+  }
+
+
+  if(
+    mode === "FOLLOW"
+    &&
+    !viewer.present
+  ){
+
+    mode = "IDLE";
+
+  }
+
+}
+
+
+/* =========================================================
+   MICROPHONE
+========================================================= */
+
+async function startMicrophone(){
+
+  try{
+
+    if(
+      micReady
+    ){
+
+      return;
+
+    }
+
+
+    micStream =
+      await navigator
+      .mediaDevices
+      .getUserMedia({
+
+        audio:{
+
+          echoCancellation:true,
+
+          noiseSuppression:false,
+
+          autoGainControl:false
+
+        },
+
+        video:false
+
+      });
+
+
+    const AudioCtx =
+      window.AudioContext
+      ||
+      window.webkitAudioContext;
+
+
+    audioContext =
+      new AudioCtx();
+
+
+    if(
+      audioContext.state ===
+      "suspended"
+    ){
+
+      await audioContext.resume();
+
+    }
+
+
+    analyser =
+      audioContext
+      .createAnalyser();
+
+
+    analyser.fftSize =
+      1024;
+
+
+    analyser.smoothingTimeConstant =
+      .25;
+
+
+    micBuffer =
+      new Uint8Array(
+        analyser.fftSize
+      );
+
+
+    micSource =
+      audioContext
+      .createMediaStreamSource(
+        micStream
+      );
+
+
+    micSource.connect(
+      analyser
+    );
+
+
+    micReady = true;
+
+
+    $("micState")
+    .textContent =
+      "已啟動";
+
+
+    $("micBtn")
+    .textContent =
+      "麥克風已開啟";
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+
+    micReady = false;
+
+
+    $("micState")
+    .textContent =
+      "啟動失敗";
+
+  }
+
+}
+
+
+async function stopMicrophone(){
+
+  if(
+    micStream
+  ){
+
+    micStream
+    .getTracks()
+    .forEach(
+      function(track){
+        track.stop();
+      }
+    );
+
+  }
+
+
+  if(
+    micSource
+  ){
+
+    try{
+      micSource.disconnect();
+    }
+    catch(error){}
+
+  }
+
+
+  if(
+    audioContext
+  ){
+
+    try{
+      await audioContext.close();
+    }
+    catch(error){}
+
+  }
+
+
+  micStream = null;
+
+  audioContext = null;
+
+  analyser = null;
+
+  micSource = null;
+
+  micBuffer = null;
+
+  micReady = false;
+
+  voiceLevel = 0;
+
+  voiceHold = 0;
+
+  speechBurstActive = false;
+
+
+  $("micState")
+  .textContent =
+    "未啟動";
+
+
+  $("micBtn")
+  .textContent =
+    "開啟麥克風";
+
+}
+
+
+$("micBtn")
+.addEventListener(
+  "click",
+  startMicrophone
+);
+
+
+$("micStopBtn")
+.addEventListener(
+  "click",
+  stopMicrophone
+);
+
+
+/* =========================================================
+   AUDIO
+========================================================= */
+
+function updateAudio(
+  dt,
+  now
+){
+
+  if(
+    !micReady
+    ||
+    !analyser
+    ||
+    !micBuffer
+  ){
+
+    voiceLevel =
+      lerp(
+        voiceLevel,
+        0,
+        .06
+      );
+
+
+    voiceHold = 0;
+
+
+    return;
+
+  }
+
+
+  analyser
+  .getByteTimeDomainData(
+    micBuffer
+  );
+
+
+  let sum = 0;
+
+  let count = 0;
+
+
+  for(
+    let i = 0;
+    i < micBuffer.length;
+    i += 4
+  ){
+
+    const value =
+      (
+        micBuffer[i] -
+        128
+      )
+      /
+      128;
+
+
+    sum +=
+      value * value;
+
+
+    count++;
+
+  }
+
+
+  const rms =
+    Math.sqrt(
+      sum /
+      Math.max(
+        1,
+        count
+      )
+    );
+
+
+  voiceLevel =
+    lerp(
+      voiceLevel,
+      constrain(
+        (
+          rms -
+          .006
+        )
+        *
+        15,
+        0,
+        1
+      ),
+      .32
+    );
+
+
+  const speakingNow =
+    voiceLevel >
+    voiceThreshold;
+
+
+  if(
+    speakingNow
+  ){
+
+    speakingUntil =
+      now + 700;
+
+
+    speechSourceIndex =
+      getNearestDeviceIndex();
+
+
+    /*
+      先出現黃色，
+      讓觀者清楚知道「它聽到了」。
+    */
+
+    if(
+      mode !== "PROPAGATE"
+    ){
+
+      mode = "LISTEN";
+
+    }
+
+
+    if(
+      !speechBurstActive
+    ){
+
+      speechBurstActive = true;
+
+    }
+
+
+    voiceHold += dt;
+
+
+    /*
+      持續說話約 350ms 才成立。
+    */
+
+    if(
+      voiceHold > 350
+    ){
+
+      injectHumanMessage(
+        speechSourceIndex,
+        now
+      );
+
+
+      voiceHold = 0;
+
+    }
+
+  }
+
+  else{
+
+    voiceHold =
+      Math.max(
+        0,
+        voiceHold -
+        dt * 1.8
+      );
+
+
+    if(
+      voiceLevel <
+      voiceThreshold * .60
+    ){
+
+      speechBurstActive = false;
+
+    }
+
+
+    if(
+      mode === "LISTEN"
+      &&
+      now > speakingUntil
+    ){
+
+      mode =
+        viewer.present
+        ?
+        "FOLLOW"
+        :
+        "IDLE";
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   HUMAN MESSAGE
+========================================================= */
+
+function injectHumanMessage(
+  index,
+  now
+){
+
+  const device =
+    devices[index];
+
+
+  sourceIndex =
+    index;
+
+
+  /*
+    觀者的訊息是一個新的強能量來源。
+  */
+
+  device.signalEnergy =
+    1;
+
+
+  /*
+    新的人類訊息重新建立
+    一個比較完整的核心。
+  */
+
+  device.coreStrength =
+    1;
+
+
+  device.particleEnergy =
+    constrain(
+      device.particleEnergy + .40,
+      0,
+      1
+    );
+
+
+  device.flash = 1;
+
+
+  /*
+    每次觀者重新說話，
+    原始訊息會讓誤差稍微降低，
+    但不完全歸零。
+  */
+
+  device.mutation *= .45;
+
+
+  device.infoPhase =
+    random(
+      0,
+      Math.PI * 2
+    );
+
+
+  device.interpretationBias *= .35;
+
+
+  /*
+    不會立刻傳給別人。
+
+    先讓它「消化」一下，
+    然後才開始看旁邊的裝置。
+  */
+
+  device.nextShareAt =
+    now +
+    random(
+      500,
+      850
+    );
+
+
+  mode =
+    "PROPAGATE";
+
+}
+
+
+/* =========================================================
+   MANUAL TEST
+========================================================= */
+
+$("simulateVoiceBtn")
+.addEventListener(
+  "click",
+  function(){
+
+    const now =
+      performance.now();
+
+
+    const index =
+      getNearestDeviceIndex();
+
+
+    speechSourceIndex =
+      index;
+
+
+    speakingUntil =
+      now +
+      850;
+
+
+    mode =
+      "LISTEN";
+
+
+    /*
+      先看到黃燈約 650ms，
+      再真正生成資訊。
+    */
+
+    manualSpeechAt =
+      now +
+      650;
+
+  }
+);
+
+
+/* =========================================================
+   TRANSFER SYSTEM
+========================================================= */
+
+function isDeviceEngaged(index){
+
+  return activeTransfers.some(
+    function(transfer){
+
+      return(
+        transfer.from === index
+        ||
+        transfer.to === index
+      );
+
+    }
+  );
+
+}
+
+
+/*
+  只選左右鄰居。
+
+  因為我們現在強調：
+  「靠近／接觸」才傳資訊。
+*/
+
+function chooseNeighbor(
+  senderIndex
+){
+
+  const options = [];
+
+
+  if(
+    senderIndex > 0
+    &&
+    !isDeviceEngaged(
+      senderIndex - 1
+    )
+  ){
+
+    options.push(
+      senderIndex - 1
+    );
+
+  }
+
+
+  if(
+    senderIndex <
+    DEVICE_COUNT - 1
+    &&
+    !isDeviceEngaged(
+      senderIndex + 1
+    )
+  ){
+
+    options.push(
+      senderIndex + 1
+    );
+
+  }
+
+
+  if(
+    options.length === 0
+  ){
+
+    return null;
+
+  }
+
+
+  /*
+    讓每支裝置有一點自己的判斷。
+  */
+
+  return options[
+    Math.floor(
+      Math.random() *
+      options.length
+    )
+  ];
+
+}
+
+
+/* =========================================================
+   START CONTACT
+========================================================= */
+
+function startTransfer(
+  from,
+  to,
+  now
+){
+
+  const sender =
+    devices[from];
+
+
+  /*
+    這次可以拿去分享的資訊。
+  */
+
+  const outgoingEnergy =
+    sender.signalEnergy
+    *
+    random(
+      .58,
+      .74
+    );
+
+
+  if(
+    outgoingEnergy <
+    energyThreshold * .55
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    傳送資訊不是複製。
+
+    送出去之後，
+    原本的裝置自己也會失去一些能量。
+  */
+
+  sender.signalEnergy *=
+    random(
+      .25,
+      .40
+    );
+
+
+  sender.nextShareAt =
+    now +
+    random(
+      650,
+      1200
+    );
+
+
+  const meetingAngle =
+    getMeetingAngle(
+      from,
+      to
+    );
+
+
+  activeTransfers.push({
+
+    from:from,
+
+    to:to,
+
+    outgoingEnergy:
+      outgoingEnergy,
+
+    stage:
+      "APPROACH",
+
+    stageStart:
+      now,
+
+    approachDuration:
+      random(
+        700,
+        1100
+      ),
+
+    contactDuration:
+      random(
+        350,
+        550
+      ),
+
+    separateDuration:
+      random(
+        450,
+        700
+      ),
+
+    meetingAngle:
+      meetingAngle,
+
+    delivered:false
+
+  });
+
+}
+
+
+/* =========================================================
+   CONTACT ANGLE
+========================================================= */
+
+function getMeetingAngle(
+  from,
+  to
+){
+
+  const distance =
+    Math.abs(
+      getDeviceX(from) -
+      getDeviceX(to)
+    );
+
+
+  const height =
+    getBodyHeight();
+
+
+  const ratio =
+    constrain(
+      distance /
+      (
+        height * 2
+      ),
+      .08,
+      .42
+    );
+
+
+  const degrees =
+    Math.asin(
+      ratio
+    )
+    *
+    180
+    /
+    Math.PI;
+
+
+  /*
+    不要真的倒太大。
+  */
+
+  return constrain(
+    degrees * .72,
+    9,
+    18
+  );
+
+}
+
+
+/* =========================================================
+   TRANSFER LEAN
+========================================================= */
+
+function getTransferLeanForDevice(
+  index,
+  now
+){
+
+  let lean = 0;
+
+
+  for(
+    const transfer
+    of activeTransfers
+  ){
+
+    if(
+      transfer.from !== index
+      &&
+      transfer.to !== index
+    ){
+
+      continue;
+
+    }
+
+
+    let strength = 0;
+
+
+    const elapsed =
+      now -
+      transfer.stageStart;
+
+
+    if(
+      transfer.stage ===
+      "APPROACH"
+    ){
+
+      const t =
+        constrain(
+          elapsed /
+          transfer.approachDuration,
+          0,
+          1
+        );
+
+
+      strength =
+        easeInOut(
+          t
+        );
+
+    }
+
+
+    if(
+      transfer.stage ===
+      "CONTACT"
+    ){
+
+      strength = 1;
+
+    }
+
+
+    if(
+      transfer.stage ===
+      "SEPARATE"
+    ){
+
+      const t =
+        constrain(
+          elapsed /
+          transfer.separateDuration,
+          0,
+          1
+        );
+
+
+      strength =
+        1 -
+        easeInOut(
+          t
+        );
+
+    }
+
+
+    let direction = 0;
+
+
+    if(
+      transfer.from === index
+    ){
+
+      direction =
+        Math.sign(
+          transfer.to -
+          transfer.from
+        );
+
+    }
+
+    else{
+
+      direction =
+        Math.sign(
+          transfer.from -
+          transfer.to
+        );
+
+    }
+
+
+    lean +=
+      direction
+      *
+      transfer.meetingAngle
+      *
+      strength;
+
+  }
+
+
+  return constrain(
+    lean,
+    -20,
+    20
+  );
+
+}
+
+
+/* =========================================================
+   DELIVER INFORMATION
+========================================================= */
+
+function deliverAtContact(
+  transfer,
+  now
+){
+
+  if(
+    transfer.delivered
+  ){
+
+    return;
+
+  }
+
+
+  transfer.delivered = true;
+
+
+  const sender =
+    devices[
+      transfer.from
+    ];
+
+
+  const receiver =
+    devices[
+      transfer.to
+    ];
+
+
+  /*
+    每傳一次都再衰減。
+  */
+
+  const incomingEnergy =
+    transfer.outgoingEnergy
+    *
+    random(
+      .72,
+      .88
+    );
+
+
+  /*
+    接收者原本有自己的資訊，
+    所以不是單純覆蓋。
+  */
+
+  receiver.signalEnergy =
+    constrain(
+      receiver.signalEnergy * .35
+      +
+      incomingEnergy,
+      0,
+      1
+    );
+
+
+  /*
+    每交換一次，
+    誤差增加。
+  */
+
+  const mutationAdded =
+    random(
+      .16,
+      .30
+    )
+    +
+    sender.mutation * .16;
+
+
+  receiver.mutation =
+    constrain(
+      receiver.mutation
+      +
+      mutationAdded,
+      0,
+      1
+    );
+
+
+  /*
+    接收的內容和來源很像，
+    但不是同一個相位。
+  */
+
+  receiver.infoPhase =
+    sender.infoPhase
+    +
+    random(
+      -.75,
+      .75
+    )
+    *
+    (
+      .45
+      +
+      receiver.mutation
+    );
+
+
+  /*
+    每個裝置會用自己的方式理解，
+    造成不同偏轉。
+  */
+
+  receiver.interpretationBias =
+    constrain(
+      receiver.interpretationBias * .45
+      +
+      random(
+        -1,
+        1
+      )
+      *
+      (
+        2
+        +
+        receiver.mutation * 5
+      ),
+      -8,
+      8
+    );
+
+
+  receiver.receiveCount++;
+
+
+  receiver.coreStrength =
+    Math.max(
+      receiver.coreStrength,
+      incomingEnergy *
+      (
+        1 -
+        receiver.mutation * .35
+      )
+    );
+
+
+  receiver.particleEnergy =
+    constrain(
+      receiver.particleEnergy
+      +
+      .20
+      +
+      receiver.mutation * .20,
+      0,
+      1
+    );
+
+
+  sender.particleEnergy =
+    constrain(
+      sender.particleEnergy
+      +
+      .06,
+      0,
+      1
+    );
+
+
+  sender.flash = 1;
+
+  receiver.flash = 1;
+
+
+  /*
+    接收者不會立刻又傳。
+
+    會停一下，
+    像是在「理解」剛收到的內容。
+  */
+
+  receiver.nextShareAt =
+    now +
+    random(
+      380,
+      850
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE CONTACTS
+========================================================= */
+
+function updateTransfers(now){
+
+  for(
+    let i =
+      activeTransfers.length - 1;
+
+    i >= 0;
+
+    i--
+  ){
+
+    const transfer =
+      activeTransfers[i];
+
+
+    const elapsed =
+      now -
+      transfer.stageStart;
+
+
+    /* -----------------------------
+       APPROACH
+    ------------------------------ */
+
+    if(
+      transfer.stage ===
+      "APPROACH"
+    ){
+
+      if(
+        elapsed >=
+        transfer.approachDuration
+      ){
+
+        transfer.stage =
+          "CONTACT";
+
+
+        transfer.stageStart =
+          now;
+
+
+        /*
+          真正接觸這一刻
+          才發生資訊交換。
+        */
+
+        deliverAtContact(
+          transfer,
+          now
+        );
+
+      }
+
+
+      continue;
+
+    }
+
+
+    /* -----------------------------
+       CONTACT
+    ------------------------------ */
+
+    if(
+      transfer.stage ===
+      "CONTACT"
+    ){
+
+      if(
+        elapsed >=
+        transfer.contactDuration
+      ){
+
+        transfer.stage =
+          "SEPARATE";
+
+
+        transfer.stageStart =
+          now;
+
+      }
+
+
+      continue;
+
+    }
+
+
+    /* -----------------------------
+       SEPARATE
+    ------------------------------ */
+
+    if(
+      transfer.stage ===
+      "SEPARATE"
+    ){
+
+      if(
+        elapsed >=
+        transfer.separateDuration
+      ){
+
+        activeTransfers.splice(
+          i,
+          1
+        );
+
+      }
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   SCHEDULE NEW CONTACTS
+========================================================= */
+
+function scheduleNewTransfers(now){
+
+  if(
+    mode !== "PROPAGATE"
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    activeTransfers.length >=
+    MAX_SIMULTANEOUS_CONTACTS
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    找出目前：
+    1. 有足夠能量
+    2. 沒在接觸
+    3. 已經思考完
+    的裝置。
+  */
+
+  const candidates =
+    devices.filter(
+      function(device){
+
+        return(
+          device.signalEnergy >=
+          energyThreshold
+
+          &&
+
+          !isDeviceEngaged(
+            device.index
+          )
+
+          &&
+
+          now >=
+          device.nextShareAt
+        );
+
+      }
+    );
+
+
+  shuffle(
+    candidates
+  );
+
+
+  for(
+    const sender
+    of candidates
+  ){
+
+    if(
+      activeTransfers.length >=
+      MAX_SIMULTANEOUS_CONTACTS
+    ){
+
+      break;
+
+    }
+
+
+    /*
+      它不一定每次都想傳。
+
+      這可以避免像排程機器。
+    */
+
+    const willingness =
+      .68
+      +
+      sender.signalEnergy * .20;
+
+
+    if(
+      Math.random() >
+      willingness
+    ){
+
+      sender.nextShareAt =
+        now +
+        random(
+          300,
+          700
+        );
+
+
+      continue;
+
+    }
+
+
+    const target =
+      chooseNeighbor(
+        sender.index
+      );
+
+
+    if(
+      target === null
+    ){
+
+      sender.nextShareAt =
+        now +
+        300;
+
+
+      continue;
+
+    }
+
+
+    startTransfer(
+      sender.index,
+      target,
+      now
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   END NATURALLY
+========================================================= */
+
+function updateNetworkEnding(){
+
+  if(
+    mode !== "PROPAGATE"
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    activeTransfers.length > 0
+  ){
+
+    return;
+
+  }
+
+
+  const stillAlive =
+    devices.some(
+      function(device){
+
+        return(
+          device.signalEnergy >=
+          energyThreshold
+        );
+
+      }
+    );
+
+
+  /*
+    沒有任何裝置還有足夠資訊，
+    自然停止。
+  */
+
+  if(
+    !stillAlive
+  ){
+
+    mode =
+      viewer.present
+      ?
+      "FOLLOW"
+      :
+      "IDLE";
+
+
+    sourceIndex =
+      -1;
+
+  }
+
+}
+
+
+/* =========================================================
+   DRAW TABLE
+========================================================= */
+
+function drawTable(){
+
+  const y =
+    getBaseY() +
+    18;
+
+
+  ctx.fillStyle =
+    "#e4dfd6";
+
+
+  ctx.fillRect(
+    W * .055,
+    y,
+    W * .89,
+    H * .19
+  );
+
+
+  ctx.fillStyle =
+    "rgba(0,0,0,.07)";
+
+
+  ctx.fillRect(
+    W * .055,
+    y,
+    W * .89,
+    4
+  );
+
+}
+
+
+/* =========================================================
+   DRAW DEVICE
+========================================================= */
+
+function drawDevice(
+  device,
+  now
+){
+
+  const x =
+    getDeviceX(
+      device.index
+    );
+
+
+  const baseY =
+    getBaseY();
+
+
+  const bodyHeight =
+    getBodyHeight();
+
+
+  const bodyWidth =
+    getBodyWidth();
+
+
+  const angleRad =
+    device.angle
+    *
+    Math.PI
+    /
+    180;
+
+
+  ctx.save();
+
+
+  ctx.translate(
+    x,
+    baseY
+  );
+
+
+  /* SHADOW */
+
+  ctx.fillStyle =
+    "rgba(0,0,0,.09)";
+
+
+  ctx.beginPath();
+
+
+  ctx.ellipse(
+    5,
+    12,
+    bodyWidth * .68,
+    7,
+    0,
+    0,
+    Math.PI * 2
+  );
+
+
+  ctx.fill();
+
+
+  /* BASE */
+
+  ctx.fillStyle =
+    "#171817";
+
+
+  roundRect(
+    ctx,
+    -bodyWidth * .63,
+    -5,
+    bodyWidth * 1.26,
+    18,
+    7
+  );
+
+
+  ctx.fill();
+
+
+  /* PIVOT */
+
+  ctx.fillStyle =
+    "#353936";
+
+
+  ctx.beginPath();
+
+
+  ctx.arc(
+    0,
+    0,
+    8,
+    0,
+    Math.PI * 2
+  );
+
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    "#101110";
+
+
+  ctx.beginPath();
+
+
+  ctx.arc(
+    0,
+    0,
+    4,
+    0,
+    Math.PI * 2
+  );
+
+
+  ctx.fill();
+
+
+  /*
+    整支裝置轉。
+  */
+
+  ctx.rotate(
+    angleRad
+  );
+
+
+  /* BODY */
+
+  const bodyGradient =
+    ctx.createLinearGradient(
+      -bodyWidth / 2,
+      0,
+      bodyWidth / 2,
+      0
+    );
+
+
+  bodyGradient.addColorStop(
+    0,
+    "#050605"
+  );
+
+
+  bodyGradient.addColorStop(
+    .45,
+    "#2b2d2c"
+  );
+
+
+  bodyGradient.addColorStop(
+    1,
+    "#070807"
+  );
+
+
+  ctx.fillStyle =
+    bodyGradient;
+
+
+  ctx.shadowBlur =
+    8;
+
+
+  ctx.shadowColor =
+    "rgba(0,0,0,.20)";
+
+
+  roundRect(
+    ctx,
+    -bodyWidth / 2,
+    -bodyHeight,
+    bodyWidth,
+    bodyHeight,
+    7
+  );
+
+
+  ctx.fill();
+
+
+  ctx.shadowBlur =
+    0;
+
+
+  /* LED */
+
+  drawLED(
+    device,
+    now,
+    bodyWidth,
+    bodyHeight
+  );
+
+
+  /* CAMERA */
+
+  const cameraY =
+    -bodyHeight * .73;
+
+
+  ctx.fillStyle =
+    "#050706";
+
+
+  ctx.beginPath();
+
+
+  ctx.arc(
+    0,
+    cameraY,
+    9,
+    0,
+    Math.PI * 2
+  );
+
+
+  ctx.fill();
+
+
+  ctx.strokeStyle =
+    "#4a504d";
+
+
+  ctx.lineWidth = 1;
+
+
+  ctx.stroke();
+
+
+  ctx.fillStyle =
+    "#020607";
+
+
+  ctx.beginPath();
+
+
+  ctx.arc(
+    0,
+    cameraY,
+    5.5,
+    0,
+    Math.PI * 2
+  );
+
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    "rgba(100,155,180,.48)";
+
+
+  ctx.beginPath();
+
+
+  ctx.arc(
+    -1.5,
+    cameraY - 1.7,
+    1.7,
+    0,
+    Math.PI * 2
+  );
+
+
+  ctx.fill();
+
+
+  /* SCREEN */
+
+  const screenW =
+    bodyWidth * .70;
+
+
+  const screenH =
+    bodyHeight * .31;
+
+
+  const screenX =
+    -screenW / 2;
+
+
+  const screenY =
+    -bodyHeight * .56;
+
+
+  ctx.fillStyle =
+    "#020405";
+
+
+  roundRect(
+    ctx,
+    screenX,
+    screenY,
+    screenW,
+    screenH,
+    3
+  );
+
+
+  ctx.fill();
+
+
+  ctx.strokeStyle =
+    "#303635";
+
+
+  ctx.stroke();
+
+
+  ctx.save();
+
+
+  roundRect(
+    ctx,
+    screenX + 3,
+    screenY + 3,
+    screenW - 6,
+    screenH - 6,
+    2
+  );
+
+
+  ctx.clip();
+
+
+  drawFluidScreen(
+    device,
+    now,
+    screenX + 3,
+    screenY + 3,
+    screenW - 6,
+    screenH - 6
+  );
+
+
+  ctx.restore();
+
+
+  ctx.restore();
+
+}
+
+
+/* =========================================================
+   LED
+========================================================= */
+
+function drawLED(
+  device,
+  now,
+  width,
+  height
+){
+
+  const breath =
+    (
+      Math.sin(
+        now * .0025 +
+        device.phase
+      )
+      +
+      1
+    )
+    /
+    2;
+
+
+  /*
+    待機 = 白
+  */
+
+  let r = 190;
+  let g = 210;
+  let b = 215;
+
+  let brightness =
+    .16 +
+    breath * .08;
+
+
+  /*
+    發現觀者 = 綠
+  */
+
+  if(
+    viewer.present
+  ){
+
+    r = 45;
+    g = 255;
+    b = 105;
+
+    brightness =
+      .55 +
+      breath * .18;
+
+  }
+
+
+  /*
+    說話 = 黃
+
+    只有最近那支。
+  */
+
+  if(
+    now < speakingUntil
+    &&
+    device.index ===
+    speechSourceIndex
+  ){
+
+    r = 255;
+    g = 215;
+    b = 35;
+
+    brightness =
+      .75 +
+      voiceLevel * .20;
+
+  }
+
+
+  /*
+    靠近／接觸傳資訊 = 紅
+
+    只限正在交換的那兩支。
+  */
+
+  if(
+    isDeviceEngaged(
+      device.index
+    )
+  ){
+
+    r = 255;
+    g = 45;
+    b = 40;
+
+
+    const pulse =
+      (
+        Math.sin(
+          now * .012 +
+          device.phase
+        )
+        +
+        1
+      )
+      /
+      2;
+
+
+    brightness =
+      .68 +
+      pulse * .30;
+
+  }
+
+
+  brightness +=
+    device.flash * .16;
+
+
+  brightness =
+    constrain(
+      brightness,
+      .10,
+      1
+    );
+
+
+  ctx.fillStyle =
+    "rgba(45,50,50,.35)";
+
+
+  ctx.fillRect(
+    -width / 2 + 3,
+    -height + 9,
+    width - 6,
+    5
+  );
+
+
+  ctx.shadowBlur =
+    5 +
+    brightness * 18;
+
+
+  ctx.shadowColor =
+    `rgba(
+      ${r},
+      ${g},
+      ${b},
+      ${brightness}
+    )`;
+
+
+  ctx.fillStyle =
+    `rgba(
+      ${r},
+      ${g},
+      ${b},
+      ${brightness}
+    )`;
+
+
+  ctx.fillRect(
+    -width / 2 + 3,
+    -height + 9,
+    width - 6,
+    4
+  );
+
+
+  ctx.shadowBlur = 0;
+
+}
+
+
+/* =========================================================
+   SCREEN
+========================================================= */
+
+function drawFluidScreen(
+  device,
+  now,
+  x,
+  y,
+  w,
+  h
+){
+
+  /* BACKGROUND */
+
+  const bg =
+    ctx.createLinearGradient(
+      x,
+      y,
+      x,
+      y + h
+    );
+
+
+  bg.addColorStop(
+    0,
+    "#071653"
+  );
+
+
+  bg.addColorStop(
+    .5,
+    "#06144a"
+  );
+
+
+  bg.addColorStop(
+    1,
+    "#030c32"
+  );
+
+
+  ctx.fillStyle = bg;
+
+
+  ctx.fillRect(
+    x,
+    y,
+    w,
+    h
+  );
+
+
+  const energy =
+    constrain(
+      device.signalEnergy,
+      0,
+      1
+    );
+
+
+  const mutation =
+    constrain(
+      device.mutation,
+      0,
+      1
+    );
+
+
+  const motion =
+    constrain(
+      Math.abs(
+        device.angularVelocity
+      )
+      *
+      1.6,
+      0,
+      1
+    );
+
+
+  /* =====================================
+     GRAVITY
+  ===================================== */
+
+  const angle =
+    device.angle
+    *
+    Math.PI
+    /
+    180;
+
+
+  let gravityX =
+    Math.sin(
+      angle
+    )
+
+    -
+
+    device.angularVelocity *
+    .11
+
+    +
+
+    device.fluidOffset *
+    .10;
+
+
+  let gravityY =
+    Math.cos(
+      angle
+    );
+
+
+  const length =
+    Math.sqrt(
+      gravityX * gravityX +
+      gravityY * gravityY
+    )
+    ||
+    1;
+
+
+  gravityX /= length;
+  gravityY /= length;
+
+
+  const tangentX =
+    gravityY;
+
+
+  const tangentY =
+    -gravityX;
+
+
+  /* =====================================
+     LIQUID AMOUNT
+  ===================================== */
+
+  const fillAmount =
+    constrain(
+      .30 +
+      energy * .13 +
+      device.particleEnergy * .06,
+      .24,
+      .55
+    );
+
+
+  const threshold =
+    lerp(
+      .57,
+      .05,
+      fillAmount
+    );
+
+
+  const time =
+    now * .001;
+
+
+  const turbulence =
+    .015
+    +
+    mutation * .065
+    +
+    device.particleEnergy * .035
+    +
+    motion * .04;
+
+
+  const cell = 2;
+
+
+  /* =====================================
+     LIQUID BODY
+  ===================================== */
+
+  for(
+    let py = 0;
+    py < h;
+    py += cell
+  ){
+
+    for(
+      let px = 0;
+      px < w;
+      px += cell
+    ){
+
+      const nx =
+        px / w * 2 - 1;
+
+
+      const ny =
+        py / h * 2 - 1;
+
+
+      const depthAxis =
+        nx * gravityX +
+        ny * gravityY;
+
+
+      const tangent =
+        nx * tangentX +
+        ny * tangentY;
+
+
+      let wave =
+        Math.sin(
+          tangent *
+          (
+            6 +
+            mutation * 6
+          )
+          +
+          time *
+          (
+            1.8 +
+            mutation * 2
+          )
+          +
+          device.infoPhase
+        )
+        *
+        (
+          .016 +
+          turbulence * .025
+        );
+
+
+      wave +=
+        Math.sin(
+          tangent * 14 -
+          time * 3.5 +
+          device.phase
+        )
+        *
+        mutation *
+        .030;
+
+
+      wave +=
+        Math.sin(
+          (
+            nx + ny
+          )
+          *
+          12
+          +
+          time * 5
+        )
+        *
+        mutation *
+        .015;
+
+
+      if(
+        depthAxis <=
+        threshold + wave
+      ){
+
+        continue;
+
+      }
+
+
+      const depth =
+        constrain(
+          (
+            depthAxis -
+            threshold -
+            wave
+          )
+          *
+          2.2,
+          0,
+          1
+        );
+
+
+      const alpha =
+        .58 +
+        depth * .32;
+
+
+      ctx.fillStyle =
+        `rgba(
+          35,
+          ${218 + depth * 28},
+          ${248 - depth * 18},
+          ${alpha}
+        )`;
+
+
+      ctx.fillRect(
+        x + px,
+        y + py,
+        cell,
+        cell
+      );
+
+
+      /*
+        誤差越高，
+        液體內的碎粒越多。
+      */
+
+      const noise =
+        pseudoLiquidNoise(
+          px,
+          py,
+          device.index,
+          Math.floor(
+            now / 100
+          )
+        );
+
+
+      if(
+        noise >
+        .96 -
+        mutation * .12
+      ){
+
+        ctx.fillStyle =
+          `rgba(
+            190,
+            255,
+            255,
+            ${
+              .10 +
+              mutation * .38
+            }
+          )`;
+
+
+        ctx.fillRect(
+          x + px,
+          y + py,
+          1,
+          1
+        );
+
+      }
+
+    }
+
+  }
+
+
+  /* =====================================
+     INFORMATION CORE
+
+     剛收到人類聲音時：
+     一顆比較完整的大核心。
+
+     傳越多次：
+     核心逐漸碎成很多顆。
+  ===================================== */
+
+  if(
+    device.coreStrength >
+    .02
+  ){
+
+    const pieces =
+      1 +
+      Math.floor(
+        mutation * 6
+      );
+
+
+    for(
+      let i = 0;
+      i < pieces;
+      i++
+    ){
+
+      const spread =
+        mutation *
+        .22;
+
+
+      const side =
+        pieces === 1
+        ?
+        0
+        :
+        (
+          i /
+          (
+            pieces - 1
+          )
+          -
+          .5
+        )
+        *
+        2;
+
+
+      const localDepth =
+        threshold +
+        .28 +
+        Math.sin(
+          device.phase +
+          i * 2.1
+        )
+        *
+        spread *
+        .18;
+
+
+      const localSide =
+        side *
+        spread;
+
+
+      const localX =
+        tangentX * localSide
+        +
+        gravityX * localDepth;
+
+
+      const localY =
+        tangentY * localSide
+        +
+        gravityY * localDepth;
+
+
+      const screenX =
+        x +
+        (
+          localX + 1
+        )
+        *
+        .5 *
+        w;
+
+
+      const screenY =
+        y +
+        (
+          localY + 1
+        )
+        *
+        .5 *
+        h;
+
+
+      const baseSize =
+        4.2
+        *
+        device.coreStrength;
+
+
+      const size =
+        Math.max(
+          .8,
+          baseSize
+          *
+          (
+            1 -
+            mutation * .55
+          )
+          /
+          Math.sqrt(
+            pieces
+          )
+        );
+
+
+      ctx.shadowBlur =
+        6 +
+        device.coreStrength * 10;
+
+
+      ctx.shadowColor =
+        "rgba(130,255,255,.70)";
+
+
+      ctx.fillStyle =
+        `rgba(
+          200,
+          255,
+          255,
+          ${
+            .45 +
+            device.coreStrength * .40
+          }
+        )`;
+
+
+      ctx.beginPath();
+
+
+      ctx.arc(
+        screenX,
+        screenY,
+        size,
+        0,
+        Math.PI * 2
+      );
+
+
+      ctx.fill();
+
+
+      ctx.shadowBlur = 0;
+
+    }
+
+  }
+
+
+  /* =====================================
+     FLOATING PARTICLES
+  ===================================== */
+
+  const particleCount =
+    Math.floor(
+      8
+      +
+      energy * 12
+      +
+      mutation * 28
+      +
+      device.receiveCount * 2
+    );
+
+
+  for(
+    let i = 0;
+    i < particleCount;
+    i++
+  ){
+
+    const seed =
+      device
+      .fluidSeeds[
+        i %
+        device.fluidSeeds.length
+      ];
+
+
+    const t =
+      fract(
+        now *
+        (
+          .00008 +
+          mutation * .00014
+        )
+        *
+        seed.speed
+        +
+        seed.phase
+      );
+
+
+    /*
+      粒子仍受重力影響，
+      但誤差越高越容易偏離。
+    */
+
+    const side =
+      seed.offset
+      *
+      (
+        .55 +
+        mutation * .35
+      );
+
+
+    const depth =
+      threshold +
+      .14 +
+      t * .62;
+
+
+    const chaosDrift =
+      Math.sin(
+        now * .003 +
+        seed.phase
+      )
+      *
+      mutation *
+      .10;
+
+
+    const localX =
+      tangentX *
+      (
+        side +
+        chaosDrift
+      )
+      +
+      gravityX *
+      depth;
+
+
+    const localY =
+      tangentY *
+      (
+        side +
+        chaosDrift
+      )
+      +
+      gravityY *
+      depth;
+
+
+    const screenX =
+      x +
+      (
+        localX + 1
+      )
+      *
+      .5 *
+      w;
+
+
+    const screenY =
+      y +
+      (
+        localY + 1
+      )
+      *
+      .5 *
+      h;
+
+
+    if(
+      screenX < x
+      ||
+      screenX > x + w
+      ||
+      screenY < y
+      ||
+      screenY > y + h
+    ){
+
+      continue;
+
+    }
+
+
+    const size =
+      .7 +
+      seed.size *
+      (
+        .20 +
+        mutation * .22
+      );
+
+
+    ctx.fillStyle =
+      `rgba(
+        190,
+        255,
+        255,
+        ${
+          .10 +
+          energy * .18 +
+          mutation * .30
+        }
+      )`;
+
+
+    ctx.beginPath();
+
+
+    ctx.arc(
+      screenX,
+      screenY,
+      size,
+      0,
+      Math.PI * 2
+    );
+
+
+    ctx.fill();
+
+  }
+
+
+  /*
+    接觸瞬間亮一下。
+  */
+
+  if(
+    device.flash > 0
+  ){
+
+    ctx.fillStyle =
+      `rgba(
+        170,
+        255,
+        255,
+        ${device.flash*.16}
+      )`;
+
+
+    ctx.fillRect(
+      x,
+      y,
+      w,
+      h
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+function updateUI(){
+
+  let viewerText = "—";
+
+
+  if(
+    viewer.present
+  ){
+
+    if(
+      viewer.x < .32
+    ){
+
+      viewerText = "左側";
+
+    }
+
+    else if(
+      viewer.x > .68
+    ){
+
+      viewerText = "右側";
+
+    }
+
+    else{
+
+      viewerText = "中央";
+
+    }
+
+  }
+
+
+  $("viewerPosition")
+  .textContent =
+    viewerText;
+
+
+  const cameraPercent =
+    Math.round(
+      constrain(
+        viewer.movement * 4,
+        0,
+        1
+      )
+      *
+      100
+    );
+
+
+  $("cameraPercent")
+  .textContent =
+    cameraPercent;
+
+
+  $("cameraMeter")
+  .style.width =
+    cameraPercent +
+    "%";
+
+
+  const voicePercent =
+    Math.round(
+      voiceLevel *
+      100
+    );
+
+
+  $("voicePercent")
+  .textContent =
+    voicePercent;
+
+
+  $("voiceMeter")
+  .style.width =
+    voicePercent +
+    "%";
+
+
+  $("contactCount")
+  .textContent =
+    activeTransfers.length;
+
+
+  let maxEnergy = 0;
+
+  let mutationTotal = 0;
+
+
+  for(
+    const device
+    of devices
+  ){
+
+    maxEnergy =
+      Math.max(
+        maxEnergy,
+        device.signalEnergy
+      );
+
+
+    mutationTotal +=
+      device.mutation;
+
+  }
+
+
+  const energyPercent =
+    Math.round(
+      maxEnergy *
+      100
+    );
+
+
+  $("energyPercent")
+  .textContent =
+    energyPercent;
+
+
+  $("energyMeter")
+  .style.width =
+    energyPercent +
+    "%";
+
+
+  const averageMutation =
+    mutationTotal /
+    DEVICE_COUNT;
+
+
+  const mutationPercent =
+    Math.round(
+      averageMutation *
+      100
+    );
+
+
+  $("mutationPercent")
+  .textContent =
+    mutationPercent;
+
+
+  $("mutationMeter")
+  .style.width =
+    mutationPercent +
+    "%";
+
+
+  $("sourceText")
+  .textContent =
+    sourceIndex >= 0
+    ?
+    `第 ${sourceIndex + 1} 支`
+    :
+    "—";
+
+
+  let title =
+    "待機";
+
+
+  let description =
+    "裝置正在等待觀者。";
+
+
+  if(
+    mode === "FOLLOW"
+  ){
+
+    title =
+      "注意觀者";
+
+
+    description =
+      "裝置注意到你，並維持對你的跟隨。";
+
+  }
+
+
+  if(
+    mode === "LISTEN"
+  ){
+
+    title =
+      "接收聲音";
+
+
+    description =
+      "離你最近的裝置正在形成一個新的資訊核心。";
+
+  }
+
+
+  if(
+    mode === "PROPAGATE"
+  ){
+
+    if(
+      activeTransfers.length > 0
+    ){
+
+      title =
+        "關係傳遞";
+
+
+      description =
+        "裝置正在靠近彼此；只有接觸發生時，資訊才會被交換。";
+
+    }
+
+    else{
+
+      title =
+        "理解／等待";
+
+
+      description =
+        "裝置正在消化資訊，並決定是否繼續影響下一個個體。";
+
+    }
+
+  }
+
+
+  $("modeText")
+  .textContent =
+    title;
+
+
+  $("phaseName")
+  .textContent =
+    title;
+
+
+  $("phaseDescription")
+  .textContent =
+    description;
+
+}
+
+
+/* =========================================================
+   SLIDERS
+========================================================= */
+
+$("sensitivitySlider")
+.addEventListener(
+  "input",
+  function(event){
+
+    viewer.sensitivity =
+      Number(
+        event.target.value
+      );
+
+
+    $("sensitivityValue")
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+$("followAngleSlider")
+.addEventListener(
+  "input",
+  function(event){
+
+    followMaxAngle =
+      Number(
+        event.target.value
+      );
+
+
+    $("followAngleValue")
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+$("voiceThresholdSlider")
+.addEventListener(
+  "input",
+  function(event){
+
+    voiceThreshold =
+      Number(
+        event.target.value
+      )
+      /
+      100;
+
+
+    $("voiceThresholdValue")
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+$("energyThresholdSlider")
+.addEventListener(
+  "input",
+  function(event){
+
+    energyThreshold =
+      Number(
+        event.target.value
+      )
+      /
+      100;
+
+
+    $("energyThresholdValue")
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+$("decaySpeedSlider")
+.addEventListener(
+  "input",
+  function(event){
+
+    decaySpeed =
+      Number(
+        event.target.value
+      )
+      /
+      100;
+
+
+    $("decaySpeedValue")
+    .textContent =
+      event.target.value;
+
+  }
+);
+
+
+$("resetBtn")
+.addEventListener(
+  "click",
+  resetSystem
+);
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function random(
+  min,
+  max
+){
+
+  if(
+    max === undefined
+  ){
+
+    max = min;
+    min = 0;
+
+  }
+
+
+  return(
+    Math.random()
+    *
+    (
+      max - min
+    )
+    +
+    min
+  );
+
+}
+
+
+function lerp(
+  a,
+  b,
+  t
+){
+
+  return(
+    a
+    +
+    (
+      b - a
+    )
+    *
+    t
+  );
+
+}
+
+
+function constrain(
+  value,
+  min,
+  max
+){
+
+  return Math.max(
+    min,
+    Math.min(
+      max,
+      value
+    )
+  );
+
+}
+
+
+function mapValue(
+  value,
+  inMin,
+  inMax,
+  outMin,
+  outMax
+){
+
+  return(
+    (
+      value - inMin
+    )
+    /
+    (
+      inMax - inMin
+    )
+    *
+    (
+      outMax - outMin
+    )
+    +
+    outMin
+  );
+
+}
+
+
+function fract(value){
+
+  return(
+    value -
+    Math.floor(
+      value
+    )
+  );
+
+}
+
+
+function easeInOut(t){
+
+  return(
+    t < .5
+    ?
+    2 * t * t
+    :
+    1 -
+    Math.pow(
+      -2 * t + 2,
+      2
+    )
+    /
+    2
+  );
+
+}
+
+
+function pseudoLiquidNoise(
+  x,
+  y,
+  deviceIndex,
+  frame
+){
+
+  const value =
+    Math.sin(
+      x * 12.9898
+      +
+      y * 78.233
+      +
+      deviceIndex * 37.719
+      +
+      frame * .137
+    )
+    *
+    43758.5453;
+
+
+  return(
+    value -
+    Math.floor(
+      value
+    )
+  );
+
+}
+
+
+function shuffle(array){
+
+  for(
+    let i =
+      array.length - 1;
+
+    i > 0;
+
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random()
+        *
+        (
+          i + 1
+        )
+      );
+
+
+    const temp =
+      array[i];
+
+
+    array[i] =
+      array[j];
+
+
+    array[j] =
+      temp;
+
+  }
+
+}
+
+
+function roundRect(
+  context,
+  x,
+  y,
+  width,
+  height,
+  radius
+){
+
+  const r =
+    Math.min(
+      radius,
+      Math.abs(width) / 2,
+      Math.abs(height) / 2
+    );
+
+
+  context.beginPath();
+
+
+  context.moveTo(
+    x + r,
+    y
+  );
+
+
+  context.arcTo(
+    x + width,
+    y,
+    x + width,
+    y + height,
+    r
+  );
+
+
+  context.arcTo(
+    x + width,
+    y + height,
+    x,
+    y + height,
+    r
+  );
+
+
+  context.arcTo(
+    x,
+    y + height,
+    x,
+    y,
+    r
+  );
+
+
+  context.arcTo(
+    x,
+    y,
+    x + width,
+    y,
+    r
+  );
+
+
+  context.closePath();
+
+}
+
+
+/* =========================================================
+   MAIN LOOP
+========================================================= */
+
+let previousTime =
+  performance.now();
+
+
+let lastCameraAnalysis = 0;
+
+
+function animate(now){
+
+  const dt =
+    Math.min(
+      50,
+      now -
+      previousTime
+    );
+
+
+  previousTime = now;
+
+
+  /* =====================================
+     MANUAL SPEECH
+  ===================================== */
+
+  if(
+    manualSpeechAt > 0
+    &&
+    now >= manualSpeechAt
+  ){
+
+    manualSpeechAt = 0;
+
+
+    injectHumanMessage(
+      speechSourceIndex,
+      now
+    );
+
+  }
+
+
+  /* =====================================
+     CAMERA
+  ===================================== */
+
+  if(
+    now -
+    lastCameraAnalysis >
+    100
+  ){
+
+    analyzeCamera();
+
+
+    lastCameraAnalysis = now;
+
+  }
+
+
+  /* =====================================
+     AUDIO
+  ===================================== */
+
+  updateAudio(
+    dt,
+    now
+  );
+
+
+  /* =====================================
+     CONTACT NETWORK
+  ===================================== */
+
+  updateTransfers(
+    now
+  );
+
+
+  scheduleNewTransfers(
+    now
+  );
+
+
+  updateNetworkEnding();
+
+
+  /* =====================================
+     DEVICES
+  ===================================== */
+
+  for(
+    const device
+    of devices
+  ){
+
+    device.update(
+      now,
+      dt
+    );
+
+
+    device.updateFluidPhysics(
+      dt
+    );
+
+  }
+
+
+  /* =====================================
+     DRAW
+  ===================================== */
+
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+
+  drawTable();
+
+
+  for(
+    const device
+    of devices
+  ){
+
+    drawDevice(
+      device,
+      now
+    );
+
+  }
+
+
+  /*
+    這版故意不畫：
+    - 虛線
+    - 紅色傳遞線
+    - 飛行紅色粒子
+
+    資訊交換只靠：
+    裝置靠近 + LED + 螢幕變化。
+  */
+
+
+  updateUI();
+
+
+  requestAnimationFrame(
+    animate
+  );
+
+}
+
+
+requestAnimationFrame(
+  animate
+);
+
+</script>
+
+</body>
+</html>
