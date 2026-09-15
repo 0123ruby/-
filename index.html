@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>誤會機器｜順從 → 傳遞 → 混亂</title>
+<title>誤會機器｜順從 → 傳遞 → 群體偏差</title>
 
 <style>
 
@@ -75,7 +75,6 @@ body{
 
 #title h1{
   margin:0;
-
   font-size:28px;
 }
 
@@ -253,8 +252,6 @@ input[type="range"]{
 
 <div id="app">
 
-  <!-- 左側模擬畫面 -->
-
   <div id="stageWrap">
 
     <canvas id="stage"></canvas>
@@ -290,12 +287,10 @@ input[type="range"]{
   </div>
 
 
-  <!-- 右側控制 -->
-
   <aside id="panel">
 
 
-    <!-- 攝像頭 -->
+    <!-- CAMERA -->
 
     <div class="section">
 
@@ -321,7 +316,6 @@ input[type="range"]{
       <div class="status">
 
         攝像頭：
-
         <b id="cameraState">
           未啟動
         </b>
@@ -329,7 +323,6 @@ input[type="range"]{
         <br>
 
         觀者位置：
-
         <b id="viewerPosition">
           —
         </b>
@@ -345,9 +338,7 @@ input[type="range"]{
         </b>
 
         <div class="meter">
-
           <div id="cameraMeter"></div>
-
         </div>
 
       </div>
@@ -355,7 +346,7 @@ input[type="range"]{
     </div>
 
 
-    <!-- 麥克風 -->
+    <!-- MICROPHONE -->
 
     <div class="section">
 
@@ -400,24 +391,20 @@ input[type="range"]{
         </b>
 
         <div class="meter">
-
           <div id="voiceMeter"></div>
-
         </div>
 
       </div>
 
       <div class="small">
-
         順從階段中，說話超過門檻後，
         距離觀者最近的裝置會成為資訊起點。
-
       </div>
 
     </div>
 
 
-    <!-- 群體狀態 -->
+    <!-- SYSTEM -->
 
     <div class="section">
 
@@ -452,9 +439,7 @@ input[type="range"]{
         </b>
 
         <div class="meter">
-
           <div id="chaosMeter"></div>
-
         </div>
 
         <br>
@@ -462,13 +447,10 @@ input[type="range"]{
         已接收資訊：
 
         <b>
-
           <span id="infectedCount">
             0
           </span>
-
           / 5
-
         </b>
 
       </div>
@@ -476,7 +458,7 @@ input[type="range"]{
     </div>
 
 
-    <!-- 參數 -->
+    <!-- SETTINGS -->
 
     <div class="section">
 
@@ -484,15 +466,9 @@ input[type="range"]{
         動作設定
       </div>
 
-
       <label>
-
         攝像頭敏感度：
-
-        <span id="sensitivityValue">
-          40
-        </span>
-
+        <span id="sensitivityValue">40</span>
       </label>
 
       <input
@@ -505,13 +481,8 @@ input[type="range"]{
 
 
       <label>
-
         順從時最大偏角：
-
-        <span id="followAngleValue">
-          10
-        </span>°
-
+        <span id="followAngleValue">10</span>°
       </label>
 
       <input
@@ -524,13 +495,8 @@ input[type="range"]{
 
 
       <label>
-
         混亂時最大偏角：
-
-        <span id="chaosAngleValue">
-          28
-        </span>°
-
+        <span id="chaosAngleValue">28</span>°
       </label>
 
       <input
@@ -543,13 +509,8 @@ input[type="range"]{
 
 
       <label>
-
         說話觸發門檻：
-
-        <span id="voiceThresholdValue">
-          16
-        </span>%
-
+        <span id="voiceThresholdValue">16</span>%
       </label>
 
       <input
@@ -562,13 +523,8 @@ input[type="range"]{
 
 
       <label>
-
         靠近速度：
-
-        <span id="transferTimeValue">
-          1200
-        </span> ms
-
+        <span id="transferTimeValue">1200</span> ms
       </label>
 
       <input
@@ -582,13 +538,8 @@ input[type="range"]{
 
 
       <label>
-
         混亂成長速度：
-
-        <span id="chaosSpeedValue">
-          40
-        </span>%
-
+        <span id="chaosSpeedValue">40</span>%
       </label>
 
       <input
@@ -612,8 +563,6 @@ input[type="range"]{
 
 </div>
 
-
-<!-- 攝像頭分析畫布 -->
 
 <canvas
   id="cameraAnalysis"
@@ -662,15 +611,6 @@ let W = 0;
 let H = 0;
 
 const devices = [];
-
-
-/*
-  三個主要狀態：
-
-  FOLLOW
-  TRANSFER
-  CHAOS
-*/
 
 let mode = "FOLLOW";
 
@@ -762,18 +702,7 @@ class Device{
 
     this.targetAngle = 0;
 
-    /*
-      info：
-
-      0 = 沒資訊
-      1 = 已經收到大量資訊
-    */
-
     this.info = 0;
-
-    /*
-      接觸時 LED / 螢幕閃一下。
-    */
 
     this.flash = 0;
 
@@ -791,10 +720,6 @@ class Device{
       2;
 
 
-    /*
-      每支只有非常小的個體差異。
-    */
-
     this.followWeight =
 
       random(
@@ -803,19 +728,29 @@ class Device{
       );
 
 
-    /*
-      混亂期自己的目標。
-    */
-
     this.chaosTarget = 0;
-
 
     this.nextChaosShift = 0;
 
 
-    /*
-      流體內部粒子。
-    */
+    /* ==================================
+       流體物理
+    ================================== */
+
+    this.lastAngle = 0;
+
+    this.angularVelocity = 0;
+
+    this.fluidOffset = 0;
+
+    this.fluidVelocity = 0;
+
+    this.fluidTilt = 0;
+
+
+    /* ==================================
+       粒子資料
+    ================================== */
 
     this.fluidSeeds = [];
 
@@ -829,25 +764,36 @@ class Device{
       this.fluidSeeds.push({
 
         phase:
+
           Math.random()
+
           *
+
           Math.PI
+
           *
+
           2,
 
+
         speed:
+
           random(
             .65,
             1.4
           ),
 
+
         size:
+
           random(
             .5,
             1.7
           ),
 
+
         offset:
+
           random(
             -1,
             1
@@ -860,12 +806,11 @@ class Device{
   }
 
 
+  /* =======================================================
+     DEVICE MOVEMENT
+  ======================================================= */
 
   update(now,dt){
-
-    /*
-      flash 慢慢衰退。
-    */
 
     this.flash =
 
@@ -921,11 +866,6 @@ class Device{
         this.followWeight;
 
 
-      /*
-        動作偏慢，
-        不會像直接控制 Servo。
-      */
-
       this.angle =
 
         lerp(
@@ -957,7 +897,6 @@ class Device{
     }
 
 
-
     /* =====================================
        TRANSFER
     ===================================== */
@@ -968,7 +907,7 @@ class Device{
 
       /*
         正在交換資訊的兩支
-        由 updateTransfer() 控制。
+        由 transfer 系統控制。
       */
 
       if(
@@ -991,11 +930,6 @@ class Device{
 
       }
 
-
-      /*
-        其他支仍然保留一些順從，
-        但開始產生輕微偏差。
-      */
 
       if(
         now >
@@ -1049,11 +983,6 @@ class Device{
         0;
 
 
-      /*
-        Chaos 越高，
-        越不服從人。
-      */
-
       const obedience =
 
         1
@@ -1104,7 +1033,9 @@ class Device{
           this.targetAngle,
 
           .035
+
           +
+
           chaos *
           .018
 
@@ -1116,7 +1047,6 @@ class Device{
     }
 
 
-
     /* =====================================
        CHAOS
     ===================================== */
@@ -1124,11 +1054,6 @@ class Device{
     if(
       mode === "CHAOS"
     ){
-
-      /*
-        每隔一段時間，
-        每支產生新的個體偏差。
-      */
 
       if(
         now >
@@ -1159,10 +1084,6 @@ class Device{
 
       }
 
-
-      /*
-        鄰居平均。
-      */
 
       let neighborAverage = 0;
 
@@ -1203,7 +1124,8 @@ class Device{
 
 
       if(
-        neighborCount > 0
+        neighborCount >
+        0
       ){
 
         neighborAverage /=
@@ -1212,11 +1134,6 @@ class Device{
 
       }
 
-
-      /*
-        觀者仍然存在，
-        但控制力越來越弱。
-      */
 
       const followAngle =
 
@@ -1251,16 +1168,6 @@ class Device{
 
         );
 
-
-      /*
-        不是純亂數。
-
-        由三件事共同決定：
-
-        1. 觀者
-        2. 自己
-        3. 鄰居
-      */
 
       this.targetAngle =
 
@@ -1303,11 +1210,6 @@ class Device{
         );
 
 
-      /*
-        平滑移動，
-        不抽搐。
-      */
-
       this.angle =
 
         lerp(
@@ -1317,13 +1219,173 @@ class Device{
           this.targetAngle,
 
           .024
+
           +
+
           chaos *
           .018
 
         );
 
     }
+
+  }
+
+
+  /* =======================================================
+     FLUID PHYSICS
+  ======================================================= */
+
+  updateFluidPhysics(dt){
+
+    const safeDt =
+
+      Math.max(
+        1,
+        dt
+      );
+
+
+    /*
+      計算棒子每一幀的旋轉速度。
+    */
+
+    const newAngularVelocity =
+
+      (
+        this.angle
+
+        -
+
+        this.lastAngle
+      )
+
+      /
+
+      (
+        safeDt /
+        16.67
+      );
+
+
+    this.angularVelocity =
+
+      lerp(
+
+        this.angularVelocity,
+
+        newAngularVelocity,
+
+        .22
+
+      );
+
+
+    this.lastAngle =
+      this.angle;
+
+
+    const angleRad =
+
+      this.angle
+
+      *
+      Math.PI
+
+      /
+      180;
+
+
+    /*
+      流體因為重力＋慣性
+      往反方向偏。
+    */
+
+    const targetOffset =
+
+      constrain(
+
+        -Math.sin(
+          angleRad
+        )
+
+        *
+        .52
+
+        -
+
+        this.angularVelocity
+
+        *
+        .12,
+
+        -.75,
+
+        .75
+
+      );
+
+
+    /*
+      Spring：
+      流體不會瞬間跟棒子一起移動。
+    */
+
+    this.fluidVelocity +=
+
+      (
+        targetOffset
+
+        -
+
+        this.fluidOffset
+      )
+
+      *
+      .075;
+
+
+    this.fluidVelocity *=
+      .86;
+
+
+    this.fluidOffset +=
+
+      this.fluidVelocity;
+
+
+    /*
+      流體表面的傾斜。
+    */
+
+    const targetTilt =
+
+      -Math.sin(
+        angleRad
+      )
+
+      *
+      .42
+
+      -
+
+      this.angularVelocity
+
+      *
+      .07;
+
+
+    this.fluidTilt =
+
+      lerp(
+
+        this.fluidTilt,
+
+        targetTilt,
+
+        .15
+
+      );
 
   }
 
@@ -1339,20 +1401,26 @@ function resetSystem(){
   mode =
     "FOLLOW";
 
+
   chaos =
     0;
+
 
   sourceIndex =
     -1;
 
+
   visited =
     new Set();
+
 
   pendingEdges =
     [];
 
+
   currentTransfer =
     null;
+
 
   voiceHold =
     0;
@@ -1383,7 +1451,7 @@ resetSystem();
 
 
 /* =========================================================
-   CANVAS SIZE
+   CANVAS
 ========================================================= */
 
 function resizeCanvas(){
@@ -1398,6 +1466,7 @@ function resizeCanvas(){
   W =
     rect.width;
 
+
   H =
     rect.height;
 
@@ -1406,7 +1475,9 @@ function resizeCanvas(){
 
     Math.round(
 
-      W *
+      W
+
+      *
       devicePixelRatio
 
     );
@@ -1416,7 +1487,9 @@ function resizeCanvas(){
 
     Math.round(
 
-      H *
+      H
+
+      *
       devicePixelRatio
 
     );
@@ -1448,11 +1521,8 @@ resizeCanvas();
 
 
 window.addEventListener(
-
   "resize",
-
   resizeCanvas
-
 );
 
 
@@ -1511,7 +1581,7 @@ function getDeviceX(index){
 
 
 /* =========================================================
-   CAMERA START
+   CAMERA
 ========================================================= */
 
 async function startCamera(){
@@ -1718,7 +1788,9 @@ function analyzeCamera(){
 
         (
           y * width
+
           +
+
           x
         )
 
@@ -1810,7 +1882,8 @@ function analyzeCamera(){
 
       constrain(
 
-        ratio * 3,
+        ratio *
+        3,
 
         0,
         1
@@ -1822,12 +1895,9 @@ function analyzeCamera(){
     );
 
 
-  /*
-    主要移動位置。
-  */
-
   if(
-    changed > 0
+    changed >
+    0
   ){
 
     let averageX =
@@ -1840,8 +1910,7 @@ function analyzeCamera(){
 
 
     /*
-      Video 是鏡像顯示，
-      所以反轉。
+      因為畫面是鏡像顯示。
     */
 
     averageX =
@@ -1876,10 +1945,6 @@ function analyzeCamera(){
   }
 
 
-  /*
-    判斷觀者存在。
-  */
-
   if(
     ratio >
     .005
@@ -1887,6 +1952,7 @@ function analyzeCamera(){
 
     viewer.present =
       true;
+
 
     viewer.absentTime =
       0;
@@ -1898,10 +1964,6 @@ function analyzeCamera(){
     viewer.absentTime +=
       100;
 
-
-    /*
-      停下來不會立即消失。
-    */
 
     if(
       viewer.absentTime >
@@ -1919,7 +1981,7 @@ function analyzeCamera(){
 
 
 /* =========================================================
-   MICROPHONE START
+   MICROPHONE
 ========================================================= */
 
 async function startMicrophone(){
@@ -2058,10 +2120,6 @@ async function startMicrophone(){
 }
 
 
-/* =========================================================
-   STOP MICROPHONE
-========================================================= */
-
 async function stopMicrophone(){
 
   if(
@@ -2117,20 +2175,26 @@ async function stopMicrophone(){
   micSource =
     null;
 
+
   audioContext =
     null;
+
 
   analyser =
     null;
 
+
   micBuffer =
     null;
+
 
   micReady =
     false;
 
+
   voiceLevel =
     0;
+
 
   voiceHold =
     0;
@@ -2305,11 +2369,6 @@ function updateAudio(dt,now){
     );
 
 
-  /*
-    只有順從期說話
-    才會啟動後續系統。
-  */
-
   if(
     mode ===
     "FOLLOW"
@@ -2337,7 +2396,8 @@ function updateAudio(dt,now){
 
           -
 
-          dt * 1.8
+          dt *
+          1.8
 
         );
 
@@ -2365,7 +2425,7 @@ function updateAudio(dt,now){
 
 
 /* =========================================================
-   TEST BUTTON
+   MANUAL TEST
 ========================================================= */
 
 document
@@ -2406,8 +2466,7 @@ function startInformationTransmission(now){
 
 
   /*
-    說話時，
-    離觀者最近的裝置
+    最靠近觀者的裝置
     變成資訊起點。
   */
 
@@ -2489,12 +2548,9 @@ function startInformationTransmission(now){
 
 function buildPendingEdges(){
 
-  pendingEdges = [];
+  pendingEdges =
+    [];
 
-
-  /*
-    往左。
-  */
 
   for(
     let i = sourceIndex;
@@ -2513,14 +2569,11 @@ function buildPendingEdges(){
   }
 
 
-  /*
-    往右。
-  */
-
   for(
     let i = sourceIndex;
     i <
-    DEVICE_COUNT - 1;
+    DEVICE_COUNT -
+    1;
     i++
   ){
 
@@ -2536,10 +2589,6 @@ function buildPendingEdges(){
 
 }
 
-
-/* =========================================================
-   ELIGIBLE EDGE
-========================================================= */
 
 function chooseEligibleEdge(){
 
@@ -2563,7 +2612,8 @@ function chooseEligibleEdge(){
 
 
   if(
-    possible.length === 0
+    possible.length ===
+    0
   ){
 
     return null;
@@ -2588,10 +2638,6 @@ function chooseEligibleEdge(){
 }
 
 
-/* =========================================================
-   SCHEDULE NEXT
-========================================================= */
-
 function scheduleNextTransfer(
   now,
   wait
@@ -2599,20 +2645,19 @@ function scheduleNextTransfer(
 
   currentTransfer = {
 
-    stage:"WAIT_NEXT",
+    stage:
+      "WAIT_NEXT",
 
-    stageStart:now,
+    stageStart:
+      now,
 
-    waitDuration:wait
+    waitDuration:
+      wait
 
   };
 
 }
 
-
-/* =========================================================
-   BEGIN NEXT EDGE
-========================================================= */
 
 function beginNextEdge(now){
 
@@ -2654,18 +2699,26 @@ function beginNextEdge(now){
 
   currentTransfer = {
 
-    from:edge.from,
+    from:
+      edge.from,
 
-    to:edge.to,
+    to:
+      edge.to,
 
-    stage:"APPROACH",
+    stage:
+      "APPROACH",
 
-    stageStart:now,
+    stageStart:
+      now,
 
     approachAngle:
+
       getMeetingAngle(
+
         edge.from,
+
         edge.to
+
       )
 
   };
@@ -2702,19 +2755,20 @@ function updateTransfer(now){
   }
 
 
-  /*
-    等待下一次傳遞。
-  */
-
   if(
     currentTransfer.stage ===
     "WAIT_NEXT"
   ){
 
     if(
-      now -
+      now
+
+      -
+
       currentTransfer.stageStart
+
       >=
+
       currentTransfer.waitDuration
     ){
 
@@ -2840,10 +2894,6 @@ function updateTransfer(now){
         now;
 
 
-      /*
-        資訊真的被傳入。
-      */
-
       toDevice.info =
 
         constrain(
@@ -2856,6 +2906,7 @@ function updateTransfer(now){
             .82
 
             +
+
             .12
 
           ),
@@ -2885,7 +2936,10 @@ function updateTransfer(now){
 
         constrain(
 
-          chaos +
+          chaos
+
+          +
+
           .11,
 
           0,
@@ -3064,7 +3118,7 @@ function updateTransfer(now){
 
 
 /* =========================================================
-   SMALL MEETING ANGLE
+   MEETING ANGLE
 ========================================================= */
 
 function getMeetingAngle(
@@ -3094,10 +3148,8 @@ function getMeetingAngle(
 
 
   /*
-    不真的要求棒頂碰在一起。
-
-    視覺上只做「接近」，
-    避免傾斜太大。
+    視覺上只做接近，
+    不要求棒頂真的碰在一起。
   */
 
   const ratio =
@@ -3148,7 +3200,7 @@ function getMeetingAngle(
 
 
 /* =========================================================
-   CHAOS LEVEL
+   CHAOS
 ========================================================= */
 
 function updateChaos(dt){
@@ -3167,8 +3219,10 @@ function updateChaos(dt){
         +
 
         dt
+
         *
         .000006
+
         *
         chaosGrowthSpeed,
 
@@ -3194,8 +3248,10 @@ function updateChaos(dt){
         +
 
         dt
+
         *
         .000018
+
         *
         chaosGrowthSpeed,
 
@@ -3220,6 +3276,7 @@ function drawTable(){
     getBaseY()
 
     +
+
     18;
 
 
@@ -3229,13 +3286,16 @@ function drawTable(){
 
   ctx.fillRect(
 
-    W * .055,
+    W *
+    .055,
 
     y,
 
-    W * .89,
+    W *
+    .89,
 
-    H * .19
+    H *
+    .19
 
   );
 
@@ -3246,11 +3306,13 @@ function drawTable(){
 
   ctx.fillRect(
 
-    W * .055,
+    W *
+    .055,
 
     y,
 
-    W * .89,
+    W *
+    .89,
 
     4
 
@@ -3307,9 +3369,7 @@ function drawDevice(
   );
 
 
-  /* =====================================
-     SHADOW
-  ===================================== */
+  /* SHADOW */
 
   ctx.fillStyle =
     "rgba(0,0,0,.09)";
@@ -3323,14 +3383,16 @@ function drawDevice(
     5,
     12,
 
-    bodyWidth * .68,
+    bodyWidth *
+    .68,
 
     7,
 
     0,
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3338,9 +3400,7 @@ function drawDevice(
   ctx.fill();
 
 
-  /* =====================================
-     BASE
-  ===================================== */
+  /* BASE */
 
   ctx.fillStyle =
     "#171817";
@@ -3351,11 +3411,13 @@ function drawDevice(
 
   ctx.roundRect(
 
-    -bodyWidth * .63,
+    -bodyWidth *
+    .63,
 
     -5,
 
-    bodyWidth * 1.26,
+    bodyWidth *
+    1.26,
 
     18,
 
@@ -3367,9 +3429,7 @@ function drawDevice(
   ctx.fill();
 
 
-  /* =====================================
-     PIVOT
-  ===================================== */
+  /* PIVOT */
 
   ctx.fillStyle =
     "#353936";
@@ -3386,7 +3446,9 @@ function drawDevice(
     8,
 
     0,
-    Math.PI * 2
+
+    Math.PI *
+    2
 
   );
 
@@ -3409,7 +3471,9 @@ function drawDevice(
     4,
 
     0,
-    Math.PI * 2
+
+    Math.PI *
+    2
 
   );
 
@@ -3417,23 +3481,29 @@ function drawDevice(
   ctx.fill();
 
 
-  /* =====================================
-     BODY ROTATION
-  ===================================== */
+  /*
+    整支裝置旋轉。
+  */
 
   ctx.rotate(
     angleRad
   );
 
 
+  /* BODY */
+
   const bodyGradient =
 
     ctx.createLinearGradient(
 
-      -bodyWidth / 2,
+      -bodyWidth /
+      2,
+
       0,
 
-      bodyWidth / 2,
+      bodyWidth /
+      2,
+
       0
 
     );
@@ -3474,7 +3544,8 @@ function drawDevice(
 
   ctx.roundRect(
 
-    -bodyWidth / 2,
+    -bodyWidth /
+    2,
 
     -bodyHeight,
 
@@ -3494,9 +3565,7 @@ function drawDevice(
     0;
 
 
-  /* =====================================
-     LED
-  ===================================== */
+  /* LED */
 
   drawLED(
 
@@ -3511,9 +3580,7 @@ function drawDevice(
   );
 
 
-  /* =====================================
-     CAMERA
-  ===================================== */
+  /* CAMERA */
 
   const cameraY =
 
@@ -3538,7 +3605,8 @@ function drawDevice(
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3567,7 +3635,8 @@ function drawDevice(
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3592,7 +3661,8 @@ function drawDevice(
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3618,7 +3688,8 @@ function drawDevice(
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3626,9 +3697,7 @@ function drawDevice(
   ctx.fill();
 
 
-  /* =====================================
-     SCREEN
-  ===================================== */
+  /* SCREEN */
 
   const screenW =
 
@@ -3690,10 +3759,6 @@ function drawDevice(
   ctx.stroke();
 
 
-  /*
-    只在螢幕範圍內畫。
-  */
-
   ctx.save();
 
 
@@ -3702,13 +3767,17 @@ function drawDevice(
 
   ctx.roundRect(
 
-    screenX + 3,
+    screenX +
+    3,
 
-    screenY + 3,
+    screenY +
+    3,
 
-    screenW - 6,
+    screenW -
+    6,
 
-    screenH - 6,
+    screenH -
+    6,
 
     2
 
@@ -3724,13 +3793,17 @@ function drawDevice(
 
     now,
 
-    screenX + 3,
+    screenX +
+    3,
 
-    screenY + 3,
+    screenY +
+    3,
 
-    screenW - 6,
+    screenW -
+    6,
 
-    screenH - 6
+    screenH -
+    6
 
   );
 
@@ -3754,12 +3827,8 @@ function drawLED(
   height
 ){
 
-  /*
-    初始階段：
-    五支呼吸接近同步。
-  */
-
-  let phase = 0;
+  let phase =
+    0;
 
 
   if(
@@ -3782,7 +3851,8 @@ function drawLED(
     (
       Math.sin(
 
-        now * .002
+        now *
+        .002
 
         +
 
@@ -3808,10 +3878,6 @@ function drawLED(
     .09;
 
 
-  /*
-    收到資訊之後更亮。
-  */
-
   brightness +=
 
     device.info
@@ -3820,10 +3886,6 @@ function drawLED(
     .30;
 
 
-  /*
-    接觸瞬間脈衝。
-  */
-
   brightness +=
 
     device.flash
@@ -3831,10 +3893,6 @@ function drawLED(
     *
     .55;
 
-
-  /*
-    混亂後每支開始略微不同步。
-  */
 
   if(
     mode !==
@@ -3858,7 +3916,9 @@ function drawLED(
 
             +
 
-            device.index *
+            device.index
+
+            *
             .00045
           )
 
@@ -3890,30 +3950,32 @@ function drawLED(
     );
 
 
-  /*
-    LED 暗底。
-  */
-
   ctx.fillStyle =
     "rgba(70,85,88,.18)";
 
 
   ctx.fillRect(
 
-    -width / 2 + 3,
+    -width /
+    2
 
-    -height + 9,
+    +
+    3,
 
-    width - 6,
+    -height
+
+    +
+    9,
+
+    width
+
+    -
+    6,
 
     5
 
   );
 
-
-  /*
-    LED 主光。
-  */
 
   ctx.shadowBlur =
 
@@ -3921,7 +3983,9 @@ function drawLED(
 
     +
 
-    brightness *
+    brightness
+
+    *
     15;
 
 
@@ -3947,11 +4011,21 @@ function drawLED(
 
   ctx.fillRect(
 
-    -width / 2 + 3,
+    -width /
+    2
 
-    -height + 9,
+    +
+    3,
 
-    width - 6,
+    -height
+
+    +
+    9,
+
+    width
+
+    -
+    6,
 
     4
 
@@ -3966,7 +4040,6 @@ function drawLED(
 
 /* =========================================================
    FLUID SCREEN
-   參考：深藍底＋青色流體＋像素粒子
 ========================================================= */
 
 function drawFluidScreen(
@@ -3978,11 +4051,7 @@ function drawFluidScreen(
   h
 ){
 
-  /*
-    --------------------------------
-    BACKGROUND
-    --------------------------------
-  */
+  /* BACKGROUND */
 
   const bg =
 
@@ -4004,14 +4073,14 @@ function drawFluidScreen(
 
 
   bg.addColorStop(
-    .52,
+    .50,
     "#06144a"
   );
 
 
   bg.addColorStop(
     1,
-    "#030d35"
+    "#030c32"
   );
 
 
@@ -4027,10 +4096,6 @@ function drawFluidScreen(
   );
 
 
-  /*
-    資訊量。
-  */
-
   const info =
 
     constrain(
@@ -4043,19 +4108,14 @@ function drawFluidScreen(
     );
 
 
-  /*
-    混亂量。
-
-    順從時非常低。
-  */
-
   const turbulence =
 
-    mode === "FOLLOW"
+    mode ===
+    "FOLLOW"
 
     ?
 
-    .03
+    .015
 
     :
 
@@ -4063,13 +4123,50 @@ function drawFluidScreen(
 
     *
     (
-      .18
+      .12
 
       +
 
       info *
-      .65
+      .48
     );
+
+
+  /*
+    裝置移動速度。
+  */
+
+  const motionStrength =
+
+    constrain(
+
+      Math.abs(
+        device.angularVelocity
+      )
+
+      *
+      1.8,
+
+      0,
+      1
+
+    );
+
+
+  /*
+    流體因傾斜產生的位置偏移。
+  */
+
+  const slosh =
+    device.fluidOffset;
+
+
+  /*
+    流體表面的傾斜程度。
+  */
+
+  const tilt =
+    device.fluidTilt;
 
 
   const flowTime =
@@ -4078,17 +4175,17 @@ function drawFluidScreen(
 
     *
     (
-      .0010
+      .00075
 
       +
 
       info *
-      .0012
+      .0008
 
       +
 
       chaos *
-      .00055
+      .00035
     )
 
     +
@@ -4096,13 +4193,9 @@ function drawFluidScreen(
     device.phase;
 
 
-  /*
-    參考圖：
-    上方邊界偏右，
-    下方邊界偏左。
-
-    流體存在右側。
-  */
+  /* =====================================
+     FLUID BODY
+  ===================================== */
 
   for(
     let yy = 0;
@@ -4117,7 +4210,10 @@ function drawFluidScreen(
 
 
     /*
-      基本斜向曲線。
+      參考圖片：
+
+      上面靠右，
+      下面往左擴張。
     */
 
     let frontRatio =
@@ -4136,52 +4232,89 @@ function drawFluidScreen(
 
 
     /*
-      收到的資訊越多，
-      流體範圍往左擴張。
+      資訊越多，
+      液體範圍變大。
     */
 
     frontRatio -=
 
       info *
-      .11;
+      .10;
 
 
     /*
-      波動。
+      ★ 跟著裝置傾斜
+    */
+
+    frontRatio +=
+
+      slosh *
+      .20;
+
+
+    /*
+      ★ 流體因重力保持水平感，
+      因此上下偏移不同。
+    */
+
+    frontRatio +=
+
+      tilt
+
+      *
+      (
+        ny -
+        .5
+      )
+
+      *
+      .38;
+
+
+    /*
+      微小流動。
     */
 
     frontRatio +=
 
       Math.sin(
 
-        ny * 5.2
+        ny *
+        5.2
 
         +
 
-        flowTime * 1.25
+        flowTime *
+        1.2
 
       )
 
       *
       (
-        .020
+        .012
 
         +
 
         turbulence *
-        .035
+        .028
       );
 
+
+    /*
+      混亂後第二層波動。
+    */
 
     frontRatio +=
 
       Math.sin(
 
-        ny * 14
+        ny *
+        14
 
         -
 
-        flowTime * .65
+        flowTime *
+        .7
 
         +
 
@@ -4193,6 +4326,32 @@ function drawFluidScreen(
       turbulence
 
       *
+      .015;
+
+
+    /*
+      棒子快速移動時，
+      液體表面會多晃一下。
+    */
+
+    frontRatio +=
+
+      Math.sin(
+
+        ny *
+        20
+
+        +
+
+        now *
+        .006
+
+      )
+
+      *
+      motionStrength
+
+      *
       .018;
 
 
@@ -4202,16 +4361,11 @@ function drawFluidScreen(
 
         frontRatio,
 
-        .05,
-
-        .96
+        .04,
+        .97
 
       );
 
-
-    /*
-      階梯感 / 像素邊緣。
-    */
 
     let frontX =
 
@@ -4219,14 +4373,21 @@ function drawFluidScreen(
 
       +
 
-      frontRatio *
+      frontRatio
+
+      *
       w;
 
+
+    /*
+      像素階梯感。
+    */
 
     frontX =
 
       Math.round(
-        frontX / 2
+        frontX /
+        2
       )
 
       *
@@ -4239,15 +4400,15 @@ function drawFluidScreen(
 
         0,
 
-        x + w -
+        x +
+        w
+
+        -
+
         frontX
 
       );
 
-
-    /*
-      主體青藍。
-    */
 
     const liquidGradient =
 
@@ -4267,22 +4428,8 @@ function drawFluidScreen(
       0,
 
       `rgba(
-        70,
-        245,
-        255,
-        ${.78 + info*.12}
-      )`
-
-    );
-
-
-    liquidGradient.addColorStop(
-
-      .45,
-
-      `rgba(
-        35,
-        220,
+        80,
+        250,
         255,
         ${.80 + info*.10}
       )`
@@ -4292,14 +4439,18 @@ function drawFluidScreen(
 
     liquidGradient.addColorStop(
 
+      .40,
+
+      "rgba(35,225,255,.90)"
+
+    );
+
+
+    liquidGradient.addColorStop(
+
       1,
 
-      `rgba(
-        20,
-        175,
-        250,
-        ${.82}
-      )`
+      "rgba(15,165,250,.88)"
 
     );
 
@@ -4322,22 +4473,23 @@ function drawFluidScreen(
 
 
     /*
-      邊界亮線。
+      發光邊界。
     */
 
     ctx.fillStyle =
 
       `rgba(
-        160,
+        175,
         255,
         255,
-        ${.45 + info*.35}
+        ${.42 + info*.30}
       )`;
 
 
     ctx.fillRect(
 
-      frontX - 1,
+      frontX -
+      1,
 
       y + yy,
 
@@ -4349,26 +4501,29 @@ function drawFluidScreen(
 
 
     /*
-      流體中的微小亮線。
+      流體內細微層次。
     */
 
     if(
-      yy % 6 === 0
+      yy %
+      6 ===
+      0
     ){
 
       ctx.fillStyle =
 
         `rgba(
-          190,
+          205,
           255,
           255,
-          ${.06 + info*.09}
+          ${.045 + info*.075}
         )`;
 
 
       ctx.fillRect(
 
-        frontX + 3,
+        frontX +
+        3,
 
         y + yy,
 
@@ -4390,25 +4545,30 @@ function drawFluidScreen(
   }
 
 
-  /*
-    --------------------------------
-    PARTICLES NEAR FRONT
-    --------------------------------
-  */
+  /* =====================================
+     EDGE PARTICLES
+  ===================================== */
 
   const edgeParticleCount =
 
     Math.floor(
 
-      22
+      26
 
       +
 
-      info * 35
+      info *
+      34
 
       +
 
-      chaos * 20
+      chaos *
+      15
+
+      +
+
+      motionStrength *
+      15
 
     );
 
@@ -4424,7 +4584,9 @@ function drawFluidScreen(
       device
       .fluidSeeds[
         i %
-        device.fluidSeeds.length
+        device
+        .fluidSeeds
+        .length
       ];
 
 
@@ -4432,12 +4594,15 @@ function drawFluidScreen(
 
       fract(
 
-        i * .137
+        i *
+        .137
 
         +
 
         now *
-        .00012 *
+        .00009
+
+        *
         seed.speed
 
         +
@@ -4449,7 +4614,9 @@ function drawFluidScreen(
 
     const yy =
 
-      pyNorm *
+      pyNorm
+
+      *
       h;
 
 
@@ -4477,53 +4644,52 @@ function drawFluidScreen(
     frontRatio -=
 
       info *
-      .11;
+      .10;
+
+
+    frontRatio +=
+
+      slosh *
+      .20;
+
+
+    frontRatio +=
+
+      tilt
+
+      *
+      (
+        ny -
+        .5
+      )
+
+      *
+      .38;
 
 
     frontRatio +=
 
       Math.sin(
 
-        ny * 5.2
+        ny *
+        5.2
 
         +
 
-        flowTime * 1.25
+        flowTime *
+        1.2
 
       )
 
       *
       (
-        .02
+        .012
 
         +
 
         turbulence *
-        .035
+        .028
       );
-
-
-    frontRatio +=
-
-      Math.sin(
-
-        ny * 14
-
-        -
-
-        flowTime * .65
-
-        +
-
-        device.phase
-
-      )
-
-      *
-      turbulence
-
-      *
-      .018;
 
 
     frontRatio =
@@ -4532,8 +4698,8 @@ function drawFluidScreen(
 
         frontRatio,
 
-        .05,
-        .96
+        .04,
+        .97
 
       );
 
@@ -4544,16 +4710,34 @@ function drawFluidScreen(
 
       +
 
-      frontRatio *
+      frontRatio
+
+      *
       w;
 
 
     /*
-      粒子主要存在於
-      流體邊界右側。
+      ★ 移動慣性：
+      裝置往右，
+      粒子往左拖。
     */
 
-    const offset =
+    const inertiaShift =
+
+      -device.angularVelocity
+
+      *
+      w
+
+      *
+      .035;
+
+
+    const particleOffset =
+
+      2
+
+      +
 
       Math.abs(
         seed.offset
@@ -4565,11 +4749,13 @@ function drawFluidScreen(
 
         +
 
-        info * 8
+        info *
+        7
 
         +
 
-        chaos * 5
+        motionStrength *
+        6
       );
 
 
@@ -4579,7 +4765,11 @@ function drawFluidScreen(
 
       +
 
-      offset;
+      particleOffset
+
+      +
+
+      inertiaShift;
 
 
     const py =
@@ -4588,28 +4778,54 @@ function drawFluidScreen(
 
       +
 
-      yy;
+      yy
+
+      +
+
+      Math.sin(
+
+        flowTime *
+        2
+
+        +
+
+        seed.phase
+
+      )
+
+      *
+      motionStrength
+
+      *
+      2;
 
 
     const alpha =
 
-      .22
+      constrain(
 
-      +
+        .20
 
-      info *
-      .35
+        +
 
-      +
+        info *
+        .36
 
-      chaos *
-      .12;
+        +
+
+        motionStrength *
+        .28,
+
+        .12,
+        .95
+
+      );
 
 
     ctx.fillStyle =
 
       `rgba(
-        110,
+        120,
         250,
         255,
         ${alpha}
@@ -4617,24 +4833,50 @@ function drawFluidScreen(
 
 
     /*
-      保留參考圖的像素感，
-      多數是方形，不全是圓點。
+      快速運動時出現短尾巴。
     */
 
+    const trail =
+
+      motionStrength
+
+      *
+      4;
+
+
     if(
-      i % 3 === 0
+      i %
+      3 ===
+      0
     ){
+
+      const direction =
+
+        Math.sign(
+          device.angularVelocity
+        )
+
+        ||
+
+        1;
+
 
       ctx.fillRect(
 
-        px,
+        px
+
+        -
+
+        direction *
+        trail,
 
         py,
 
-        Math.max(
-          1,
-          seed.size
-        ),
+        1
+
+        +
+
+        trail,
 
         Math.max(
           1,
@@ -4656,10 +4898,12 @@ function drawFluidScreen(
         py,
 
         seed.size *
-        .65,
+        .6,
 
         0,
-        Math.PI * 2
+
+        Math.PI *
+        2
 
       );
 
@@ -4671,25 +4915,25 @@ function drawFluidScreen(
   }
 
 
-  /*
-    --------------------------------
-    FLOATING PARTICLES
-    --------------------------------
-  */
+  /* =====================================
+     FLOATING PARTICLES
+  ===================================== */
 
   const floatingCount =
 
     Math.floor(
 
-      6
+      7
 
       +
 
-      info * 14
+      info *
+      12
 
       +
 
-      chaos * 5
+      motionStrength *
+      8
 
     );
 
@@ -4704,11 +4948,18 @@ function drawFluidScreen(
 
       device
       .fluidSeeds[
+
         (
-          i + 40
+          i +
+          40
         )
+
         %
-        device.fluidSeeds.length
+
+        device
+        .fluidSeeds
+        .length
+
       ];
 
 
@@ -4716,8 +4967,12 @@ function drawFluidScreen(
 
       fract(
 
-        now *
-        .00016 *
+        now
+
+        *
+        .00012
+
+        *
         seed.speed
 
         +
@@ -4727,7 +4982,7 @@ function drawFluidScreen(
       );
 
 
-    const py =
+    let py =
 
       y
 
@@ -4741,14 +4996,47 @@ function drawFluidScreen(
       h;
 
 
-    const ny =
+    /*
+      裝置移動時，
+      粒子上下晃動。
+    */
 
-      (
-        py - y
+    py +=
+
+      Math.cos(
+
+        now *
+        .003
+
+        +
+
+        seed.phase
+
       )
 
-      /
-      h;
+      *
+      motionStrength
+
+      *
+      3;
+
+
+    const ny =
+
+      constrain(
+
+        (
+          py -
+          y
+        )
+
+        /
+        h,
+
+        0,
+        1
+
+      );
 
 
     let frontRatio =
@@ -4769,23 +5057,38 @@ function drawFluidScreen(
     frontRatio -=
 
       info *
-      .11;
+      .10;
 
 
     frontRatio +=
 
-      Math.sin(
+      slosh *
+      .20;
 
-        ny * 5.2
 
-        +
+    frontRatio +=
 
-        flowTime * 1.25
+      tilt
 
+      *
+      (
+        ny -
+        .5
       )
 
       *
-      .025;
+      .38;
+
+
+    const inertiaShift =
+
+      -device.angularVelocity
+
+      *
+      w
+
+      *
+      .035;
 
 
     const px =
@@ -4808,17 +5111,23 @@ function drawFluidScreen(
       )
 
       *
-      w *
-      .17;
+      w
+
+      *
+      .16
+
+      +
+
+      inertiaShift;
 
 
     ctx.fillStyle =
 
       `rgba(
-        190,
+        195,
         255,
         255,
-        ${.12 + info*.25}
+        ${.12 + info*.24}
       )`;
 
 
@@ -4828,7 +5137,6 @@ function drawFluidScreen(
     ctx.arc(
 
       px,
-
       py,
 
       1
@@ -4836,11 +5144,12 @@ function drawFluidScreen(
       +
 
       seed.size *
-      .2,
+      .18,
 
       0,
 
-      Math.PI * 2
+      Math.PI *
+      2
 
     );
 
@@ -4851,9 +5160,8 @@ function drawFluidScreen(
 
 
   /*
-    --------------------------------
-    CONTACT FLASH
-    --------------------------------
+    交換資訊瞬間，
+    螢幕整體閃亮。
   */
 
   if(
@@ -4864,7 +5172,7 @@ function drawFluidScreen(
     ctx.fillStyle =
 
       `rgba(
-        155,
+        170,
         255,
         255,
         ${device.flash*.14}
@@ -4872,10 +5180,12 @@ function drawFluidScreen(
 
 
     ctx.fillRect(
+
       x,
       y,
       w,
       h
+
     );
 
   }
@@ -4884,7 +5194,7 @@ function drawFluidScreen(
 
 
 /* =========================================================
-   TRANSFER CONTACT VISUAL
+   CONTACT VISUAL
 ========================================================= */
 
 function drawTransferContact(now){
@@ -4903,28 +5213,27 @@ function drawTransferContact(now){
   }
 
 
-  const a =
-
-    currentTransfer.from;
-
-
-  const b =
-
-    currentTransfer.to;
-
-
   const pointA =
-    getTopPoint(a);
+
+    getTopPoint(
+      currentTransfer.from
+    );
 
 
   const pointB =
-    getTopPoint(b);
+
+    getTopPoint(
+      currentTransfer.to
+    );
 
 
   const midX =
 
     (
-      pointA.x +
+      pointA.x
+
+      +
+
       pointB.x
     )
 
@@ -4935,7 +5244,10 @@ function drawTransferContact(now){
   const midY =
 
     (
-      pointA.y +
+      pointA.y
+
+      +
+
       pointB.y
     )
 
@@ -4947,7 +5259,8 @@ function drawTransferContact(now){
 
     (
       Math.sin(
-        now * .025
+        now *
+        .025
       )
 
       +
@@ -4958,21 +5271,17 @@ function drawTransferContact(now){
     2;
 
 
-  /*
-    接觸亮點。
-  */
-
   ctx.shadowBlur =
 
     12
 
     +
 
-    pulse * 8;
+    pulse *
+    8;
 
 
   ctx.shadowColor =
-
     "rgba(140,240,255,.8)";
 
 
@@ -4992,18 +5301,19 @@ function drawTransferContact(now){
   ctx.arc(
 
     midX,
-
     midY,
 
     3
 
     +
 
-    pulse * 3,
+    pulse *
+    3,
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -5016,7 +5326,7 @@ function drawTransferContact(now){
 
 
   /*
-    資訊粒子橋。
+    粒子交換橋。
   */
 
   for(
@@ -5029,11 +5339,13 @@ function drawTransferContact(now){
 
       fract(
 
-        i / 10
+        i /
+        10
 
         +
 
-        now * .0012
+        now *
+        .0012
 
       );
 
@@ -5067,8 +5379,12 @@ function drawTransferContact(now){
 
       Math.sin(
 
-        t *
-        Math.PI *
+        t
+
+        *
+        Math.PI
+
+        *
         3
 
       )
@@ -5078,7 +5394,6 @@ function drawTransferContact(now){
 
 
     ctx.fillStyle =
-
       "rgba(150,245,255,.58)";
 
 
@@ -5126,11 +5441,15 @@ function getTopPoint(index){
 
     x:
 
-      getDeviceX(index)
+      getDeviceX(
+        index
+      )
 
       +
 
-      Math.sin(angle)
+      Math.sin(
+        angle
+      )
 
       *
       height,
@@ -5142,7 +5461,9 @@ function getTopPoint(index){
 
       -
 
-      Math.cos(angle)
+      Math.cos(
+        angle
+      )
 
       *
       height
@@ -5210,7 +5531,9 @@ function updateUI(){
 
       constrain(
 
-        viewer.movement *
+        viewer.movement
+
+        *
         4,
 
         0,
@@ -5237,14 +5560,19 @@ function updateUI(){
     "cameraMeter"
   )
   .style.width =
-    cameraPercent + "%";
+    cameraPercent
+
+    +
+    "%";
 
 
   const voicePercent =
 
     Math.round(
 
-      voiceLevel *
+      voiceLevel
+
+      *
       100
 
     );
@@ -5263,14 +5591,19 @@ function updateUI(){
     "voiceMeter"
   )
   .style.width =
-    voicePercent + "%";
+    voicePercent
+
+    +
+    "%";
 
 
   const chaosPercent =
 
     Math.round(
 
-      chaos *
+      chaos
+
+      *
       100
 
     );
@@ -5289,7 +5622,10 @@ function updateUI(){
     "chaosMeter"
   )
   .style.width =
-    chaosPercent + "%";
+    chaosPercent
+
+    +
+    "%";
 
 
   document
@@ -5306,7 +5642,8 @@ function updateUI(){
   )
   .textContent =
 
-    sourceIndex >= 0
+    sourceIndex >=
+    0
 
     ?
 
@@ -5577,6 +5914,7 @@ function random(
     max =
       min;
 
+
     min =
       0;
 
@@ -5588,7 +5926,6 @@ function random(
     Math.random()
 
     *
-
     (
       max -
       min
@@ -5707,7 +6044,7 @@ function fract(value){
 
 
 /* =========================================================
-   MAIN LOOP
+   LOOP
 ========================================================= */
 
 let previousTime =
@@ -5726,7 +6063,10 @@ function animate(now){
 
       50,
 
-      now -
+      now
+
+      -
+
       previousTime
 
     );
@@ -5736,13 +6076,16 @@ function animate(now){
     now;
 
 
-  /*
-    CAMERA
-  */
+  /* CAMERA */
 
   if(
-    now -
-    lastCameraAnalysis >
+    now
+
+    -
+
+    lastCameraAnalysis
+
+    >
     100
   ){
 
@@ -5755,9 +6098,7 @@ function animate(now){
   }
 
 
-  /*
-    MICROPHONE
-  */
+  /* AUDIO */
 
   updateAudio(
     dt,
@@ -5765,18 +6106,14 @@ function animate(now){
   );
 
 
-  /*
-    TRANSFER
-  */
+  /* TRANSFER */
 
   updateTransfer(
     now
   );
 
 
-  /*
-    CHAOS
-  */
+  /* CHAOS */
 
   updateChaos(
     dt
@@ -5784,24 +6121,28 @@ function animate(now){
 
 
   /*
-    DEVICE
+    先更新機械動作，
+    再更新流體慣性。
   */
 
   devices.forEach(
-
-    device =>
+    device => {
 
       device.update(
         now,
         dt
-      )
+      );
 
+
+      device.updateFluidPhysics(
+        dt
+      );
+
+    }
   );
 
 
-  /*
-    DRAW
-  */
+  /* DRAW */
 
   ctx.clearRect(
 
@@ -5817,14 +6158,14 @@ function animate(now){
 
 
   devices.forEach(
-
-    device =>
+    device => {
 
       drawDevice(
         device,
         now
-      )
+      );
 
+    }
   );
 
 
