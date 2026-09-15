@@ -22,14 +22,22 @@ body{
   overflow:hidden;
   background:#ece9e2;
   color:#303532;
-  font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
+
+  font-family:
+  "Microsoft JhengHei",
+  "Noto Sans TC",
+  sans-serif;
 }
 
 #app{
   width:100%;
   height:100vh;
+
   display:grid;
-  grid-template-columns:minmax(0,1fr) 360px;
+
+  grid-template-columns:
+  minmax(0,1fr)
+  360px;
 }
 
 #stageWrap{
@@ -53,8 +61,10 @@ body{
 
 #title{
   position:absolute;
+
   left:28px;
   top:24px;
+
   pointer-events:none;
 }
 
@@ -71,6 +81,7 @@ body{
 
 #phaseBox{
   position:absolute;
+
   left:28px;
   bottom:25px;
 
@@ -78,7 +89,9 @@ body{
 
   background:rgba(255,255,255,.92);
 
-  border:1px solid rgba(0,0,0,.05);
+  border:
+  1px solid rgba(0,0,0,.05);
+
   border-radius:10px;
 
   font-size:13px;
@@ -93,11 +106,13 @@ body{
 
 #panel{
   padding:20px;
+
   overflow-y:auto;
 
   background:#faf9f6;
 
-  border-left:1px solid #ddd8ce;
+  border-left:
+  1px solid #ddd8ce;
 }
 
 .section{
@@ -106,6 +121,7 @@ body{
 
 .sectionTitle{
   margin-bottom:10px;
+
   font-size:13px;
   font-weight:700;
 }
@@ -122,12 +138,15 @@ video{
 
   border-radius:8px;
 
-  transform:scaleX(-1);
+  transform:
+  scaleX(-1);
 }
 
 button{
   width:100%;
+
   margin:0 0 8px;
+
   padding:11px;
 
   border:0;
@@ -163,7 +182,9 @@ button.test{
 
   background:#fff;
 
-  border:1px solid #dedad1;
+  border:
+  1px solid #dedad1;
+
   border-radius:8px;
 
   font-size:12px;
@@ -172,7 +193,9 @@ button.test{
 
 label{
   display:block;
+
   margin:12px 0 5px;
+
   font-size:12px;
 }
 
@@ -182,6 +205,7 @@ input[type="range"]{
 
 .meter{
   height:8px;
+
   margin-top:7px;
 
   overflow:hidden;
@@ -199,16 +223,29 @@ input[type="range"]{
 
   background:#373d3a;
 
-  transition:width .07s linear;
+  transition:
+  width .07s linear;
+}
+
+.small{
+  margin-top:8px;
+
+  color:#777;
+
+  font-size:11px;
+  line-height:1.6;
 }
 
 .legend{
   margin-top:10px;
+
   padding:10px;
 
   background:#fff;
 
-  border:1px solid #dedad1;
+  border:
+  1px solid #dedad1;
+
   border-radius:8px;
 
   font-size:12px;
@@ -244,20 +281,29 @@ input[type="range"]{
 </style>
 </head>
 
+
 <body>
 
 <div id="app">
+
+  <!-- =========================
+       LEFT STAGE
+  ========================== -->
 
   <div id="stageWrap">
 
     <canvas id="stage"></canvas>
 
     <div id="title">
-      <h1>《誤會機器》</h1>
+
+      <h1>
+        《誤會機器》
+      </h1>
 
       <p>
         看到你 → 聽你說話 → 群體資訊失真
       </p>
+
     </div>
 
     <div id="phaseBox">
@@ -278,6 +324,10 @@ input[type="range"]{
 
   </div>
 
+
+  <!-- =========================
+       RIGHT PANEL
+  ========================== -->
 
   <aside id="panel">
 
@@ -308,6 +358,7 @@ input[type="range"]{
       <div class="status">
 
         攝像頭：
+
         <b id="cameraState">
           未啟動
         </b>
@@ -315,6 +366,7 @@ input[type="range"]{
         <br>
 
         觀者位置：
+
         <b id="viewerPosition">
           —
         </b>
@@ -322,8 +374,11 @@ input[type="range"]{
         <br>
 
         動作量：
+
         <b>
-          <span id="cameraPercent">0</span>%
+          <span id="cameraPercent">
+            0
+          </span>%
         </b>
 
         <div class="meter">
@@ -364,6 +419,7 @@ input[type="range"]{
       <div class="status">
 
         麥克風：
+
         <b id="micState">
           未啟動
         </b>
@@ -371,8 +427,11 @@ input[type="range"]{
         <br>
 
         聲音強度：
+
         <b>
-          <span id="voicePercent">0</span>%
+          <span id="voicePercent">
+            0
+          </span>%
         </b>
 
         <div class="meter">
@@ -384,7 +443,7 @@ input[type="range"]{
     </div>
 
 
-    <!-- GROUP -->
+    <!-- SYSTEM -->
 
     <div class="section">
 
@@ -395,6 +454,7 @@ input[type="range"]{
       <div class="status">
 
         階段：
+
         <b id="modeText">
           待機
         </b>
@@ -402,6 +462,7 @@ input[type="range"]{
         <br>
 
         起點裝置：
+
         <b id="sourceText">
           —
         </b>
@@ -409,8 +470,11 @@ input[type="range"]{
         <br>
 
         混亂程度：
+
         <b>
-          <span id="chaosPercent">0</span>%
+          <span id="chaosPercent">
+            0
+          </span>%
         </b>
 
         <div class="meter">
@@ -420,23 +484,23 @@ input[type="range"]{
         <br>
 
         同時傳遞：
+
         <b>
-          <span id="transferCount">0</span>
+          <span id="transferCount">
+            0
+          </span>
         </b>
+
         組
 
         <br>
 
-        傳遞剩餘：
-        <b id="activeRemaining">
-          —
-        </b>
-
-        <br>
-
         平均資訊濃度：
+
         <b>
-          <span id="averageInfo">0</span>%
+          <span id="averageInfo">
+            0
+          </span>%
         </b>
 
       </div>
@@ -460,7 +524,7 @@ input[type="range"]{
         <br>
 
         <span class="dot red"></span>
-        傳遞資訊
+        正在傳遞資訊
 
       </div>
 
@@ -478,7 +542,9 @@ input[type="range"]{
 
       <label>
         攝像頭敏感度：
-        <span id="sensitivityValue">40</span>
+        <span id="sensitivityValue">
+          40
+        </span>
       </label>
 
       <input
@@ -492,7 +558,9 @@ input[type="range"]{
 
       <label>
         順從最大偏角：
-        <span id="followAngleValue">10</span>°
+        <span id="followAngleValue">
+          10
+        </span>°
       </label>
 
       <input
@@ -506,7 +574,9 @@ input[type="range"]{
 
       <label>
         混亂最大偏角：
-        <span id="chaosAngleValue">28</span>°
+        <span id="chaosAngleValue">
+          28
+        </span>°
       </label>
 
       <input
@@ -520,7 +590,9 @@ input[type="range"]{
 
       <label>
         說話觸發門檻：
-        <span id="voiceThresholdValue">16</span>%
+        <span id="voiceThresholdValue">
+          16
+        </span>%
       </label>
 
       <input
@@ -534,7 +606,9 @@ input[type="range"]{
 
       <label>
         資訊傳遞強度：
-        <span id="transmissionRateValue">70</span>%
+        <span id="transmissionRateValue">
+          70
+        </span>%
       </label>
 
       <input
@@ -548,7 +622,9 @@ input[type="range"]{
 
       <label>
         混亂成長速度：
-        <span id="chaosSpeedValue">45</span>%
+        <span id="chaosSpeedValue">
+          45
+        </span>%
       </label>
 
       <input
@@ -588,18 +664,27 @@ input[type="range"]{
 ========================================================= */
 
 const canvas =
-  document.getElementById("stage");
+  document.getElementById(
+    "stage"
+  );
 
 const ctx =
-  canvas.getContext("2d");
+  canvas.getContext(
+    "2d"
+  );
+
 
 const video =
-  document.getElementById("video");
+  document.getElementById(
+    "video"
+  );
+
 
 const analysisCanvas =
   document.getElementById(
     "cameraAnalysis"
   );
+
 
 const analysisCtx =
   analysisCanvas.getContext(
@@ -614,25 +699,22 @@ const analysisCtx =
    SYSTEM
 ========================================================= */
 
-const DEVICE_COUNT = 5;
+const DEVICE_COUNT =
+  5;
 
 
 /*
-  最多同時傳幾組。
+  最多同時有幾組資訊在跑。
+
+  數字越高畫面越亂。
 */
 
-const MAX_TRANSFERS = 7;
-
-
-/*
-  每次說話後，
-  混亂傳遞維持 8 秒。
-*/
-
-const ACTIVE_DURATION = 8000;
+const MAX_TRANSFERS =
+  7;
 
 
 let W = 0;
+
 let H = 0;
 
 
@@ -640,13 +722,21 @@ const devices = [];
 
 
 /*
-  同時存在多組資訊傳遞。
+  activeTransfers 裡面可以
+  同時存在很多組：
+
+  1 → 2
+  3 → 4
+  5 → 3
+  ...
 */
 
 let activeTransfers = [];
 
 
 /*
+  MODE：
+
   IDLE
   FOLLOW
   LISTEN
@@ -665,40 +755,12 @@ let chaos =
   0;
 
 
-/*
-  ACTIVE 的結束時間。
-*/
-
-let activeUntil =
-  0;
-
-
-/*
-  true：
-
-  已經停止製造新的傳遞，
-  等畫面上剩下的資訊粒子跑完。
-*/
-
-let networkClosing =
-  false;
-
-
 let speakingUntil =
   0;
 
 
 let manualActivationAt =
   0;
-
-
-/*
-  防止同一句話
-  每一幀都被當成新的一次說話。
-*/
-
-let speechBurstActive =
-  false;
 
 
 /* =========================================================
@@ -813,7 +875,7 @@ class Device{
 
 
     /*
-      資訊濃度。
+      資訊量。
     */
 
     this.info =
@@ -821,16 +883,24 @@ class Device{
 
 
     /*
-      收到資訊次數。
+      收到資訊的次數。
     */
 
     this.receiveCount =
       0;
 
 
+    /*
+      接收／傳遞瞬間發光。
+    */
+
     this.flash =
       0;
 
+
+    /*
+      每支裝置自己的時間差。
+    */
 
     this.phase =
 
@@ -853,6 +923,10 @@ class Device{
       );
 
 
+    /*
+      群體混亂時的方向。
+    */
+
     this.chaosTarget =
       0;
 
@@ -860,6 +934,10 @@ class Device{
     this.nextChaosShift =
       0;
 
+
+    /*
+      限制傳送頻率。
+    */
 
     this.sendCooldown =
 
@@ -870,20 +948,25 @@ class Device{
 
 
     /*
-      每次收到資訊，
-      都會增加。
+      粒子能量：
+
+      每收到資訊一次會增加。
     */
 
     this.particleEnergy =
       0;
 
 
+    /*
+      每支裝置自己的混亂程度。
+    */
+
     this.localNoise =
       0;
 
 
     /* =====================================
-       LIQUID
+       LIQUID INERTIA
     ===================================== */
 
     this.lastAngle =
@@ -903,7 +986,7 @@ class Device{
 
 
     /* =====================================
-       PARTICLES
+       PARTICLE SEEDS
     ===================================== */
 
     this.fluidSeeds =
@@ -963,10 +1046,14 @@ class Device{
 
 
   /* =======================================================
-     MOVEMENT
+     DEVICE MOVEMENT
   ======================================================= */
 
   update(now,dt){
+
+    /*
+      Flash 慢慢退掉。
+    */
 
     this.flash =
 
@@ -984,12 +1071,16 @@ class Device{
       );
 
 
+    /*
+      傳送 cooldown。
+    */
+
     this.sendCooldown -=
       dt;
 
 
     /*
-      資訊慢慢衰減。
+      資訊會非常慢地衰減。
     */
 
     this.info =
@@ -1009,7 +1100,8 @@ class Device{
 
 
     /*
-      粒子會慢慢平靜。
+      粒子擾動會比資訊本身
+      稍微快一點恢復。
     */
 
     this.particleEnergy =
@@ -1045,7 +1137,7 @@ class Device{
 
 
     /* =====================================
-       NORMAL FOLLOW
+       IDLE / FOLLOW / LISTEN
     ===================================== */
 
     if(
@@ -1109,12 +1201,16 @@ class Device{
 
 
     /* =====================================
-       ACTIVE
+       ACTIVE CHAOS
     ===================================== */
 
     if(
       mode === "ACTIVE"
     ){
+
+      /*
+        每支會自己改變方向。
+      */
 
       if(
         now >
@@ -1233,6 +1329,11 @@ class Device{
         0;
 
 
+      /*
+        Chaos 越高，
+        觀者影響越低。
+      */
+
       const obedience =
 
         Math.max(
@@ -1250,8 +1351,8 @@ class Device{
 
 
       /*
-        裝置內部資訊本身
-        也會造成動作。
+        每支資訊越亂，
+        自己的小震盪越大。
       */
 
       const internalOscillation =
@@ -1288,6 +1389,18 @@ class Device{
           4
         );
 
+
+      /*
+        最終角度是：
+
+        人
+        +
+        自己
+        +
+        鄰居
+        +
+        內部資訊
+      */
 
       this.targetAngle =
 
@@ -1383,6 +1496,10 @@ class Device{
       );
 
 
+    /*
+      角速度。
+    */
+
     const newAngularVelocity =
 
       (
@@ -1417,6 +1534,10 @@ class Device{
     this.lastAngle =
       this.angle;
 
+
+    /*
+      旋轉造成液體慣性。
+    */
 
     const targetOffset =
 
@@ -1478,24 +1599,12 @@ function resetSystem(){
     0;
 
 
-  activeUntil =
-    0;
-
-
-  networkClosing =
-    false;
-
-
   speakingUntil =
     0;
 
 
   manualActivationAt =
     0;
-
-
-  speechBurstActive =
-    false;
 
 
   voiceHold =
@@ -1615,8 +1724,7 @@ window.addEventListener(
 
 function getBaseY(){
 
-  return H *
-  .73;
+  return H * .73;
 
 }
 
@@ -1627,8 +1735,7 @@ function getBodyHeight(){
 
     245,
 
-    H *
-    .34
+    H * .34
 
   );
 
@@ -1641,8 +1748,7 @@ function getBodyWidth(){
 
     65,
 
-    W *
-    .055
+    W * .055
 
   );
 
@@ -1656,14 +1762,10 @@ function getDeviceX(index){
     index,
 
     0,
-    DEVICE_COUNT -
-    1,
+    DEVICE_COUNT - 1,
 
-    W *
-    .16,
-
-    W *
-    .84
+    W * .16,
+    W * .84
 
   );
 
@@ -1692,19 +1794,14 @@ function getNearestDeviceIndex(){
       viewer.x
 
       *
-
       (
-        DEVICE_COUNT
-
-        -
-
+        DEVICE_COUNT -
         1
       )
 
     ),
 
     0,
-
     DEVICE_COUNT -
     1
 
@@ -1781,13 +1878,13 @@ async function startCamera(){
 
   catch(error){
 
+    cameraReady =
+      false;
+
+
     console.error(
       error
     );
-
-
-    cameraReady =
-      false;
 
 
     document
@@ -1985,7 +2082,6 @@ function analyzeCamera(){
 
         changed++;
 
-
         xTotal +=
           x;
 
@@ -2049,6 +2145,10 @@ function analyzeCamera(){
 
       changed;
 
+
+    /*
+      Video 是鏡像。
+    */
 
     averageX =
 
@@ -2116,8 +2216,7 @@ function analyzeCamera(){
 
 
   /*
-    只有非 ACTIVE 時，
-    相機會控制 IDLE / FOLLOW。
+    看到觀者後進入 FOLLOW。
   */
 
   if(
@@ -2271,13 +2370,13 @@ async function startMicrophone(){
 
   catch(error){
 
+    micReady =
+      false;
+
+
     console.error(
       error
     );
-
-
-    micReady =
-      false;
 
 
     document
@@ -2376,10 +2475,6 @@ async function stopMicrophone(){
     0;
 
 
-  speechBurstActive =
-    false;
-
-
   document
   .getElementById(
     "micState"
@@ -2422,10 +2517,7 @@ document
    AUDIO
 ========================================================= */
 
-function updateAudio(
-  dt,
-  now
-){
+function updateAudio(dt,now){
 
   if(
     !micReady
@@ -2454,10 +2546,6 @@ function updateAudio(
 
     voiceHold =
       0;
-
-
-    speechBurstActive =
-      false;
 
 
     return;
@@ -2562,21 +2650,13 @@ function updateAudio(
     );
 
 
-  const speakingNow =
-
-    voiceLevel
-
-    >
-
-    voiceThreshold;
-
-
   /* =====================================
-     SPEECH START
+     YELLOW
   ===================================== */
 
   if(
-    speakingNow
+    voiceLevel >
+    voiceThreshold
   ){
 
     speakingUntil =
@@ -2588,104 +2668,26 @@ function updateAudio(
       650;
 
 
-    /*
-      長時間持續說話時，
-      ACTIVE 不會突然停止。
-
-      至少讓它延長到
-      說話結束後一小段時間。
-    */
-
     if(
       mode ===
-      "ACTIVE"
+      "FOLLOW"
+
+      ||
+
+      mode ===
+      "IDLE"
     ){
 
-      activeUntil =
-
-        Math.max(
-
-          activeUntil,
-
-          now +
-          1500
-
-        );
+      mode =
+        "LISTEN";
 
     }
-
-
-    /*
-      新的一段說話開始。
-    */
-
-    if(
-      !speechBurstActive
-    ){
-
-      speechBurstActive =
-        true;
-
-
-      /*
-        已經 ACTIVE：
-
-        新說話會再製造一波，
-        並重新計算 8 秒。
-      */
-
-      if(
-        mode ===
-        "ACTIVE"
-      ){
-
-        activateChaosTransmission(
-          now
-        );
-
-      }
-
-      else if(
-        mode ===
-        "IDLE"
-
-        ||
-
-        mode ===
-        "FOLLOW"
-      ){
-
-        mode =
-          "LISTEN";
-
-      }
-
-    }
-
-  }
-
-  else if(
-    voiceLevel
-
-    <
-
-    voiceThreshold *
-    .65
-  ){
-
-    /*
-      音量真的降下來之後，
-      才允許下一次說話重新觸發。
-    */
-
-    speechBurstActive =
-      false;
 
   }
 
 
   /* =====================================
-     FIRST ACTIVATION
+     START ACTIVE
   ===================================== */
 
   if(
@@ -2699,7 +2701,8 @@ function updateAudio(
   ){
 
     if(
-      speakingNow
+      voiceLevel >
+      voiceThreshold
     ){
 
       voiceHold +=
@@ -2727,11 +2730,6 @@ function updateAudio(
     }
 
 
-    /*
-      說話持續約 360ms 後
-      才真的進入資訊傳遞。
-    */
-
     if(
       voiceHold >
       360
@@ -2751,8 +2749,8 @@ function updateAudio(
 
 
   /*
-    如果只是短暫聲音，
-    沒達到正式觸發時間。
+    聲音太短，
+    沒有真的進入傳遞。
   */
 
   if(
@@ -2805,6 +2803,10 @@ document
       performance.now();
 
 
+    /*
+      先黃燈。
+    */
+
     speakingUntil =
 
       now
@@ -2814,43 +2816,34 @@ document
       900;
 
 
-    /*
-      已經 ACTIVE：
-
-      按一次等於再講一次話。
-    */
-
     if(
       mode ===
-      "ACTIVE"
+      "IDLE"
+
+      ||
+
+      mode ===
+      "FOLLOW"
+
+      ||
+
+      mode ===
+      "LISTEN"
     ){
 
-      activateChaosTransmission(
+      mode =
+        "LISTEN";
+
+
+      manualActivationAt =
+
         now
-      );
 
+        +
 
-      return;
+        650;
 
     }
-
-
-    /*
-      正常模式：
-      先黃燈，再開始傳。
-    */
-
-    mode =
-      "LISTEN";
-
-
-    manualActivationAt =
-
-      now
-
-      +
-
-      650;
 
   }
 
@@ -2858,14 +2851,15 @@ document
 
 
 /* =========================================================
-   START / EXTEND TRANSMISSION
+   ACTIVATE TRANSMISSION
 ========================================================= */
 
 function activateChaosTransmission(now){
 
-  /* =====================================
-     ALREADY ACTIVE
-  ===================================== */
+  /*
+    如果已經在傳遞，
+    再次說話會額外加一波資訊。
+  */
 
   if(
     mode ===
@@ -2879,24 +2873,6 @@ function activateChaosTransmission(now){
 
     sourceIndex =
       source;
-
-
-    /*
-      每次再次說話，
-      從現在重新計 8 秒。
-    */
-
-    activeUntil =
-
-      now
-
-      +
-
-      ACTIVE_DURATION;
-
-
-    networkClosing =
-      false;
 
 
     boostDevice(
@@ -2929,7 +2905,7 @@ function activateChaosTransmission(now){
 
 
     /*
-      新增一波資訊。
+      再立即送出兩三條。
     */
 
     for(
@@ -2969,24 +2945,11 @@ function activateChaosTransmission(now){
 
 
   /* =====================================
-     FIRST ACTIVE
+     FIRST ACTIVATION
   ===================================== */
 
   mode =
     "ACTIVE";
-
-
-  activeUntil =
-
-    now
-
-    +
-
-    ACTIVE_DURATION;
-
-
-  networkClosing =
-    false;
 
 
   chaos =
@@ -3019,7 +2982,8 @@ function activateChaosTransmission(now){
 
 
   /*
-    一開始一次散出去幾組。
+    一開始就不是只傳一條，
+    而是同時發出 3 條。
   */
 
   for(
@@ -3077,6 +3041,11 @@ function deviceIsTransferring(index){
 
 }
 
+
+/*
+  完全相同方向的傳遞，
+  短時間內不要重複塞太多。
+*/
 
 function transferPairExists(
   a,
@@ -3146,7 +3115,7 @@ function chooseTargetFor(
 
 
     /*
-      初期比較常傳鄰居。
+      初期比較喜歡傳給鄰居。
     */
 
     if(
@@ -3165,10 +3134,9 @@ function chooseTargetFor(
 
     }
 
-
     /*
       Chaos 增加後，
-      開始跨一支。
+      開始跨一支傳。
     */
 
     else if(
@@ -3187,6 +3155,9 @@ function chooseTargetFor(
 
     }
 
+    /*
+      更後期可以跨更遠。
+    */
 
     else if(
       distance ===
@@ -3200,7 +3171,6 @@ function chooseTargetFor(
 
     }
 
-
     else{
 
       weight =
@@ -3212,8 +3182,8 @@ function chooseTargetFor(
 
 
     /*
-      同方向現在正在傳，
-      就先降低再次選到它的機率。
+      同一對正在傳時，
+      降低再次選到的機率。
     */
 
     if(
@@ -3228,6 +3198,11 @@ function chooseTargetFor(
 
     }
 
+
+    /*
+      已經很亂的裝置，
+      更容易被選中。
+    */
 
     weight +=
 
@@ -3291,15 +3266,6 @@ function addTransfer(
 ){
 
   if(
-    networkClosing
-  ){
-
-    return;
-
-  }
-
-
-  if(
     from ===
     to
   ){
@@ -3310,10 +3276,7 @@ function addTransfer(
 
 
   if(
-    activeTransfers.length
-
-    >=
-
+    activeTransfers.length >=
     MAX_TRANSFERS
   ){
 
@@ -3353,8 +3316,8 @@ function addTransfer(
 
 
     /*
-      粒子會走彎曲路徑，
-      但不畫任何線。
+      不畫線，
+      但粒子仍會走不同弧線。
     */
 
     curvature:
@@ -3369,8 +3332,7 @@ function addTransfer(
 
       random(
         0,
-        Math.PI *
-        2
+        Math.PI * 2
       )
 
   });
@@ -3390,7 +3352,6 @@ function boostDevice(
 ){
 
   const device =
-
     devices[index];
 
 
@@ -3476,7 +3437,8 @@ function deliverTransfer(
 
 
   /*
-    每次傳遞都有一點失真。
+    資訊不是完整複製，
+    每次都會稍微失真。
   */
 
   const mutation =
@@ -3511,7 +3473,8 @@ function deliverTransfer(
 
 
   /*
-    新資訊與舊資訊混合。
+    接收者自己的舊資訊
+    和新資訊混在一起。
   */
 
   const mixedInfo =
@@ -3554,8 +3517,8 @@ function deliverTransfer(
 
 
   /*
-    被傳一次，
-    螢幕粒子就更激烈。
+    每收到一次，
+    粒子能量增加。
   */
 
   to.particleEnergy =
@@ -3588,6 +3551,10 @@ function deliverTransfer(
     );
 
 
+  /*
+    每傳一次也會增加錯亂。
+  */
+
   to.localNoise =
 
     constrain(
@@ -3619,7 +3586,7 @@ function deliverTransfer(
 
 
   /*
-    傳送者自己也被資訊影響。
+    傳送者本身也會受到影響。
   */
 
   from.particleEnergy =
@@ -3665,37 +3632,25 @@ function deliverTransfer(
   to.receiveCount++;
 
 
-  /*
-    如果目前正在收尾，
-    已經存在的資訊可以傳完，
-    但不再讓混亂繼續增長。
-  */
+  chaos =
 
-  if(
-    !networkClosing
-  ){
+    constrain(
 
-    chaos =
+      chaos
 
-      constrain(
+      +
 
-        chaos
+      .028
 
-        +
+      +
 
-        .028
+      to.localNoise *
+      .024,
 
-        +
+      0,
+      1
 
-        to.localNoise *
-        .024,
-
-        0,
-        1
-
-      );
-
-  }
+    );
 
 }
 
@@ -3719,326 +3674,195 @@ function updateTransmissionNetwork(
   }
 
 
+  /*
+    混亂會隨時間成長。
+  */
+
+  chaos =
+
+    constrain(
+
+      chaos
+
+      +
+
+      dt
+
+      *
+      .000018
+
+      *
+      chaosGrowthSpeed,
+
+      0,
+      1
+
+    );
+
+
+  const chanceScale =
+
+    dt /
+    16.67;
+
+
   /* =====================================
-     TIME'S UP
+     EACH DEVICE MAY SEND
   ===================================== */
 
-  if(
-    now >=
-    activeUntil
+  for(
+    let i = 0;
+    i < DEVICE_COUNT;
+    i++
   ){
+
+    const device =
+
+      devices[i];
+
 
     /*
-      從這一刻開始：
-
-      不再新增任何資訊。
-
-      但已經飛出去的粒子
-      仍然會完整跑到終點。
+      至少要有一點資訊才能傳。
     */
 
-    networkClosing =
-      true;
-
-  }
-
-
-  /* =====================================
-     STILL ACTIVE
-  ===================================== */
-
-  if(
-    !networkClosing
-  ){
-
-    chaos =
-
-      constrain(
-
-        chaos
-
-        +
-
-        dt
-
-        *
-        .000018
-
-        *
-        chaosGrowthSpeed,
-
-        0,
-        1
-
-      );
-
-
-    const chanceScale =
-
-      dt /
-      16.67;
-
-
-    /* =====================================
-       DEVICE SEND
-    ===================================== */
-
-    for(
-      let i = 0;
-      i < DEVICE_COUNT;
-      i++
+    if(
+      device.info <
+      .06
     ){
 
-      const device =
-
-        devices[i];
-
-
-      if(
-        device.info <
-        .06
-      ){
-
-        continue;
-
-      }
-
-
-      if(
-        device.sendCooldown >
-        0
-      ){
-
-        continue;
-
-      }
-
-
-      const sendChance =
-
-        (
-          .014
-
-          +
-
-          chaos *
-          .030
-
-          +
-
-          device.localNoise *
-          .025
-        )
-
-        *
-        transmissionRate;
-
-
-      if(
-        Math.random()
-
-        <
-
-        sendChance
-
-        *
-        chanceScale
-      ){
-
-        /*
-          Chaos 越高，
-          越容易一次傳兩組。
-        */
-
-        const burstCount =
-
-          Math.random()
-
-          <
-
-          (
-            .22
-
-            +
-
-            chaos *
-            .68
-          )
-
-          ?
-
-          2
-
-          :
-
-          1;
-
-
-        for(
-          let k = 0;
-          k < burstCount;
-          k++
-        ){
-
-          const target =
-
-            chooseTargetFor(
-              i
-            );
-
-
-          if(
-            target !==
-            null
-          ){
-
-            addTransfer(
-
-              i,
-
-              target
-
-            );
-
-          }
-
-        }
-
-
-        device.sendCooldown =
-
-          random(
-
-            140,
-
-            Math.max(
-
-              260,
-
-              700
-
-              -
-
-              chaos *
-              320
-
-            )
-
-          );
-
-      }
+      continue;
 
     }
 
 
-    /* =====================================
-       EXTRA EVENTS
-    ===================================== */
+    if(
+      device.sendCooldown >
+      0
+    ){
 
-    const desiredTransfers =
+      continue;
 
-      Math.floor(
+    }
 
-        2
+
+    /*
+      Chaos 越高、
+      裝置越亂，
+      越容易主動傳。
+    */
+
+    const sendChance =
+
+      (
+        .014
 
         +
 
         chaos *
-        5
+        .030
 
-      );
+        +
+
+        device.localNoise *
+        .025
+
+      )
+
+      *
+      transmissionRate;
 
 
     if(
-      activeTransfers.length
+      Math.random()
 
       <
 
-      desiredTransfers
+      sendChance
+
+      *
+      chanceScale
     ){
 
-      const extraChance =
+      /*
+        後期更容易一次送給兩支。
+      */
 
-        (
-          .025
+      const burstCount =
 
-          +
-
-          chaos *
-          .04
-        )
-
-        *
-        chanceScale;
-
-
-      if(
         Math.random()
 
         <
 
-        extraChance
+        (
+          .22
+
+          +
+
+          chaos *
+          .68
+
+        )
+
+        ?
+
+        2
+
+        :
+
+        1;
+
+
+      for(
+        let k = 0;
+        k < burstCount;
+        k++
       ){
 
-        const candidates =
+        const target =
 
-          devices.filter(
-
-            device =>
-
-              device.info >
-              .10
-
+          chooseTargetFor(
+            i
           );
 
 
         if(
-          candidates.length >
-          0
+          target !==
+          null
         ){
 
-          const sender =
+          addTransfer(
 
-            candidates[
+            i,
 
-              Math.floor(
+            target
 
-                Math.random()
-
-                *
-
-                candidates.length
-
-              )
-
-            ];
-
-
-          const target =
-
-            chooseTargetFor(
-              sender.index
-            );
-
-
-          if(
-            target !==
-            null
-          ){
-
-            addTransfer(
-
-              sender.index,
-
-              target
-
-            );
-
-          }
+          );
 
         }
 
       }
+
+
+      device.sendCooldown =
+
+        random(
+
+          140,
+
+          Math.max(
+
+            260,
+
+            700
+
+            -
+
+            chaos *
+            320
+
+          )
+
+        );
 
     }
 
@@ -4046,9 +3870,7 @@ function updateTransmissionNetwork(
 
 
   /* =====================================
-     EXISTING TRANSFERS
-
-     收尾時依然跑完。
+     UPDATE EXISTING TRANSFERS
   ===================================== */
 
   for(
@@ -4095,94 +3917,112 @@ function updateTransmissionNetwork(
 
 
   /* =====================================
-     CLOSING
+     BACKGROUND CHAOTIC EVENTS
   ===================================== */
 
+  const desiredTransfers =
+
+    Math.floor(
+
+      2
+
+      +
+
+      chaos *
+      5
+
+    );
+
+
   if(
-    networkClosing
+    activeTransfers.length <
+    desiredTransfers
   ){
 
-    /*
-      整體機械混亂開始下降。
-    */
+    const extraChance =
 
-    chaos =
+      (
+        .025
 
-      Math.max(
+        +
 
-        0,
+        chaos *
+        .04
+      )
 
-        chaos
+      *
+      chanceScale;
 
-        -
-
-        dt *
-        .00030
-
-      );
-
-
-    /*
-      最後一顆資訊粒子也抵達後，
-      正式回到一般狀態。
-    */
 
     if(
-      activeTransfers.length ===
-      0
+      Math.random()
+
+      <
+      extraChance
     ){
 
-      networkClosing =
-        false;
-
-
-      activeUntil =
-        0;
-
-
-      sourceIndex =
-        -1;
-
-
-      chaos =
-        0;
-
-
-      mode =
-
-        viewer.present
-
-        ?
-
-        "FOLLOW"
-
-        :
-
-        "IDLE";
-
-
       /*
-        不把 info / particleEnergy 清掉。
-
-        所以螢幕還會保留一點
-        被擾亂過的痕跡，
-        然後慢慢恢復。
+        從目前有資訊的裝置中
+        隨機挑一支。
       */
 
-      devices.forEach(
+      const candidates =
 
-        device => {
+        devices.filter(
 
-          device.sendCooldown =
+          device =>
 
-            random(
-              300,
-              700
-            );
+            device.info >
+            .10
+
+        );
+
+
+      if(
+        candidates.length >
+        0
+      ){
+
+        const sender =
+
+          candidates[
+
+            Math.floor(
+
+              Math.random()
+
+              *
+
+              candidates.length
+
+            )
+
+          ];
+
+
+        const target =
+
+          chooseTargetFor(
+            sender.index
+          );
+
+
+        if(
+          target !==
+          null
+        ){
+
+          addTransfer(
+
+            sender.index,
+
+            target
+
+          );
 
         }
 
-      );
+      }
 
     }
 
@@ -4248,7 +4088,7 @@ function drawTable(){
 
 
 /* =========================================================
-   DEVICE
+   DRAW DEVICE
 ========================================================= */
 
 function drawDevice(
@@ -4290,12 +4130,17 @@ function drawDevice(
 
 
   ctx.translate(
+
     x,
+
     baseY
+
   );
 
 
-  /* SHADOW */
+  /* =====================================
+     SHADOW
+  ===================================== */
 
   ctx.fillStyle =
     "rgba(0,0,0,.09)";
@@ -4326,7 +4171,9 @@ function drawDevice(
   ctx.fill();
 
 
-  /* BASE */
+  /* =====================================
+     BASE
+  ===================================== */
 
   ctx.fillStyle =
     "#171817";
@@ -4355,7 +4202,9 @@ function drawDevice(
   ctx.fill();
 
 
-  /* PIVOT */
+  /* =====================================
+     PIVOT
+  ===================================== */
 
   ctx.fillStyle =
     "#353936";
@@ -4408,7 +4257,7 @@ function drawDevice(
 
 
   /*
-    整支裝置旋轉。
+    整支旋轉。
   */
 
   ctx.rotate(
@@ -4416,7 +4265,9 @@ function drawDevice(
   );
 
 
-  /* BODY */
+  /* =====================================
+     BODY
+  ===================================== */
 
   const bodyGradient =
 
@@ -4436,20 +4287,29 @@ function drawDevice(
 
 
   bodyGradient.addColorStop(
+
     0,
+
     "#050605"
+
   );
 
 
   bodyGradient.addColorStop(
+
     .45,
+
     "#2b2d2c"
+
   );
 
 
   bodyGradient.addColorStop(
+
     1,
+
     "#070807"
+
   );
 
 
@@ -4491,7 +4351,9 @@ function drawDevice(
     0;
 
 
-  /* LED */
+  /* =====================================
+     LED
+  ===================================== */
 
   drawLED(
 
@@ -4506,7 +4368,9 @@ function drawDevice(
   );
 
 
-  /* CAMERA */
+  /* =====================================
+     CAMERA
+  ===================================== */
 
   const cameraY =
 
@@ -4526,6 +4390,7 @@ function drawDevice(
   ctx.arc(
 
     0,
+
     cameraY,
 
     9,
@@ -4555,6 +4420,7 @@ function drawDevice(
   ctx.arc(
 
     0,
+
     cameraY,
 
     9,
@@ -4580,6 +4446,7 @@ function drawDevice(
   ctx.arc(
 
     0,
+
     cameraY,
 
     5.5,
@@ -4622,17 +4489,23 @@ function drawDevice(
   ctx.fill();
 
 
-  /* SCREEN */
+  /* =====================================
+     SCREEN
+  ===================================== */
 
   const screenW =
 
-    bodyWidth *
+    bodyWidth
+
+    *
     .70;
 
 
   const screenH =
 
-    bodyHeight *
+    bodyHeight
+
+    *
     .31;
 
 
@@ -4644,7 +4517,9 @@ function drawDevice(
 
   const screenY =
 
-    -bodyHeight *
+    -bodyHeight
+
+    *
     .56;
 
 
@@ -4658,9 +4533,11 @@ function drawDevice(
   ctx.roundRect(
 
     screenX,
+
     screenY,
 
     screenW,
+
     screenH,
 
     3
@@ -4751,7 +4628,7 @@ function drawLED(
 ){
 
   /*
-    優先：
+    優先順序：
 
     紅 > 黃 > 綠 > 白
   */
@@ -4780,7 +4657,9 @@ function drawLED(
     2;
 
 
-  /* IDLE */
+  /*
+    待機白。
+  */
 
   let r =
     190;
@@ -4804,7 +4683,9 @@ function drawLED(
     .08;
 
 
-  /* GREEN */
+  /* =====================================
+     GREEN
+  ===================================== */
 
   if(
     viewer.present
@@ -4834,14 +4715,13 @@ function drawLED(
   }
 
 
-  /* YELLOW */
+  /* =====================================
+     YELLOW
+  ===================================== */
 
   const speaking =
 
-    now
-
-    <
-
+    now <
     speakingUntil;
 
 
@@ -4857,6 +4737,23 @@ function drawLED(
 
     device.index ===
     speakingDevice
+
+    &&
+
+    (
+      mode ===
+      "LISTEN"
+
+      ||
+
+      mode ===
+      "FOLLOW"
+
+      ||
+
+      mode ===
+      "IDLE"
+    )
   ){
 
     r =
@@ -4890,7 +4787,9 @@ function drawLED(
   }
 
 
-  /* RED */
+  /* =====================================
+     RED
+  ===================================== */
 
   if(
     deviceIsTransferring(
@@ -4965,6 +4864,8 @@ function drawLED(
     );
 
 
+  /* LED BASE */
+
   ctx.fillStyle =
     "rgba(45,50,50,.35)";
 
@@ -4977,16 +4878,22 @@ function drawLED(
     +
     3,
 
-    -height +
+    -height
+
+    +
     9,
 
-    width -
+    width
+
+    -
     6,
 
     5
 
   );
 
+
+  /* LED LIGHT */
 
   ctx.shadowBlur =
 
@@ -5026,10 +4933,14 @@ function drawLED(
     +
     3,
 
-    -height +
+    -height
+
+    +
     9,
 
-    width -
+    width
+
+    -
     6,
 
     4
@@ -5056,7 +4967,9 @@ function drawFluidScreen(
   h
 ){
 
-  /* BACKGROUND */
+  /* =====================================
+     BACKGROUND
+  ===================================== */
 
   const bg =
 
@@ -5066,27 +4979,35 @@ function drawFluidScreen(
       y,
 
       x,
-      y +
-      h
+      y + h
 
     );
 
 
   bg.addColorStop(
+
     0,
+
     "#071653"
+
   );
 
 
   bg.addColorStop(
+
     .5,
+
     "#06144a"
+
   );
 
 
   bg.addColorStop(
+
     1,
+
     "#030c32"
+
   );
 
 
@@ -5095,10 +5016,12 @@ function drawFluidScreen(
 
 
   ctx.fillRect(
+
     x,
     y,
     w,
     h
+
   );
 
 
@@ -5134,8 +5057,8 @@ function drawFluidScreen(
 
 
   /*
-    每被傳一次，
-    這個數值就會更大。
+    每次收到資訊後，
+    particleEnergy / localNoise 都會增加。
   */
 
   const particleVariation =
@@ -5166,6 +5089,11 @@ function drawFluidScreen(
 
     );
 
+
+  /*
+    粒子越亂，
+    液面波動越強。
+  */
 
   const turbulence =
 
@@ -5202,6 +5130,11 @@ function drawFluidScreen(
     180;
 
 
+  /*
+    世界重力轉換成
+    裝置自己的座標。
+  */
+
   let gravityX =
 
     Math.sin(
@@ -5217,7 +5150,7 @@ function drawFluidScreen(
 
 
   /*
-    慣性。
+    旋轉慣性。
   */
 
   gravityX +=
@@ -5265,6 +5198,10 @@ function drawFluidScreen(
     gravityLength;
 
 
+  /*
+    液面方向。
+  */
+
   const tangentX =
 
     gravityY;
@@ -5276,8 +5213,13 @@ function drawFluidScreen(
 
 
   /* =====================================
-     AMOUNT
+     LIQUID AMOUNT
   ===================================== */
+
+  /*
+    資訊越多，
+    液體看起來越多。
+  */
 
   const fillAmount =
 
@@ -5394,6 +5336,10 @@ function drawFluidScreen(
         tangentY;
 
 
+      /*
+        第一層波。
+      */
+
       let surfaceWave =
 
         Math.sin(
@@ -5432,6 +5378,10 @@ function drawFluidScreen(
         );
 
 
+      /*
+        第二層較碎的波。
+      */
+
       surfaceWave +=
 
         Math.sin(
@@ -5466,12 +5416,19 @@ function drawFluidScreen(
         );
 
 
+      /*
+        高混亂時出現局部雜訊。
+      */
+
       surfaceWave +=
 
         Math.sin(
 
           (
-            nx +
+            nx
+
+            +
+
             ny
           )
 
@@ -5492,10 +5449,16 @@ function drawFluidScreen(
 
         *
         (
-          particleVariation *
+          particleVariation
+
+          *
           .015
         );
 
+
+      /*
+        裝置動作引起的液面波。
+      */
 
       surfaceWave +=
 
@@ -5630,11 +5593,9 @@ function drawFluidScreen(
 
       ctx.fillRect(
 
-        x +
-        px,
+        x + px,
 
-        y +
-        py,
+        y + py,
 
         cellSize,
 
@@ -5643,26 +5604,33 @@ function drawFluidScreen(
       );
 
 
+      /* =================================
+         MICRO PARTICLES
+      ================================= */
+
       const sparkle =
 
         pseudoLiquidNoise(
 
           px,
+
           py,
 
           device.index,
 
           Math.floor(
+
             now /
             90
+
           )
 
         );
 
 
       /*
-        越混亂，
-        越多小亮點。
+        particleVariation 越高，
+        越容易出現亮點。
       */
 
       if(
@@ -5704,11 +5672,9 @@ function drawFluidScreen(
 
         ctx.fillRect(
 
-          x +
-          px,
+          x + px,
 
-          y +
-          py,
+          y + py,
 
           1,
           1
@@ -5870,6 +5836,11 @@ function drawFluidScreen(
       wave;
 
 
+    /*
+      資訊越亂，
+      粒子越散。
+    */
+
     const randomDepth =
 
       Math.abs(
@@ -5970,8 +5941,7 @@ function drawFluidScreen(
       ||
 
       screenX >
-      x +
-      w
+      x + w
 
       ||
 
@@ -5981,8 +5951,7 @@ function drawFluidScreen(
       ||
 
       screenY >
-      y +
-      h
+      y + h
     ){
 
       continue;
@@ -6050,9 +6019,11 @@ function drawFluidScreen(
     ctx.fillRect(
 
       screenX,
+
       screenY,
 
       size,
+
       size
 
     );
@@ -6093,15 +6064,8 @@ function drawFluidScreen(
 
       device
       .fluidSeeds[
-
-        i
-
-        %
-
-        device
-        .fluidSeeds
-        .length
-
+        i %
+        device.fluidSeeds.length
       ];
 
 
@@ -6275,8 +6239,7 @@ function drawFluidScreen(
       ||
 
       screenX >
-      x +
-      w
+      x + w
 
       ||
 
@@ -6286,8 +6249,7 @@ function drawFluidScreen(
       ||
 
       screenY >
-      y +
-      h
+      y + h
     ){
 
       continue;
@@ -6318,6 +6280,7 @@ function drawFluidScreen(
     ctx.arc(
 
       screenX,
+
       screenY,
 
       .6
@@ -6345,6 +6308,10 @@ function drawFluidScreen(
   }
 
 
+  /* =====================================
+     INFORMATION FLASH
+  ===================================== */
+
   if(
     device.flash >
     0
@@ -6361,10 +6328,12 @@ function drawFluidScreen(
 
 
     ctx.fillRect(
+
       x,
       y,
       w,
       h
+
     );
 
   }
@@ -6375,12 +6344,11 @@ function drawFluidScreen(
 /* =========================================================
    TRANSFER PARTICLES
 
-   沒有線。
-   沒有虛線。
-   只有粒子。
+   ★ 這裡完全沒有任何連接線。
+   ★ 只有紅色粒子在裝置間移動。
 ========================================================= */
 
-function drawAllTransferParticles(
+function drawAllTransferContacts(
   now
 ){
 
@@ -6403,7 +6371,7 @@ function drawAllTransferParticles(
 
 
 /* =========================================================
-   ONE TRANSFER
+   TRANSFER PARTICLES
 ========================================================= */
 
 function drawTransferParticles(
@@ -6490,6 +6458,12 @@ function drawTransferParticles(
     1;
 
 
+  /*
+    垂直方向。
+    只是用來計算粒子彎曲路徑，
+    不會畫成線。
+  */
+
   const nx =
 
     -dy
@@ -6505,11 +6479,6 @@ function drawTransferParticles(
     /
     distance;
 
-
-  /*
-    只用來算粒子路徑。
-    不會畫線。
-  */
 
   const bend =
 
@@ -6557,6 +6526,11 @@ function drawTransferParticles(
     transfer.curvature;
 
 
+  /*
+    Chaos 越高，
+    粒子越多。
+  */
+
   const particleCount =
 
     5
@@ -6565,19 +6539,25 @@ function drawTransferParticles(
 
     Math.floor(
 
-      chaos
-
-      *
+      chaos *
       12
 
     );
 
+
+  /* =====================================
+     MOVING RED PARTICLES
+  ===================================== */
 
   for(
     let i = 0;
     i < particleCount;
     i++
   ){
+
+    /*
+      顆粒彼此錯開。
+    */
 
     const offset =
 
@@ -6586,6 +6566,15 @@ function drawTransferParticles(
       /
       particleCount;
 
+
+    /*
+      每顆粒子沿著同一條
+      隱形路徑往前跑。
+
+      注意：
+      只有數學路徑，
+      畫面不畫線。
+    */
 
     const p =
 
@@ -6625,8 +6614,8 @@ function drawTransferParticles(
 
 
     /*
-      越混亂，
-      資訊越散。
+      混亂越高，
+      顆粒越散。
     */
 
     const scatter =
@@ -6682,6 +6671,10 @@ function drawTransferParticles(
       *
       scatter;
 
+
+    /*
+      越靠後稍微越淡。
+    */
 
     const alpha =
 
@@ -6779,9 +6772,11 @@ function drawTransferParticles(
   }
 
 
-  /*
-    最前面的資訊核心。
-  */
+  /* =====================================
+     LEADING PARTICLE
+
+     最前面的資訊核心。
+  ===================================== */
 
   const highlight =
 
@@ -6797,12 +6792,9 @@ function drawTransferParticles(
       pointB.y,
 
       constrain(
-
         transfer.progress,
-
         0,
         1
-
       )
 
     );
@@ -6869,6 +6861,7 @@ function drawTransferParticles(
   ctx.arc(
 
     highlight.x,
+
     highlight.y,
 
     2
@@ -6896,7 +6889,7 @@ function drawTransferParticles(
 
 
 /* =========================================================
-   QUADRATIC
+   QUADRATIC POSITION
 ========================================================= */
 
 function getQuadraticPoint(
@@ -6911,7 +6904,10 @@ function getQuadraticPoint(
 
   const mt =
 
-    1 -
+    1
+
+    -
+
     t;
 
 
@@ -6962,7 +6958,7 @@ function getQuadraticPoint(
 
 
 /* =========================================================
-   TOP
+   TOP POINT
 ========================================================= */
 
 function getTopPoint(index){
@@ -7082,7 +7078,9 @@ function updateUI(now){
 
       constrain(
 
-        viewer.movement *
+        viewer.movement
+
+        *
         4,
 
         0,
@@ -7211,7 +7209,6 @@ function updateUI(now){
     )
 
     /
-
     DEVICE_COUNT;
 
 
@@ -7249,85 +7246,6 @@ function updateUI(now){
     "—";
 
 
-  /* =====================================
-     REMAINING TIME
-  ===================================== */
-
-  if(
-    mode ===
-    "ACTIVE"
-
-    &&
-
-    !networkClosing
-  ){
-
-    const remaining =
-
-      Math.max(
-
-        0,
-
-        activeUntil
-
-        -
-
-        now
-
-      )
-
-      /
-      1000;
-
-
-    document
-    .getElementById(
-      "activeRemaining"
-    )
-    .textContent =
-
-      remaining.toFixed(1)
-
-      +
-
-      " 秒";
-
-  }
-
-  else if(
-    mode ===
-    "ACTIVE"
-
-    &&
-
-    networkClosing
-  ){
-
-    document
-    .getElementById(
-      "activeRemaining"
-    )
-    .textContent =
-      "收尾中";
-
-  }
-
-  else{
-
-    document
-    .getElementById(
-      "activeRemaining"
-    )
-    .textContent =
-      "—";
-
-  }
-
-
-  /* =====================================
-     MODE TEXT
-  ===================================== */
-
   let modeText =
     "待機";
 
@@ -7346,7 +7264,7 @@ function updateUI(now){
 
 
     description =
-      "裝置拍到觀者，LED 變成綠色並跟隨觀者。";
+      "裝置已拍到觀者，LED 變成綠色並跟隨觀者。";
 
   }
 
@@ -7361,7 +7279,7 @@ function updateUI(now){
 
 
     description =
-      "最近的裝置正在接收聲音，LED 變成黃色。";
+      "最近的裝置正在接收你的聲音，LED 變成黃色。";
 
   }
 
@@ -7369,10 +7287,6 @@ function updateUI(now){
   if(
     mode ===
     "ACTIVE"
-
-    &&
-
-    !networkClosing
   ){
 
     modeText =
@@ -7380,26 +7294,7 @@ function updateUI(now){
 
 
     description =
-      "資訊正在反覆、交叉傳遞，粒子持續擾動。";
-
-  }
-
-
-  if(
-    mode ===
-    "ACTIVE"
-
-    &&
-
-    networkClosing
-  ){
-
-    modeText =
-      "傳遞收尾";
-
-
-    description =
-      "已停止產生新資訊，剩下的資訊正在完成最後傳遞。";
+      "資訊正在反覆、交叉傳遞；紅色粒子在裝置之間流竄。";
 
   }
 
@@ -7440,6 +7335,7 @@ document
 )
 .addEventListener(
   "input",
+
   e => {
 
     viewer.sensitivity =
@@ -7454,9 +7350,11 @@ document
       "sensitivityValue"
     )
     .textContent =
+
       e.target.value;
 
   }
+
 );
 
 
@@ -7466,6 +7364,7 @@ document
 )
 .addEventListener(
   "input",
+
   e => {
 
     followMaxAngle =
@@ -7480,9 +7379,11 @@ document
       "followAngleValue"
     )
     .textContent =
+
       e.target.value;
 
   }
+
 );
 
 
@@ -7492,6 +7393,7 @@ document
 )
 .addEventListener(
   "input",
+
   e => {
 
     chaosMaxAngle =
@@ -7506,9 +7408,11 @@ document
       "chaosAngleValue"
     )
     .textContent =
+
       e.target.value;
 
   }
+
 );
 
 
@@ -7518,6 +7422,7 @@ document
 )
 .addEventListener(
   "input",
+
   e => {
 
     voiceThreshold =
@@ -7535,9 +7440,11 @@ document
       "voiceThresholdValue"
     )
     .textContent =
+
       e.target.value;
 
   }
+
 );
 
 
@@ -7547,6 +7454,7 @@ document
 )
 .addEventListener(
   "input",
+
   e => {
 
     transmissionRate =
@@ -7564,9 +7472,11 @@ document
       "transmissionRateValue"
     )
     .textContent =
+
       e.target.value;
 
   }
+
 );
 
 
@@ -7576,6 +7486,7 @@ document
 )
 .addEventListener(
   "input",
+
   e => {
 
     chaosGrowthSpeed =
@@ -7593,9 +7504,11 @@ document
       "chaosSpeedValue"
     )
     .textContent =
+
       e.target.value;
 
   }
+
 );
 
 
@@ -7626,6 +7539,7 @@ function random(
     max =
       min;
 
+
     min =
       0;
 
@@ -7638,7 +7552,10 @@ function random(
 
     *
     (
-      max -
+      max
+
+      -
+
       min
     )
 
@@ -7664,7 +7581,10 @@ function lerp(
     +
 
     (
-      b -
+      b
+
+      -
+
       a
     )
 
@@ -7710,21 +7630,30 @@ function mapValue(
   return(
 
     (
-      value -
+      value
+
+      -
+
       inMin
     )
 
     /
 
     (
-      inMax -
+      inMax
+
+      -
+
       inMin
     )
 
     *
 
     (
-      outMax -
+      outMax
+
+      -
+
       outMin
     )
 
@@ -7803,6 +7732,10 @@ function pseudoLiquidNoise(
 
 }
 
+
+/* =========================================================
+   WEIGHTED RANDOM
+========================================================= */
 
 function weightedPick(items){
 
@@ -7904,7 +7837,7 @@ function animate(now){
 
 
   /* =====================================
-     MANUAL
+     MANUAL SPEECH
   ===================================== */
 
   if(
@@ -7933,7 +7866,9 @@ function animate(now){
   }
 
 
-  /* CAMERA */
+  /* =====================================
+     CAMERA
+  ===================================== */
 
   if(
     now
@@ -7955,7 +7890,9 @@ function animate(now){
   }
 
 
-  /* AUDIO */
+  /* =====================================
+     AUDIO
+  ===================================== */
 
   updateAudio(
     dt,
@@ -7963,7 +7900,9 @@ function animate(now){
   );
 
 
-  /* NETWORK */
+  /* =====================================
+     TRANSMISSION
+  ===================================== */
 
   updateTransmissionNetwork(
     now,
@@ -7971,7 +7910,9 @@ function animate(now){
   );
 
 
-  /* DEVICES */
+  /* =====================================
+     DEVICES
+  ===================================== */
 
   devices.forEach(
 
@@ -7992,7 +7933,9 @@ function animate(now){
   );
 
 
-  /* DRAW */
+  /* =====================================
+     DRAW
+  ===================================== */
 
   ctx.clearRect(
 
@@ -8013,8 +7956,11 @@ function animate(now){
     device => {
 
       drawDevice(
+
         device,
+
         now
+
       );
 
     }
@@ -8023,11 +7969,10 @@ function animate(now){
 
 
   /*
-    只有紅色資訊粒子，
-    沒有任何虛線。
+    ★ 只有粒子，不畫線。
   */
 
-  drawAllTransferParticles(
+  drawAllTransferContacts(
     now
   );
 
