@@ -73,15 +73,11 @@ body{
   left:28px;
   bottom:25px;
   padding:11px 15px;
-
   background:rgba(255,255,255,.9);
-
   border:1px solid rgba(0,0,0,.05);
   border-radius:10px;
-
   font-size:13px;
   line-height:1.65;
-
   pointer-events:none;
 }
 
@@ -92,9 +88,7 @@ body{
 #panel{
   padding:20px;
   overflow-y:auto;
-
   background:#faf9f6;
-
   border-left:1px solid #ddd8ce;
 }
 
@@ -112,12 +106,9 @@ video{
   display:block;
   width:100%;
   min-height:145px;
-
   object-fit:cover;
-
   background:#111;
   border-radius:8px;
-
   transform:scaleX(-1);
 }
 
@@ -125,10 +116,8 @@ button{
   width:100%;
   margin:0 0 8px;
   padding:11px;
-
   border:0;
   border-radius:9px;
-
   font-weight:700;
   cursor:pointer;
 }
@@ -155,12 +144,9 @@ button.test{
 
 .status{
   padding:11px;
-
   background:#fff;
-
   border:1px solid #dedad1;
   border-radius:8px;
-
   font-size:12px;
   line-height:1.8;
 }
@@ -179,7 +165,6 @@ input[type="range"]{
   height:8px;
   margin-top:7px;
   overflow:hidden;
-
   background:#e1ddd5;
   border-radius:999px;
 }
@@ -189,9 +174,7 @@ input[type="range"]{
 #chaosMeter{
   width:0%;
   height:100%;
-
   background:#373d3a;
-
   transition:width .07s linear;
 }
 
@@ -201,6 +184,30 @@ input[type="range"]{
   font-size:11px;
   line-height:1.6;
 }
+
+.legend{
+  margin-top:10px;
+  padding:10px;
+  background:#fff;
+  border:1px solid #dedad1;
+  border-radius:8px;
+  font-size:12px;
+  line-height:1.9;
+}
+
+.dot{
+  display:inline-block;
+  width:9px;
+  height:9px;
+  margin-right:6px;
+  border-radius:50%;
+}
+
+.dot.white{background:#ccd5d5;}
+.dot.green{background:#35ff73;}
+.dot.yellow{background:#ffd52d;}
+.dot.red{background:#ff3c34;}
+
 </style>
 </head>
 
@@ -222,7 +229,7 @@ input[type="range"]{
       <span id="phaseName">順從</span>
       <br>
       <span id="phaseDescription">
-        裝置正在跟隨觀者的位置。
+        裝置正在等待觀者。
       </span>
     </div>
 
@@ -362,6 +369,28 @@ input[type="range"]{
         <b>
           <span id="infectedCount">0</span> / 5
         </b>
+
+      </div>
+
+      <div class="legend">
+
+        <span class="dot white"></span>
+        待機
+
+        <br>
+
+        <span class="dot green"></span>
+        拍到觀者
+
+        <br>
+
+        <span class="dot yellow"></span>
+        觀者說話
+
+        <br>
+
+        <span class="dot red"></span>
+        傳遞資訊
 
       </div>
 
@@ -534,6 +563,27 @@ let pendingEdges = [];
 let currentTransfer = null;
 
 
+/*
+  黃燈顯示時間。
+
+  麥克風一偵測到說話，
+  黃燈至少保持一小段時間，
+  不會閃一下就直接消失。
+*/
+
+let speakingUntil = 0;
+
+
+/*
+  模擬說話按鈕用。
+
+  先讓黃燈亮一段時間，
+  再正式開始資訊傳遞。
+*/
+
+let manualTransferAt = 0;
+
+
 /* =========================================================
    SETTINGS
 ========================================================= */
@@ -634,7 +684,7 @@ class Device{
 
 
     /* ===============================
-       液體慣性
+       LIQUID INERTIA
     =============================== */
 
     this.lastAngle = 0;
@@ -647,7 +697,7 @@ class Device{
 
 
     /* ===============================
-       粒子
+       PARTICLES
     =============================== */
 
     this.fluidSeeds = [];
@@ -763,8 +813,17 @@ class Device{
       mode === "TRANSFER"
     ){
 
+      /*
+        正在傳資訊的兩支，
+        由 updateTransfer 控制。
+      */
+
       if(
         currentTransfer
+        &&
+        currentTransfer.from !== undefined
+        &&
+        currentTransfer.to !== undefined
         &&
         (
           this.index ===
@@ -994,7 +1053,7 @@ class Device{
 
 
   /* =======================================================
-     LIQUID INERTIA
+     LIQUID PHYSICS
   ======================================================= */
 
   updateFluidPhysics(dt){
@@ -1005,10 +1064,6 @@ class Device{
         dt
       );
 
-
-    /*
-      棒子旋轉速度。
-    */
 
     const newAngularVelocity =
 
@@ -1038,10 +1093,8 @@ class Device{
 
 
     /*
-      短暫的液體慣性。
-
-      棒子往右動，
-      流體會慢半拍往左拖。
+      裝置旋轉時，
+      液體會有短暫慣性。
     */
 
     const targetOffset =
@@ -1059,6 +1112,7 @@ class Device{
         targetOffset -
         this.fluidOffset
       )
+
       *
       .075;
 
@@ -1106,6 +1160,14 @@ function resetSystem(){
 
 
   voiceHold =
+    0;
+
+
+  speakingUntil =
+    0;
+
+
+  manualTransferAt =
     0;
 
 
@@ -1236,6 +1298,41 @@ function getDeviceX(index){
 
     W * .16,
     W * .84
+
+  );
+
+}
+
+
+/* =========================================================
+   NEAREST DEVICE
+========================================================= */
+
+function getNearestDeviceIndex(){
+
+  if(
+    !viewer.present
+  ){
+
+    return 2;
+
+  }
+
+
+  return constrain(
+
+    Math.round(
+
+      viewer.x *
+      (
+        DEVICE_COUNT -
+        1
+      )
+
+    ),
+
+    0,
+    DEVICE_COUNT - 1
 
   );
 
@@ -1441,9 +1538,9 @@ function analyzeCamera(){
     ){
 
       const i =
-
         (
-          y * width +
+          y *
+          width +
           x
         )
         *
@@ -1482,7 +1579,8 @@ function analyzeCamera(){
 
         changed++;
 
-        xTotal += x;
+        xTotal +=
+          x;
 
       }
 
@@ -1511,7 +1609,8 @@ function analyzeCamera(){
       viewer.movement,
 
       constrain(
-        ratio * 3,
+        ratio *
+        3,
         0,
         1
       ),
@@ -1531,7 +1630,7 @@ function analyzeCamera(){
 
 
     /*
-      鏡像反轉。
+      畫面是鏡像顯示。
     */
 
     averageX =
@@ -1565,6 +1664,7 @@ function analyzeCamera(){
 
     viewer.present =
       true;
+
 
     viewer.absentTime =
       0;
@@ -1876,7 +1976,6 @@ function updateAudio(dt,now){
   ){
 
     const value =
-
       (
         micBuffer[i] -
         128
@@ -1929,6 +2028,28 @@ function updateAudio(dt,now){
     );
 
 
+  /*
+    只要有超過門檻，
+    黃燈先亮起。
+  */
+
+  if(
+    voiceLevel >
+    voiceThreshold
+  ){
+
+    speakingUntil =
+      now +
+      600;
+
+  }
+
+
+  /*
+    順從階段說話，
+    累積一小段時間後開始傳遞。
+  */
+
   if(
     mode ===
     "FOLLOW"
@@ -1950,7 +2071,8 @@ function updateAudio(dt,now){
         Math.max(
           0,
           voiceHold -
-          dt * 1.8
+          dt *
+          1.8
         );
 
     }
@@ -1958,7 +2080,7 @@ function updateAudio(dt,now){
 
     if(
       voiceHold >
-      280
+      360
     ){
 
       startInformationTransmission(
@@ -1977,7 +2099,7 @@ function updateAudio(dt,now){
 
 
 /* =========================================================
-   MANUAL TEST
+   MANUAL VOICE TEST
 ========================================================= */
 
 document
@@ -1989,15 +2111,35 @@ document
   () => {
 
     if(
-      mode ===
+      mode !==
       "FOLLOW"
     ){
 
-      startInformationTransmission(
-        performance.now()
-      );
+      return;
 
     }
+
+
+    const now =
+      performance.now();
+
+
+    /*
+      先模擬黃燈。
+    */
+
+    speakingUntil =
+      now +
+      900;
+
+
+    /*
+      約 650ms 後正式開始紅色傳遞。
+    */
+
+    manualTransferAt =
+      now +
+      650;
 
   }
 );
@@ -2009,6 +2151,16 @@ document
 
 function startInformationTransmission(now){
 
+  if(
+    mode !==
+    "FOLLOW"
+  ){
+
+    return;
+
+  }
+
+
   mode =
     "TRANSFER";
 
@@ -2017,36 +2169,8 @@ function startInformationTransmission(now){
     .06;
 
 
-  if(
-    viewer.present
-  ){
-
-    sourceIndex =
-      constrain(
-
-        Math.round(
-
-          viewer.x *
-          (
-            DEVICE_COUNT -
-            1
-          )
-
-        ),
-
-        0,
-        DEVICE_COUNT - 1
-
-      );
-
-  }
-
-  else{
-
-    sourceIndex =
-      2;
-
-  }
+  sourceIndex =
+    getNearestDeviceIndex();
 
 
   visited =
@@ -2076,7 +2200,7 @@ function startInformationTransmission(now){
 
   scheduleNextTransfer(
     now,
-    450
+    300
   );
 
 }
@@ -2088,7 +2212,8 @@ function startInformationTransmission(now){
 
 function buildPendingEdges(){
 
-  pendingEdges = [];
+  pendingEdges =
+    [];
 
 
   for(
@@ -2111,7 +2236,8 @@ function buildPendingEdges(){
   for(
     let i = sourceIndex;
     i <
-    DEVICE_COUNT - 1;
+    DEVICE_COUNT -
+    1;
     i++
   ){
 
@@ -2298,6 +2424,7 @@ function updateTransfer(now){
 
     }
 
+
     return;
 
   }
@@ -2329,7 +2456,9 @@ function updateTransfer(now){
     -1;
 
 
-  /* APPROACH */
+  /* =====================================
+     APPROACH
+  ===================================== */
 
   if(
     currentTransfer.stage ===
@@ -2399,9 +2528,12 @@ function updateTransfer(now){
         );
 
 
-      fromDevice.flash = 1;
+      fromDevice.flash =
+        1;
 
-      toDevice.flash = 1;
+
+      toDevice.flash =
+        1;
 
 
       visited.add(
@@ -2411,7 +2543,8 @@ function updateTransfer(now){
 
       chaos =
         constrain(
-          chaos + .11,
+          chaos +
+          .11,
           0,
           1
         );
@@ -2424,7 +2557,9 @@ function updateTransfer(now){
   }
 
 
-  /* CONTACT */
+  /* =====================================
+     CONTACT
+  ===================================== */
 
   if(
     currentTransfer.stage ===
@@ -2474,7 +2609,9 @@ function updateTransfer(now){
   }
 
 
-  /* SEPARATE */
+  /* =====================================
+     SEPARATE
+  ===================================== */
 
   if(
     currentTransfer.stage ===
@@ -2776,14 +2913,16 @@ function drawDevice(
     5,
     12,
 
-    bodyWidth * .68,
+    bodyWidth *
+    .68,
 
     7,
 
     0,
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -2802,11 +2941,13 @@ function drawDevice(
 
   ctx.roundRect(
 
-    -bodyWidth * .63,
+    -bodyWidth *
+    .63,
 
     -5,
 
-    bodyWidth * 1.26,
+    bodyWidth *
+    1.26,
 
     18,
 
@@ -2836,7 +2977,8 @@ function drawDevice(
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -2860,7 +3002,8 @@ function drawDevice(
 
     0,
 
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -2869,7 +3012,7 @@ function drawDevice(
 
 
   /*
-    整支裝置轉動。
+    整支裝置旋轉。
   */
 
   ctx.rotate(
@@ -2913,7 +3056,9 @@ function drawDevice(
     bodyGradient;
 
 
-  ctx.shadowBlur = 8;
+  ctx.shadowBlur =
+    8;
+
 
   ctx.shadowColor =
     "rgba(0,0,0,.20)";
@@ -2940,7 +3085,8 @@ function drawDevice(
   ctx.fill();
 
 
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur =
+    0;
 
 
   /* LED */
@@ -2978,7 +3124,8 @@ function drawDevice(
     9,
 
     0,
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -2990,7 +3137,8 @@ function drawDevice(
     "#4a504d";
 
 
-  ctx.lineWidth = 1;
+  ctx.lineWidth =
+    1;
 
 
   ctx.beginPath();
@@ -3004,7 +3152,8 @@ function drawDevice(
     9,
 
     0,
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3027,7 +3176,8 @@ function drawDevice(
     5.5,
 
     0,
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -3046,12 +3196,15 @@ function drawDevice(
 
     -1.5,
 
-    cameraY - 1.7,
+    cameraY -
+    1.7,
 
     1.7,
 
     0,
-    Math.PI * 2
+
+    Math.PI *
+    2
 
   );
 
@@ -3108,7 +3261,8 @@ function drawDevice(
     "#303635";
 
 
-  ctx.lineWidth = 1;
+  ctx.lineWidth =
+    1;
 
 
   ctx.stroke();
@@ -3122,13 +3276,17 @@ function drawDevice(
 
   ctx.roundRect(
 
-    screenX + 3,
+    screenX +
+    3,
 
-    screenY + 3,
+    screenY +
+    3,
 
-    screenW - 6,
+    screenW -
+    6,
 
-    screenH - 6,
+    screenH -
+    6,
 
     2
 
@@ -3143,16 +3301,23 @@ function drawDevice(
     device,
     now,
 
-    screenX + 3,
-    screenY + 3,
+    screenX +
+    3,
 
-    screenW - 6,
-    screenH - 6
+    screenY +
+    3,
+
+    screenW -
+    6,
+
+    screenH -
+    6
 
   );
 
 
   ctx.restore();
+
 
   ctx.restore();
 
@@ -3160,7 +3325,7 @@ function drawDevice(
 
 
 /* =========================================================
-   LED
+   LED STATE SYSTEM
 ========================================================= */
 
 function drawLED(
@@ -3170,123 +3335,250 @@ function drawLED(
   height
 ){
 
-  let phase = 0;
+  /*
+    LED 規則：
 
+    待機       → 白
+    看到觀者   → 綠
+    開始說話   → 黃
+    傳遞資訊   → 紅
 
-  if(
-    mode !==
-    "FOLLOW"
-  ){
-
-    phase =
-      device.phase *
-      chaos;
-
-  }
+    優先：
+    紅 > 黃 > 綠 > 白
+  */
 
 
   const breath =
 
     (
       Math.sin(
-        now * .002 +
-        phase
+        now *
+        .0025 +
+        device.phase
       )
       +
       1
     )
+
     /
     2;
 
 
+  let r = 190;
+  let g = 210;
+  let b = 215;
+
   let brightness =
-    .18 +
-    breath * .09;
+    .16 +
+    breath *
+    .08;
 
 
-  brightness +=
-    device.info *
-    .30;
+  /* =====================================
+     GREEN
+     拍到觀者
+  ===================================== */
+
+  if(
+    viewer.present
+  ){
+
+    r = 45;
+    g = 255;
+    b = 105;
 
 
-  brightness +=
-    device.flash *
-    .55;
+    brightness =
+      .55 +
+      breath *
+      .18;
+
+  }
+
+
+  /* =====================================
+     YELLOW
+     說話
+
+     只讓離觀者最近的那一支變黃。
+  ===================================== */
+
+  const speaking =
+    now <
+    speakingUntil;
+
+
+  const speakingDevice =
+    getNearestDeviceIndex();
 
 
   if(
-    mode !==
+    speaking
+    &&
+    device.index ===
+    speakingDevice
+    &&
+    mode ===
     "FOLLOW"
   ){
 
-    brightness +=
+    r = 255;
+    g = 215;
+    b = 35;
 
-      chaos
 
-      *
+    brightness =
+      constrain(
+
+        .72 +
+        voiceLevel *
+        .55,
+
+        .72,
+        1
+
+      );
+
+  }
+
+
+  /* =====================================
+     RED
+     傳資訊
+
+     只有正在交換的兩支紅。
+  ===================================== */
+
+  let transferring =
+    false;
+
+
+  if(
+    mode ===
+    "TRANSFER"
+
+    &&
+
+    currentTransfer
+
+    &&
+
+    currentTransfer.from !== undefined
+
+    &&
+
+    currentTransfer.to !== undefined
+
+    &&
+
+    currentTransfer.stage !==
+    "WAIT_NEXT"
+  ){
+
+    if(
+      device.index ===
+      currentTransfer.from
+
+      ||
+
+      device.index ===
+      currentTransfer.to
+    ){
+
+      transferring =
+        true;
+
+    }
+
+  }
+
+
+  if(
+    transferring
+  ){
+
+    r = 255;
+    g = 45;
+    b = 40;
+
+
+    const pulse =
 
       (
         Math.sin(
-
           now *
-          (
-            .0033 +
-            device.index *
-            .00045
-          )
-
-          +
-
-          device.phase
-
+          .013
         )
-
         +
         1
       )
 
-      *
-      .07;
+      /
+      2;
+
+
+    brightness =
+      .68 +
+      pulse *
+      .32;
 
   }
+
+
+  /*
+    碰到的一瞬間更亮。
+  */
+
+  brightness +=
+    device.flash *
+    .20;
 
 
   brightness =
     constrain(
       brightness,
-      .08,
+      .10,
       1
     );
 
 
+  /* DARK BASE */
+
   ctx.fillStyle =
-    "rgba(70,85,88,.18)";
+    "rgba(45,50,50,.35)";
 
 
   ctx.fillRect(
 
-    -width / 2 + 3,
+    -width /
+    2 +
+    3,
 
-    -height + 9,
+    -height +
+    9,
 
-    width - 6,
+    width -
+    6,
 
     5
 
   );
 
 
+  /* GLOW */
+
   ctx.shadowBlur =
     5 +
-    brightness * 15;
+    brightness *
+    18;
 
 
   ctx.shadowColor =
 
     `rgba(
-      100,
-      235,
-      255,
+      ${r},
+      ${g},
+      ${b},
       ${brightness}
     )`;
 
@@ -3294,33 +3586,38 @@ function drawLED(
   ctx.fillStyle =
 
     `rgba(
-      155,
-      245,
-      255,
+      ${r},
+      ${g},
+      ${b},
       ${brightness}
     )`;
 
 
   ctx.fillRect(
 
-    -width / 2 + 3,
+    -width /
+    2 +
+    3,
 
-    -height + 9,
+    -height +
+    9,
 
-    width - 6,
+    width -
+    6,
 
     4
 
   );
 
 
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur =
+    0;
 
 }
 
 
 /* =========================================================
-   REAL GRAVITY LIQUID
+   GRAVITY LIQUID
 ========================================================= */
 
 function drawFluidScreen(
@@ -3332,9 +3629,7 @@ function drawFluidScreen(
   h
 ){
 
-  /* =====================================
-     BACKGROUND
-  ===================================== */
+  /* BACKGROUND */
 
   const bg =
     ctx.createLinearGradient(
@@ -3343,7 +3638,8 @@ function drawFluidScreen(
       y,
 
       x,
-      y + h
+      y +
+      h
 
     );
 
@@ -3416,12 +3712,13 @@ function drawFluidScreen(
     chaos *
     (
       .10 +
-      info * .42
+      info *
+      .42
     );
 
 
   /* =====================================
-     世界重力 → 裝置本地座標
+     WORLD GRAVITY
   ===================================== */
 
   const angleRad =
@@ -3431,17 +3728,11 @@ function drawFluidScreen(
 
 
   /*
-    0°：
-    g = 下方
+    裝置直立：
+    液體往螢幕下方。
 
-    +90°：
-    g = 螢幕右方
-
-    -90°：
-    g = 螢幕左方
-
-    180°：
-    g = 螢幕上方
+    裝置轉向：
+    重力方向會相對改變。
   */
 
   let gravityX =
@@ -3457,29 +3748,22 @@ function drawFluidScreen(
 
 
   /*
-    裝置正在旋轉時，
-    流體會慢半拍。
-
-    angularVelocity 正 →
-    慣性稍微往反方向。
+    旋轉慣性。
   */
 
   gravityX +=
+
     -device.angularVelocity *
     .11;
 
 
   gravityX +=
+
     device.fluidOffset *
     .10;
 
 
-  /*
-    正規化。
-  */
-
   const gravityLength =
-
     Math.sqrt(
 
       gravityX *
@@ -3491,7 +3775,6 @@ function drawFluidScreen(
       gravityY
 
     )
-
     ||
     1;
 
@@ -3505,7 +3788,7 @@ function drawFluidScreen(
 
 
   /*
-    液面的切線方向。
+    液面的切線。
   */
 
   const tangentX =
@@ -3517,26 +3800,21 @@ function drawFluidScreen(
 
 
   /* =====================================
-     液體量
+     LIQUID VOLUME
   ===================================== */
 
   const fillAmount =
     constrain(
 
       .34 +
-      info * .24,
+      info *
+      .24,
 
       .26,
       .65
 
     );
 
-
-  /*
-    Projection threshold。
-
-    越低液體越多。
-  */
 
   const threshold =
     lerp(
@@ -3550,7 +3828,8 @@ function drawFluidScreen(
     );
 
 
-  const cellSize = 2;
+  const cellSize =
+    2;
 
 
   const time =
@@ -3559,7 +3838,7 @@ function drawFluidScreen(
 
 
   /* =====================================
-     LIQUID BODY
+     MAIN LIQUID
   ===================================== */
 
   for(
@@ -3574,13 +3853,10 @@ function drawFluidScreen(
       px += cellSize
     ){
 
-      /*
-        螢幕座標轉成 -1 ~ 1。
-      */
-
       const nx =
         (
-          px / w
+          px /
+          w
         )
         *
         2
@@ -3590,18 +3866,14 @@ function drawFluidScreen(
 
       const ny =
         (
-          py / h
+          py /
+          h
         )
         *
         2
         -
         1;
 
-
-      /*
-        這個位置沿著
-        重力方向有多深。
-      */
 
       const gravityDepth =
 
@@ -3613,10 +3885,6 @@ function drawFluidScreen(
         ny *
         gravityY;
 
-
-      /*
-        沿液面方向的位置。
-      */
 
       const tangentPosition =
 
@@ -3630,7 +3898,7 @@ function drawFluidScreen(
 
 
       /*
-        小型液面波。
+        表面小波浪。
       */
 
       let surfaceWave =
@@ -3643,7 +3911,7 @@ function drawFluidScreen(
           +
 
           time *
-          2.0
+          2
 
           +
 
@@ -3663,7 +3931,8 @@ function drawFluidScreen(
 
 
       /*
-        快速移動時波動增加。
+        裝置移動越快，
+        液面晃越明顯。
       */
 
       surfaceWave +=
@@ -3686,11 +3955,6 @@ function drawFluidScreen(
         *
         .025;
 
-
-      /*
-        深度超過液面，
-        就是液體。
-      */
 
       const insideLiquid =
 
@@ -3715,7 +3979,6 @@ function drawFluidScreen(
 
 
       const depth =
-
         constrain(
 
           (
@@ -3738,10 +4001,6 @@ function drawFluidScreen(
 
         );
 
-
-      /*
-        深處顏色比較濃。
-      */
 
       const alpha =
         .62 +
@@ -3777,8 +4036,11 @@ function drawFluidScreen(
 
       ctx.fillRect(
 
-        x + px,
-        y + py,
+        x +
+        px,
+
+        y +
+        py,
 
         cellSize,
         cellSize
@@ -3787,12 +4049,10 @@ function drawFluidScreen(
 
 
       /*
-        電子流體中的
-        細小亮點。
+        微小電子粒子。
       */
 
       const sparkle =
-
         pseudoLiquidNoise(
 
           px,
@@ -3825,8 +4085,11 @@ function drawFluidScreen(
 
         ctx.fillRect(
 
-          x + px,
-          y + py,
+          x +
+          px,
+
+          y +
+          py,
 
           1,
           1
@@ -3841,11 +4104,10 @@ function drawFluidScreen(
 
 
   /* =====================================
-     LIQUID SURFACE PARTICLES
+     SURFACE PARTICLES
   ===================================== */
 
   const surfaceParticleCount =
-
     Math.floor(
 
       20
@@ -3870,7 +4132,6 @@ function drawFluidScreen(
   ){
 
     const t =
-
       (
         i /
         Math.max(
@@ -3879,17 +4140,11 @@ function drawFluidScreen(
           1
         )
       )
-
       *
       2
-
       -
       1;
 
-
-    /*
-      projection = threshold 的液面。
-    */
 
     let localX =
 
@@ -3912,10 +4167,6 @@ function drawFluidScreen(
       gravityY *
       threshold;
 
-
-    /*
-      液面波。
-    */
 
     const wave =
 
@@ -3947,21 +4198,18 @@ function drawFluidScreen(
 
 
     localX +=
+
       gravityX *
       wave;
 
 
     localY +=
+
       gravityY *
       wave;
 
 
-    /*
-      讓粒子稍微進入流體內。
-    */
-
     const randomDepth =
-
       Math.abs(
 
         Math.sin(
@@ -3976,17 +4224,18 @@ function drawFluidScreen(
         )
 
       )
-
       *
       .10;
 
 
     localX +=
+
       gravityX *
       randomDepth;
 
 
     localY +=
+
       gravityY *
       randomDepth;
 
@@ -4028,19 +4277,23 @@ function drawFluidScreen(
 
 
     if(
-      screenX < x
+      screenX <
+      x
 
       ||
 
-      screenX > x + w
+      screenX >
+      x + w
 
       ||
 
-      screenY < y
+      screenY <
+      y
 
       ||
 
-      screenY > y + h
+      screenY >
+      y + h
     ){
 
       continue;
@@ -4049,15 +4302,12 @@ function drawFluidScreen(
 
 
     const size =
-
-      i % 4 === 0
-
+      i %
+      4 ===
+      0
       ?
-
       2
-
       :
-
       1;
 
 
@@ -4089,12 +4339,9 @@ function drawFluidScreen(
   ===================================== */
 
   const inertialCount =
-
     Math.floor(
-
       motionStrength *
       18
-
     );
 
 
@@ -4105,7 +4352,6 @@ function drawFluidScreen(
   ){
 
     const seed =
-
       device
       .fluidSeeds[
         i %
@@ -4119,15 +4365,12 @@ function drawFluidScreen(
 
     const depth =
       .10
-
       +
-
       Math.abs(
         Math.sin(
           seed.phase
         )
       )
-
       *
       .40;
 
@@ -4159,10 +4402,6 @@ function drawFluidScreen(
         depth
       );
 
-
-    /*
-      旋轉慣性拖尾。
-    */
 
     localX +=
 
@@ -4215,17 +4454,11 @@ function drawFluidScreen(
 
     if(
       screenX < x
-
       ||
-
       screenX > x + w
-
       ||
-
       screenY < y
-
       ||
-
       screenY > y + h
     ){
 
@@ -4260,9 +4493,9 @@ function drawFluidScreen(
   }
 
 
-  /* =====================================
-     CONTACT FLASH
-  ===================================== */
+  /*
+    接觸瞬間螢幕亮一下。
+  */
 
   if(
     device.flash >
@@ -4292,7 +4525,7 @@ function drawFluidScreen(
 
 
 /* =========================================================
-   CONTACT
+   CONTACT VISUAL
 ========================================================= */
 
 function drawTransferContact(now){
@@ -4324,7 +4557,6 @@ function drawTransferContact(now){
 
 
   const midX =
-
     (
       pointA.x +
       pointB.x
@@ -4334,7 +4566,6 @@ function drawTransferContact(now){
 
 
   const midY =
-
     (
       pointA.y +
       pointB.y
@@ -4344,10 +4575,10 @@ function drawTransferContact(now){
 
 
   const pulse =
-
     (
       Math.sin(
-        now * .025
+        now *
+        .025
       )
       +
       1
@@ -4358,19 +4589,20 @@ function drawTransferContact(now){
 
   ctx.shadowBlur =
     12 +
-    pulse * 8;
+    pulse *
+    8;
 
 
   ctx.shadowColor =
-    "rgba(140,240,255,.8)";
+    "rgba(255,70,60,.65)";
 
 
   ctx.fillStyle =
 
     `rgba(
-      185,
-      250,
       255,
+      90,
+      70,
       ${.35 + pulse*.40}
     )`;
 
@@ -4384,10 +4616,12 @@ function drawTransferContact(now){
     midY,
 
     3 +
-    pulse * 3,
+    pulse *
+    3,
 
     0,
-    Math.PI * 2
+    Math.PI *
+    2
 
   );
 
@@ -4395,8 +4629,13 @@ function drawTransferContact(now){
   ctx.fill();
 
 
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur =
+    0;
 
+
+  /*
+    紅色資訊粒子。
+  */
 
   for(
     let i = 0;
@@ -4407,7 +4646,8 @@ function drawTransferContact(now){
     const t =
       fract(
 
-        i / 10
+        i /
+        10
 
         +
 
@@ -4442,7 +4682,7 @@ function drawTransferContact(now){
 
 
     ctx.fillStyle =
-      "rgba(150,245,255,.58)";
+      "rgba(255,75,65,.65)";
 
 
     ctx.fillRect(
@@ -4517,7 +4757,7 @@ function getTopPoint(index){
    UI
 ========================================================= */
 
-function updateUI(){
+function updateUI(now){
 
   let viewerText =
     "—";
@@ -4528,7 +4768,8 @@ function updateUI(){
   ){
 
     if(
-      viewer.x < .32
+      viewer.x <
+      .32
     ){
 
       viewerText =
@@ -4537,7 +4778,8 @@ function updateUI(){
     }
 
     else if(
-      viewer.x > .68
+      viewer.x >
+      .68
     ){
 
       viewerText =
@@ -4564,7 +4806,6 @@ function updateUI(){
 
 
   const cameraPercent =
-
     Math.round(
 
       constrain(
@@ -4671,7 +4912,38 @@ function updateUI(){
 
 
   let description =
-    "五個裝置正在跟隨觀者的位置。";
+    "裝置正在等待觀者。";
+
+
+  if(
+    mode ===
+    "FOLLOW"
+    &&
+    viewer.present
+  ){
+
+    description =
+      "裝置已偵測到觀者，LED 變成綠色並開始跟隨。";
+
+  }
+
+
+  if(
+    mode ===
+    "FOLLOW"
+    &&
+    now <
+    speakingUntil
+  ){
+
+    modeText =
+      "接收聲音";
+
+
+    description =
+      "觀者正在說話，最近的裝置變成黃色。";
+
+  }
 
 
   if(
@@ -4684,7 +4956,7 @@ function updateUI(){
 
 
     description =
-      "裝置開始彼此靠近，資訊逐漸進入其他個體。";
+      "正在交換資訊的裝置變成紅色。";
 
   }
 
@@ -4699,7 +4971,7 @@ function updateUI(){
 
 
     description =
-      "裝置開始受自身與鄰居影響，不再完全服從觀者。";
+      "資訊已擴散到群體，裝置開始產生不同反應。";
 
   }
 
@@ -4911,8 +5183,11 @@ function random(
     max === undefined
   ){
 
-    max = min;
-    min = 0;
+    max =
+      min;
+
+    min =
+      0;
 
   }
 
@@ -5061,7 +5336,8 @@ let previousTime =
   performance.now();
 
 
-let lastCameraAnalysis = 0;
+let lastCameraAnalysis =
+  0;
 
 
 function animate(now){
@@ -5078,6 +5354,36 @@ function animate(now){
     now;
 
 
+  /* =====================================
+     MANUAL VOICE
+  ===================================== */
+
+  if(
+    manualTransferAt >
+    0
+
+    &&
+
+    now >=
+    manualTransferAt
+
+    &&
+
+    mode ===
+    "FOLLOW"
+  ){
+
+    manualTransferAt =
+      0;
+
+
+    startInformationTransmission(
+      now
+    );
+
+  }
+
+
   /* CAMERA */
 
   if(
@@ -5087,6 +5393,7 @@ function animate(now){
   ){
 
     analyzeCamera();
+
 
     lastCameraAnalysis =
       now;
@@ -5116,10 +5423,7 @@ function animate(now){
   );
 
 
-  /*
-    先算機械，
-    再算液體。
-  */
+  /* DEVICE + LIQUID */
 
   devices.forEach(
     device => {
@@ -5168,7 +5472,9 @@ function animate(now){
   );
 
 
-  updateUI();
+  updateUI(
+    now
+  );
 
 
   requestAnimationFrame(
